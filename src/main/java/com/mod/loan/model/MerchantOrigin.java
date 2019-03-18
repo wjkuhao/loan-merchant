@@ -22,6 +22,17 @@ public class MerchantOrigin {
     @Column(name = "create_time")
     private Date createTime;
 
+    @Column(name = "deduction_rate")
+    private Integer deductionRate;
+
+    public Integer getDeductionRate() {
+        return deductionRate;
+    }
+
+    public void setDeductionRate(Integer deductionRate) {
+        this.deductionRate = deductionRate;
+    }
+
     /**
      * @return id
      */

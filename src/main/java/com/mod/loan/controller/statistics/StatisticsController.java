@@ -1,13 +1,12 @@
 package com.mod.loan.controller.statistics;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
-
+import com.mod.loan.common.enums.ResponseEnum;
+import com.mod.loan.common.model.Page;
+import com.mod.loan.common.model.RequestThread;
+import com.mod.loan.common.model.ResultMessage;
 import com.mod.loan.service.*;
+import com.mod.loan.util.ExcelUtil;
+import com.mod.loan.util.TimeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.slf4j.Logger;
@@ -18,12 +17,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.mod.loan.common.enums.ResponseEnum;
-import com.mod.loan.common.model.Page;
-import com.mod.loan.common.model.RequestThread;
-import com.mod.loan.common.model.ResultMessage;
-import com.mod.loan.util.ExcelUtil;
-import com.mod.loan.util.TimeUtils;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "statistics")
@@ -41,6 +39,11 @@ public class StatisticsController {
     private ReportPartnerEffectService reportPartnerEffectService;
     @Autowired
     private ReportRegisterOrderService reportRegisterOrderService;
+    @Autowired
+    private ReportPartnerEffectDeductionService reportPartnerEffectDeductionService;
+    @Autowired
+    private ReportRegisterOrderDeductionService reportRegisterOrderDeductionService;
+
 
     @RequestMapping(value = "loan_report_list")
     public ModelAndView loan_report_list(ModelAndView view) {
@@ -61,6 +64,15 @@ public class StatisticsController {
         param.put("startTime", StringUtils.isNotEmpty(startTime) ? startTime : null);
         param.put("endTime", StringUtils.isNotEmpty(endTime) ? endTime : null);
         return new ResultMessage(ResponseEnum.M2000,reportRegisterOrderService.findReportRegisterOrderList(param,page),page);
+    }
+
+    @RequestMapping(value = "report_register_order_deduction_list_ajax")
+    public ResultMessage report_register_order_deducton_list_ajax(String startTime, String endTime, Page page) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("merchant",RequestThread.get().getMerchant());
+        param.put("startTime", StringUtils.isNotEmpty(startTime) ? startTime : null);
+        param.put("endTime", StringUtils.isNotEmpty(endTime) ? endTime : null);
+        return new ResultMessage(ResponseEnum.M2000,reportRegisterOrderDeductionService.findReportRegisterOrderDeductionList(param,page),page);
     }
 
     @RequestMapping(value = "loan_report_list_ajax", method = {RequestMethod.POST})
@@ -93,6 +105,12 @@ public class StatisticsController {
         return view;
     }
 
+    @RequestMapping(value = "partner_report_deduction_list")
+    public ModelAndView partner_report_deduction_list(ModelAndView view) {
+        view.setViewName("statistics/partner_report_deduction_list");
+        return view;
+    }
+
     @RequestMapping(value = "partner_report_list_ajax", method = {RequestMethod.POST})
     public ResultMessage partner_report_list_ajax(String userOrigin, String startTime, String endTime, Page page) {
         Map<String, Object> param = new HashMap<String, Object>();
@@ -101,6 +119,17 @@ public class StatisticsController {
         param.put("startTime", StringUtils.isNotEmpty(startTime) ? startTime : null);
         param.put("endTime", StringUtils.isNotEmpty(endTime) ? endTime : null);
         return new ResultMessage(ResponseEnum.M2000, reportPartnerEffectService.findReportPartnerEffectList(param, page), page);
+    }
+
+    //扣量查询
+    @RequestMapping(value = "partner_report_deduction_list_ajax", method = {RequestMethod.POST})
+    public ResultMessage partner_report_list_ajax_deduction(String userOrigin, String startTime, String endTime, Page page) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("merchant", RequestThread.get().getMerchant());
+        param.put("userOrigin", StringUtils.isNotEmpty(userOrigin) ? userOrigin : null);
+        param.put("startTime", StringUtils.isNotEmpty(startTime) ? startTime : null);
+        param.put("endTime", StringUtils.isNotEmpty(endTime) ? endTime : null);
+        return new ResultMessage(ResponseEnum.M2000, reportPartnerEffectDeductionService.findReportPartnerEffectDeductionList(param, page), page);
     }
 
     @RequestMapping(value = "day")
@@ -176,4 +205,39 @@ public class StatisticsController {
         }
     }
 
+
+    @RequestMapping(value = "export_report_deduction")
+    public void export_report_deduction(String reportName, String startTime, String endTime, HttpServletResponse response, String userPhone, String userOrigin, Integer status) {
+        try {
+            String[] title;
+            String sheetName = null;
+            String[] columns = null;
+            List<Map<String, Object>> list;
+            String downloadFileName = TimeUtils.parseTime(new Date(), TimeUtils.dateformat4);
+            Map<String, Object> param = new HashMap<String, Object>();
+            param.put("merchant", RequestThread.get().getMerchant());
+            param.put("startTime", StringUtils.isNotEmpty(startTime) ? startTime : null);
+            param.put("endTime", StringUtils.isNotEmpty(endTime) ? endTime : null);
+            param.put("status", status);
+            param.put("userPhone", StringUtils.isNotEmpty(userPhone) ? userPhone : null);
+            param.put("userOrigin", StringUtils.isNotEmpty(userOrigin) ? userOrigin : null);
+
+
+            downloadFileName += "-渠道统计";
+            // 定义excel第一行的信息
+            title = new String[]{"注册日期", "注册渠道", "注册人数(人)", "注册的登录数量(人)", "实名人数(人)", "提单人数(人)", "首借人数(人)", "首借金额(元)"};
+            sheetName = "渠道统计";
+            // 设置插入值的名称
+            columns = new String[]{"day_key", "user_origin", "reg_cnt", "login_cnt", "real_name_cnt", "submit_order_cnt", "first_submit_cnt", "first_submit_amount"};
+            // 获取信息
+            list = reportPartnerEffectDeductionService.exportReport(param);
+
+
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            ExcelUtil.createSheet(workbook, sheetName, title, ExcelUtil.mapToArray(list, columns));
+            ExcelUtil.excelExp(response, downloadFileName, workbook);
+        } catch (Exception e) {
+            logger.error(reportName + "报告导出异常。", e);
+        }
+    }
 }

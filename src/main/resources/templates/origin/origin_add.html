@@ -11,13 +11,21 @@
 		<form action="" name="myForm" id="myForm" method="post">
 			<fieldset>
 				<legend>新增渠道</legend>
-				<table>
+				<table style="border-collapse:separate; border-spacing:10px;">
 					<tr>
 						<td>
 							<label class="col-sm-2 control-label">渠道别名</label>
 						</td>
 						<td>
 							<input name="originName" id="originName" maxlength="32" class="form-control" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label class="col-sm-2 control-label">扣量率</label>
+						</td>
+						<td>
+							<input name="deductionRate" id="deductionRate" maxlength="32" class="form-control" />
 						</td>
 					</tr>
 				</table>
@@ -35,6 +43,10 @@
 		$("#saveButton").bind("click",function(){
 			if(!$("#originName").val()){
 				Dialog.alert("请输入渠道别名");
+				return;
+			}
+			if(!$("#deductionRate").val()){
+				Dialog.alert("请输入扣量率");
 				return;
 			}
 			$.ajax({

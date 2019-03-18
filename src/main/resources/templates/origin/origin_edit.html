@@ -11,7 +11,7 @@
 		<form action="" name="myForm" id="myForm" method="post">
 			<fieldset>
 				<legend>修改渠道</legend>
-				<table>
+				<table style="border-collapse:separate; border-spacing:10px;">
 					<tr>
 						<td>
 							<label class="col-sm-2 control-label">渠道别名</label>
@@ -19,6 +19,14 @@
 						<td>
 							<input name="id" id="id" maxlength="32" class="form-control" th:value="${origin.id}" type="hidden"/>
 							<input name="originName" id="originName" maxlength="32" class="form-control" th:value="${origin.originName}" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label class="col-sm-2 control-label">扣量率</label>
+						</td>
+						<td>
+							<input name="deductionRate" id="deductionRate" maxlength="32" class="form-control" th:value="${origin.deductionRate}" />
 						</td>
 					</tr>
 				</table>
@@ -36,6 +44,10 @@
 		$("#saveButton").bind("click",function(){
 			if(!$("#originName").val()){
 				Dialog.alert("请输入渠道别名");
+				return;
+			}
+			if(!$("#deductionRate").val()){
+				Dialog.alert("请输入扣量率");
 				return;
 			}
 			$.ajax({
