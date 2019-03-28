@@ -60,4 +60,11 @@ public class StringUtil {
 		}
 	}
 
+	public static boolean isEmpty(String str) {
+		return null == str || str.length() < 1;
+	}
+
+	public static boolean isNotEmpty(String str) {
+		return null != str && str.length() > 0;
+	}
 }
