@@ -37,6 +37,7 @@
 		<guava.version>19.0</guava.version>
 		<dom4j.version>1.6.1</dom4j.version>
 		<thymeleaf.version>3.0.9.RELEASE</thymeleaf.version>
+		<okhttp.version>3.13.1</okhttp.version>
 	</properties>
 
 	<dependencies>
@@ -144,6 +145,19 @@
 			<artifactId>jjwt</artifactId>
 			<version>0.9.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>${okhttp.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.2</version>
+			<scope>provided</scope>
+		</dependency>
+
 	</dependencies>
 
 
@@ -155,7 +169,7 @@
 				<profiles.active>dev</profiles.active>
 			</properties>
 			<activation>
-				<activeByDefault>false</activeByDefault>
+				<activeByDefault>true</activeByDefault>
 			</activation>
 		</profile>
 		<profile>
@@ -165,7 +179,7 @@
 				<profiles.active>online</profiles.active>
 			</properties>
 			<activation>
-				<activeByDefault>true</activeByDefault>
+				<activeByDefault>false</activeByDefault>
 			</activation>
 		</profile>
 	</profiles>

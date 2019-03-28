@@ -2,6 +2,7 @@ package com.mod.loan.controller.order;
 
 import com.alibaba.fastjson.JSONObject;
 import com.mod.loan.common.enums.ResponseEnum;
+import com.mod.loan.common.model.RequestThread;
 import com.mod.loan.common.model.ResultMessage;
 import com.mod.loan.config.Constant;
 import com.mod.loan.model.OrderRiskInfo;
@@ -29,10 +30,10 @@ public class OrderRiskController {
     }
 
     @GetMapping(value = "risk_again")
-    public ResultMessage risk_again(Long orderId, int merchant) {
+    public ResultMessage risk_again(Long orderId) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("orderId", orderId);
-        jsonObject.put("merchant", merchant);
+        jsonObject.put("merchant", RequestThread.get().getMerchant());
         rabbitTemplate.convertAndSend("queue_risk_order_notify", jsonObject);
         return new ResultMessage(ResponseEnum.M2000);
     }
