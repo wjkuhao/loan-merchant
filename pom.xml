@@ -144,6 +144,11 @@
 			<artifactId>jjwt</artifactId>
 			<version>0.9.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>3.13.1</version>
+		</dependency>
 	</dependencies>
 
 
@@ -155,7 +160,7 @@
 				<profiles.active>dev</profiles.active>
 			</properties>
 			<activation>
-				<activeByDefault>false</activeByDefault>
+				<activeByDefault>true</activeByDefault>
 			</activation>
 		</profile>
 		<profile>
@@ -165,7 +170,7 @@
 				<profiles.active>online</profiles.active>
 			</properties>
 			<activation>
-				<activeByDefault>true</activeByDefault>
+				<activeByDefault>false</activeByDefault>
 			</activation>
 		</profile>
 	</profiles>
