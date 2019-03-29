@@ -110,10 +110,14 @@ public class Constant {
 
     public static String server_api_url;
 
-    @Value("${oss.moxie.bucket.name:}")
-    public void setMoxie_bucket_name(String moxie_bucket_name) {
-        Constant.moxie_bucket_name = moxie_bucket_name;
-    }
+	public static String mx_risk_url;
+
+	public static String mx_risk_token;
+
+	@Value("${oss.moxie.bucket.name:}")
+	public void setMoxie_bucket_name(String moxie_bucket_name) {
+		Constant.moxie_bucket_name = moxie_bucket_name;
+	}
 
     @Value("${oss.moxie.bucket.name.mobile_jxl:}")
     public void setMoxie_mobile_jxl(String moxie_mobile_jxl) {
@@ -215,21 +219,27 @@ public class Constant {
         Constant.server_api_url = server_api_url;
     }
 
-    /**
-     * 为thymeleaf添加全局静态变量
-     *
-     * @param viewResolver
-     */
-    @Bean
-    public ThymeleafViewResolver configureThymeleafStaticVars(ThymeleafViewResolver viewResolver) {
-        if (viewResolver != null) {
-            Map<String, Object> vars = new HashMap<>();
-            vars.put("ALI_OSS_FILE_URL", img_prefix);
-            vars.put("server_h5_url", server_h5_url);
-            vars.put("server_itf_url", server_itf_url);
-            viewResolver.setStaticVariables(vars);
-        }
-        return viewResolver;
-    }
+	@Value("${mx.risk.url:}")
+	public static void setMx_risk_url(String mx_risk_url) { Constant.mx_risk_url = mx_risk_url; }
+
+	@Value("${mx.risk.token:}")
+	public static void setMx_risk_token(String mx_risk_token) { Constant.mx_risk_token = mx_risk_token;}
+
+	/**
+	 * 为thymeleaf添加全局静态变量
+	 *
+	 * @param viewResolver
+	 */
+	@Bean
+	public ThymeleafViewResolver configureThymeleafStaticVars(ThymeleafViewResolver viewResolver) {
+		if (viewResolver != null) {
+			Map<String, Object> vars = new HashMap<>();
+			vars.put("ALI_OSS_FILE_URL", img_prefix);
+			vars.put("server_h5_url", server_h5_url);
+			vars.put("server_itf_url", server_itf_url);
+			viewResolver.setStaticVariables(vars);
+		}
+		return viewResolver;
+	}
 
 }

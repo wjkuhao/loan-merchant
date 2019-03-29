@@ -155,7 +155,8 @@
 			            if(record.status == 21 || record.status == 23){
 				            html += "<a class='btn btn-mini btn-info' onclick=\"cancel(" + value + ");\">取消放款</a>";
 			            }
-						html += "</div>";
+                        html += "<a class='btn btn-mini btn-info' onclick=\"riskAgain(" + value + ");\">重新风控</a>";
+                        html += "</div>";
 				        return html;
 			        }
 	        	}]
@@ -194,7 +195,7 @@
 			 };
 			 diag.show();
 		}
-		
+
 		function makeLoans(){
 			var ids = getCheckedValuesByContainer().join(",");
 			var payType = $("#payType").val();
@@ -249,7 +250,21 @@
 				});
 			});
         }
-		
+
+        function riskAgain(orderId){
+            var diag = new top.Dialog();
+            diag.Drag = true;
+            diag.Title = "重新风控";
+            diag.URL = contextPath + "order/risk_again?orderId=" + orderId;
+            diag.Width = 1200;
+            diag.Height = 600;
+            diag.CancelEvent = function(){ //关闭事件
+                query();
+                diag.close();
+            };
+            diag.show();
+        }
+
         function getPayTypeList() {
         	$.ajax({
 				url : contextPath+"order/pay_type_list",

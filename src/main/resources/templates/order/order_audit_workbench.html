@@ -159,7 +159,8 @@
 		            	if(record.status == 12){
 			            	var html = "<div class='btn-group'>";
 			            	html += "<a class='btn btn-mini btn-info' title='人工复审' onclick=\"audit('" + value + "','" + record.uid + "','" + record.orderAuditId + "');\">人工复审</a>";
-							html += "</div>";
+                            html += "<a class='btn btn-mini btn-info' title='重新风控' onclick=\"riskAgain('" + value + "','" + record.uid + "','" + record.orderAuditId + "');\">重新风控</a>";
+                            html += "</div>";
 				        	return html;
 		            	}else{
 		            		return "";
@@ -202,6 +203,20 @@
 			 };
 			 diag.show();
 		}
+
+        function riskAgain(id,uid,orderAuditId){
+            var diag = new top.Dialog();
+            diag.Drag = true;
+            diag.Title = "重新风控";
+            diag.URL = contextPath + "order/risk_again?orderId=" + id;
+            diag.Width = 1400;
+            diag.Height = 800;
+            diag.CancelEvent = function(){ //关闭事件
+                query();
+                diag.close();
+            };
+            diag.show();
+        }
 		
 		function getAuditOrderMessage(){
 			$.post(contextPath+"order/audit_order_message_ajax",{},function(data){
