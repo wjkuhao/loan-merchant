@@ -15,7 +15,7 @@
 					<th class="center">分数</th>
 				</tr>
 			</thead>
-			<tbody id="addressList">
+			<tbody id="scoreList">
 			</tbody>
 		</table>
 	</div>
@@ -34,9 +34,9 @@
 				},
 				success : function(scoreData) {
 					if(scoreData) {
-                        var scoreMap = scoreData.data;
+                        var scoreMap = JSON.parse(scoreData.data);
                         for (var key in scoreMap) {
-                            $("#addressList").append("<tr><td class='center'>" + key + "</td><td class='center'>" + scoreMap[key] + "</td></tr>");
+                            $("#scoreList").append("<tr><td class='center'>" + key + "</td><td class='center'>" + scoreMap[key] + "</td></tr>");
                         }
                     }
 				},
