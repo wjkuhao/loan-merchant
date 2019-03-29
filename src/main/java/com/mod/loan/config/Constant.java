@@ -213,10 +213,12 @@ public class Constant {
 	}
 
 	@Value("${mx.risk.url:}")
-	public static void setMx_risk_url(String mx_risk_url) { Constant.mx_risk_url = mx_risk_url; }
+	public void setMx_risk_url(String mx_risk_url) {
+	    Constant.mx_risk_url = mx_risk_url; }
 
 	@Value("${mx.risk.token:}")
-	public static void setMx_risk_token(String mx_risk_token) { Constant.mx_risk_token = mx_risk_token;}
+	public void setMx_risk_token(String mx_risk_token) {
+		Constant.mx_risk_token = mx_risk_token;}
 	/**
 	 * 为thymeleaf添加全局静态变量
 	 *

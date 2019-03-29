@@ -212,4 +212,9 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
         }
     }
 
+    @Override
+    public Order selectLastOneByUid(Long uid) {
+        return orderMapper.selectLastOneByUid(uid);
+    }
+
 }

@@ -57,4 +57,6 @@ public interface OrderMapper extends MyBaseMapper<Order> {
 
 	Order selectOrderById(@Param("id") Long id);
 
+	Order selectLastOneByUid(@Param("uid") Long uid);
+
 }

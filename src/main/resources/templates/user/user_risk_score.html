@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="common/top :: head">
+</head>
+<head>
+<link href="/static/css/bootstrap3.3.7.min.css" rel="stylesheet" th:href="@{/static/css/bootstrap3.3.7.min.css}"/>
+</head>
+<body>
+	<div id="zhongxin" align="center">
+		<h4>统计</h4>
+		<table class="table table-striped table-bordered table-hover">
+			<thead>
+				<tr>
+					<th class="center">类型</th>
+					<th class="center">分数</th>
+				</tr>
+			</thead>
+			<tbody id="addressList">
+			</tbody>
+		</table>
+	</div>
+	<script type="text/javascript">
+		$(top.hangge());
+		var id = [[${id}]];
+		var contextPath="[[@{/}]]";
+		function getAllMessage(){
+			$.ajax({
+				url : contextPath+"user/user_risk_score_ajax",
+				type : "POST",
+				dataType : "json",
+                data : {"id":id},
+				beforeSend : function(){
+					maskScreen();
+				},
+				success : function(scoreData) {
+					if(scoreData) {
+                        var scoreMap = scoreData.data;
+                        for (var key in scoreMap) {
+                            $("#addressList").append("<tr><td class='center'>" + key + "</td><td class='center'>" + scoreMap[key] + "</td></tr>");
+                        }
+                    }
+				},
+				complete : function(){
+					unMaskScreen();
+				}
+			});
+        }
+        getAllMessage();
+	</script>
+</body>
+</html>

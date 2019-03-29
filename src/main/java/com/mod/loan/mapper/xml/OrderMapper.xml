@@ -278,4 +278,13 @@
         order by time_key desc
     </select>
 
+    <select id="selectLastOneByUid" resultMap="BaseResultMap">
+        select * from tb_order
+        <where>
+            <if test="uid != null">
+                and uid = #{uid}
+            </if>
+        </where>
+        order by id desc limit 1
+    </select>
 </mapper>

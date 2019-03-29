@@ -58,4 +58,6 @@ public interface OrderService extends BaseService<Order, Long> {
      */
     void saveTakeOutOrder(Long getOrderNumber);
 
+
+    Order selectLastOneByUid(Long uid);
 }

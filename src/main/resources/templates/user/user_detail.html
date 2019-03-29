@@ -24,8 +24,9 @@
 	<a class="btn btn-info" target='_blank' id="moxieZfbMXReport" style="display:none;">支付宝报告</a>
 	<a class="btn btn-info" target='_blank' id="carrierJxReport" style="display:none;">运营商资信报告</a>
 	<a class="btn btn-info" target='_blank' id="magicWandReport" style="display:none;">魔杖报告</a>
-	<a class="btn btn-info" href='javascript:void(0);' id="auditList" style="display:none;" onclick='userAuditList()'>用户信审记录</a>
-	<a class="btn btn-info" href='javascript:void(0);' id="recycleList" style="display:none;" onclick='userRecycleList()'>用户催收记录</a>
+    <a class="btn btn-info" href='javascript:void(0);' id="riskScore" style="display:none;" onclick='userRiskScore()'>风控相关分</a>
+    <a class="btn btn-info" href='javascript:void(0);' id="auditList" style="display:none;" onclick='userAuditList()'>用户信审记录</a>
+    <a class="btn btn-info" href='javascript:void(0);' id="recycleList" style="display:none;" onclick='userRecycleList()'>用户催收记录</a>
 	<div id="zhongxin" align="center">
 		<template v-if="imgFace">
 			<div align="left">
@@ -295,7 +296,8 @@
 						if(result.data.countUserOrder > 0){
 		                    $("#auditList").show();
 		                    $("#recycleList").show();
-						}
+                            $("#riskScore").show();
+                        }
 						
 						if(result.data.moxieMobileTaskId){
 		                       var moxieMobileTaskId = result.data.moxieMobileTaskId;
@@ -473,6 +475,19 @@
 			 };
 			 diag.show();
 		}
+
+        function userRiskScore(){
+            var diag = new top.Dialog();
+            diag.Drag = true;
+            diag.Title = "风控分";
+            diag.URL = contextPath + "user/user_risk_score?id=" + id;
+            diag.Width = 600;
+            diag.Height = 600;
+            diag.CancelEvent = function(){ //关闭事件
+                diag.close();
+            };
+            diag.show();
+        }
 
         function userAuditList(){
             var diag = new top.Dialog();
