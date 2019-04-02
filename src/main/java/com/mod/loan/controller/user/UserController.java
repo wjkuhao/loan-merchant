@@ -57,8 +57,6 @@ public class UserController {
     @Autowired
     private UserIdentMapper userIdentMapper;
     @Autowired
-    private MoxieZfbMapper moxieZfbMapper;
-    @Autowired
     private MoxieMobileMapper moxieMobileMapper;
     @Autowired
     private OrderMapper orderMapper;
@@ -94,7 +92,6 @@ public class UserController {
     @RequestMapping(value = "user_detail")
     public ModelAndView user_detail(ModelAndView view, HttpServletRequest request, Long id) {
         //七天通讯录数据url
-        String moheTaskId = getTaskIdFromItf(id, "mobile");
         view.addObject("moheTaskId", getTaskIdFromItf(id, "mobile"));
         view.addObject("id", id);
         view.setViewName("user/user_detail");
@@ -125,11 +122,9 @@ public class UserController {
         //data.put("moxieMobileTaskId", moxieMobile != null ? moxieMobile.getTaskId() : null);
 
         //获取数据魔盒淘宝报告url
-        String taskId = getTaskIdFromItf(id, "taobao");
-        data.put("moheTaobaoReportUrl", getMoheReportUrl(taskId));
+        data.put("moheTaobaoReportUrl", getMoheReportUrl(getTaskIdFromItf(id, "taobao")));
         //获取数据魔盒运营商报告url
-        taskId = getTaskIdFromItf(id, "mobile");
-        data.put("moheMobileReportUrl", getMoheReportUrl(taskId));
+        data.put("moheMobileReportUrl", getMoheReportUrl(getTaskIdFromItf(id, "mobile")));
         // 共债记录
         data.putAll(orderMapper.countDebtRecord(user.getUserPhone()));
         // 提单历史
@@ -142,7 +137,7 @@ public class UserController {
      */
     @RequestMapping(value = "user_call_report")
     public ModelAndView user_call_report(ModelAndView view, String taskId, Long uid) {
-        view.addObject("uid",uid);
+        view.addObject("uid", uid);
         view.addObject("taskId", taskId);
         view.setViewName("user/user_call_report");
         return view;
@@ -157,7 +152,7 @@ public class UserController {
             //获取数据魔盒taskId
             String url = Constant.server_itf_url + "tongdun/getOssData?type=weekaddress" + "&taskId=" + taskId + "&uid=" + uid;
             Response execute = Jsoup.connect(url).ignoreContentType(true).ignoreHttpErrors(true).execute();
-           return execute.body();
+            return execute.body();
         } catch (Exception e) {
             logger.error("获取七天通话记录分析失败", e);
         }
@@ -320,7 +315,7 @@ public class UserController {
     private String getMoheReportUrl(String taskId) {
         String url = "";
         try {
-            if(StringUtils.isNotBlank(taskId)){
+            if (StringUtils.isNotBlank(taskId)) {
                 //step 1.从api获取同盾数据魔盒配置账号
                 url = Constant.server_api_url + "tongdun/getConfig";
                 Response execute = Jsoup.connect(url).ignoreContentType(true).ignoreHttpErrors(true).execute();
