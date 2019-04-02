@@ -1,6 +1,5 @@
 package com.mod.loan.controller.user;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.mod.loan.common.enums.ResponseEnum;
 import com.mod.loan.common.model.Page;
@@ -9,17 +8,11 @@ import com.mod.loan.common.model.ResultMessage;
 import com.mod.loan.config.Constant;
 import com.mod.loan.mapper.*;
 import com.mod.loan.model.*;
-import com.mod.loan.model.moxie.CallInContactList;
-import com.mod.loan.model.moxie.CallOutContactList;
-import com.mod.loan.model.moxie.ContactList;
-import com.mod.loan.model.moxie.Linkmans;
 import com.mod.loan.service.UserService;
 import com.mod.loan.util.ExcelUtil;
 import com.mod.loan.util.OkHttpReader;
+import com.mod.loan.util.StringUtil;
 import com.mod.loan.util.TimeUtils;
-import com.mod.loan.util.moxie.AddressListUtil;
-import com.mod.loan.util.moxie.ContactUtil;
-import com.mod.loan.util.moxie.MoxieOssUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.jsoup.Connection.Response;
@@ -89,8 +82,11 @@ public class UserController {
         return new ResultMessage(ResponseEnum.M2000, userService.findUserList(param, page), page);
     }
 
+    /**
+     * 用户信息详情
+     */
     @RequestMapping(value = "user_detail")
-    public ModelAndView user_detail(ModelAndView view, HttpServletRequest request, Long id) {
+    public ModelAndView user_detail(ModelAndView view, Long id) {
         //七天通讯录数据url
         view.addObject("moheTaskId", getTaskIdFromItf(id, "mobile"));
         view.addObject("id", id);
@@ -99,7 +95,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "user_detail_ajax", method = {RequestMethod.POST})
-    public ResultMessage user_detail_ajax(Long id) {
+    public ResultMessage user_detail_ajax(Long id, HttpServletRequest request) {
         Map<String, Object> data = new HashMap<>();
         User user = userService.selectByPrimaryKey(id);
 //        if (!user.getMerchant().equals(RequestThread.get().getMerchant())) {
@@ -122,7 +118,8 @@ public class UserController {
         //data.put("moxieMobileTaskId", moxieMobile != null ? moxieMobile.getTaskId() : null);
 
         //获取数据魔盒淘宝报告url
-        data.put("moheTaobaoReportUrl", getMoheReportUrl(getTaskIdFromItf(id, "taobao")));
+        String contextPath = (StringUtil.isEmpty(request.getContextPath()) ? "/" : request.getContextPath());
+        data.put("moheTaobaoReportUrl", "http://" + request.getServerName() + ":" + request.getServerPort() + contextPath + "user/user_taobao_report?taskId=" + getTaskIdFromItf(id, "taobao"));
         //获取数据魔盒运营商报告url
         data.put("moheMobileReportUrl", getMoheReportUrl(getTaskIdFromItf(id, "mobile")));
         // 共债记录
@@ -159,61 +156,30 @@ public class UserController {
         return "";
     }
 
-    @RequestMapping(value = "user_zfb_mxreport")
-    public ModelAndView user_report_zfb(ModelAndView view, String taskId) {
+    /**
+     * 同盾数据魔盒淘宝报告
+     */
+    @RequestMapping(value = "user_taobao_report")
+    public ModelAndView user_taobao_report(ModelAndView view, String taskId) {
         view.addObject("taskId", taskId);
-        view.setViewName("user/user_zfb_mxreport");
+        view.setViewName("user/user_taobao_report");
         return view;
     }
 
-    @RequestMapping(value = "user_zfb_mxreport_ajax")
-    public String user_zfb_mxreport_ajax(String taskId) throws IOException {
-        return MoxieOssUtil.zfbData(Constant.env, taskId);
-    }
-
-    @RequestMapping(value = "user_zfb_zmscore_ajax")
-    public String user_zfb_zmscore_ajax(String taskId) throws IOException {
-        String url = String.format(Constant.moxie_zfb_zmscore, taskId);
-        Response response = Jsoup.connect(url).header("Authorization", "token " + Constant.moxie_token).ignoreHttpErrors(true).ignoreContentType(true).execute();
-        return response.body();
-    }
-
-    @RequestMapping(value = "user_carrier_jxreport")
-    public ModelAndView user_carrier_jxreport(ModelAndView view, String taskId) {
-        view.addObject("taskId", taskId);
-        view.setViewName("user/user_carrier_jxreport");
-        return view;
-    }
-
-    @RequestMapping(value = "user_carrier_jxreport_ajax", method = {RequestMethod.POST})
-    public ResultMessage user_carrier_jxreport_ajax(String taskId) {
-        MoxieMobile moxieMobile = moxieMobileMapper.selectByTaskId(taskId);
-        Map<String, Object> data = new HashMap<String, Object>();
-        UserInfo userInfo = userInfoMapper.selectByPrimaryKey(moxieMobile.getUid());
-        String carrierReport = MoxieOssUtil.mobileJxlReport(Constant.env, taskId);
-        data.put("userInfo", userInfo);
-        JSONObject carrierReportJson = JSONObject.parseObject(carrierReport);
-        // 获取呼入和呼出的通话记录信息
-        String contact_list = carrierReportJson.getString("contact_list");
-        carrierReportJson.remove("contact_list");// 去掉呼入和呼出的通话记录信息
-        if (null != contact_list) {
-            try {
-                // 从itf接口获取通讯录数据
-                String url = Constant.server_itf_url + "user/address_list?uid=" + userInfo.getUid();
-                Response execute = Jsoup.connect(url).ignoreContentType(true).ignoreHttpErrors(true).execute();
-                List<Linkmans> addressList = AddressListUtil.getLinkmans(execute.body());
-                Map<String, String> map = AddressListUtil.getMap(addressList);
-                List<ContactList> listContactList = JSON.parseArray(contact_list, ContactList.class);
-                List<CallInContactList> callInList = ContactUtil.getCallInContactList(map, listContactList);
-                List<CallOutContactList> callOutList = ContactUtil.getCallOutContactList(map, listContactList);
-                data.put("callInList", callInList);
-                data.put("callOutList", callOutList);
-            } catch (IOException e) {
-                logger.error("从itf获取通讯录失败，uid={}", userInfo.getUid());
-            }
+    /**
+     * 同盾数据魔盒淘宝报告数据获取
+     */
+    @RequestMapping(value = "user_taobao_report_ajax")
+    public String user_taobao_report_ajax(String taskId) {
+        try {
+            //获取数据魔盒taskId
+            String url = Constant.server_itf_url + "tongdun/getOssData?type=taobao" + "&taskId=" + taskId;
+            Response execute = Jsoup.connect(url).ignoreContentType(true).ignoreHttpErrors(true).execute();
+            return execute.body();
+        } catch (IOException e) {
+            logger.error("user_taobao_report_ajax", e);
         }
-        data.put("carrierReport", carrierReportJson);
-        return new ResultMessage(ResponseEnum.M2000, data);
+        return "";
     }
 
     @RequestMapping(value = "user_magic_wand_report")
