@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/html">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>魔盒淘宝报告</title>
+		<meta charset="utf-8/">
+		<link rel="stylesheet" href="/static/css/bootstrap.min.css" th:href="@{/static/css/bootstrap.min.css}" media="screen" />
+		<style>
+			body {
+				margin: 4%;
+			}
+			.ali-title {
+				text-align: center;
+				font-size: 18px;
+			}
+			
+			table.tablesorter thead tr th,
+			table.tablesorter tfoot tr th {
+				background-color: #e6EEEE;
+				border: 1px solid #FFF;
+				font-size: 12pt;
+				padding: 4px;
+			}
+			
+			table.tablesorter thead tr .header {
+				background-image: url(/static/images/bg.gif);
+				background-repeat: no-repeat;
+				background-position: center right;
+				cursor: pointer;
+			}
+			
+			table.tablesorter tbody td {
+				color: #3D3D3D;
+				padding: 4px;
+				vertical-align: top;
+			}
+			
+			table.tablesorter tbody tr.odd td {
+				background-color: #F0F0F6;
+			}
+			
+			table.tablesorter thead tr .headerSortUp {
+				background-image: url(/static/images/asc.gif);
+			}
+			
+			table.tablesorter thead tr .headerSortDown {
+				background-image: url(/static/images/desc.gif);
+			}
+			
+			table.tablesorter thead tr .headerSortDown,
+			table.tablesorter thead tr .headerSortUp {
+				background-color: #8dbdd8;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="row-fluid">
+			<div class="block">
+				<div class="navbar block-header">
+					<div class="muted ali-title">魔盒淘宝报告</div>
+				</div>
+				<div class="block-content collapse in" id="report">
+					<table class="table table-bordered">
+						<tbody>
+						<tr class="success">
+							<td colspan="10">基本信息</td>
+						</tr>
+						<tr>
+							<th colspan="2">用户名：<span v-text="report.user_name"></span></th>
+							<th colspan="2">用户级别：<span v-text=""></span></th>
+							<th colspan="2">昵称：<span v-text="baseInfo.nick_name"></span></th>
+						</tr>
+						<tr>
+							<th colspan="2">真实姓名：<span v-text="baseInfo.name"></span></th>
+							<th colspan="2">性别：<span v-text="baseInfo.gender"></span></th>
+							<th colspan="2">绑定手机号：<span v-text="baseInfo.mobile"></span></th>
+						</tr>
+						<tr>
+							<th colspan="2">实名认证姓名：<span v-text="baseInfo.real_name"></span></th>
+							<th colspan="2">实名认证身份证：<span v-text="report.identity_code"></span></th>
+							<th colspan="2">邮箱：<span v-text="baseInfo.email"></span></th>
+						</tr>
+						</tbody>
+					</table>
+
+					<table class="table table-bordered">
+						<tbody>
+						<tr class="success">
+							<td colspan="10">账户信息</td>
+						</tr>
+						<tr>
+							<th colspan="2">账户余额(元)：<span v-text="accountInfo.account_balance"></span></th>
+							<th colspan="2">金融账户余额(元)：<span v-text="accountInfo.financial_account_balance"></span></th>
+							<th colspan="2">信用分数：<span v-text="accountInfo.credit_point"></span></th>
+						</tr>
+						<tr>
+							<th colspan="2">花呗额度(元)：<span v-text="accountInfo.credit_quota"></span></th>
+							<th colspan="2">花呗使用额度(元)：<span v-text="accountInfo.consume_quota"></span></th>
+							<th colspan="2">借呗额度(元)：<span v-text="accountInfo.jiebei_quota"></span></th>
+						</tr>
+						</tbody>
+					</table>
+
+					<!--收获地址-->
+					<table class="table table-bordered">
+						<tbody>
+						<tr class="success">
+							<td colspan="10">收获地址</td>
+						</tr>
+						<tr>
+							<th>收货人</th>
+							<th>地区</th>
+							<th>地址</th>
+							<th>手机号码</th>
+						</tr>
+						<template v-for="(item,index) in addressList">
+							<tr>
+								<td v-text="item.name"></td>
+								<td v-text="item.area"></td>
+								<td v-text="item.address"></td>
+								<td v-text="item.mobile"></td>
+							</tr>
+						</template>
+						</tbody>
+					</table>
+
+					<!--购买记录-->
+					<table class="table table-bordered">
+						<tbody>
+						<tr class="success">
+							<td colspan="10">购买记录</td>
+						</tr>
+						<tr>
+							<th>商品名称</th>
+							<th>订单金额(分)</th>
+							<th>订单类型</th>
+							<th>订单状态</th>
+							<th>订单时间</th>
+						</tr>
+						<template v-for="(item,index) in productList">
+							<tr>
+								<td v-text="item.name"></td>
+								<td v-text="item.price"></td>
+								<td v-text="item.order_type"></td>
+								<td v-text="item.order_status"></td>
+								<td v-text="item.order_time"></td>
+							</tr>
+						</template>
+						</tbody>
+					</table>
+			</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="/static/js/jquery.min.js" th:src="@{/static/js/jquery.min.js}"></script>
+		<script type="text/javascript" src="/static/js/vue.min.js" th:src="@{/static/js/vue.min.js}"></script>
+		<script type="text/javascript" src="/static/js/jquery.tablesorter.min.js" th:src="@{/static/js/jquery.tablesorter.min.js}"></script>
+		<script type="text/javascript">
+			var contextPath = "[[@{/}]]";
+			var taskId = "[[${taskId}]]";
+			new Vue({
+				el: '#report',
+				data: {
+					report: {},
+					baseInfo: {},
+					accountInfo: {},
+					addressList: [],
+					productList: []
+				},
+				methods: {
+
+				},
+				updated:function(){
+
+			    },
+				created() {
+					var _that = this;
+					$.ajax({
+						type: "post",
+						url: contextPath + "user/user_taobao_report_ajax",
+						dataType: "json",
+						data: {
+                            taskId: taskId
+						},
+						success: function(result) {
+							var report = result.data;
+							_that.report = report;
+							_that.baseInfo = report.task_data.base_info;
+							_that.addressList = report.task_data.receiver_list;
+
+							//账户信息金额除以100
+							var accountInfo = report.task_data.account_info;
+							for(var k in accountInfo){
+								var value = accountInfo[k];
+								if(value){
+									accountInfo[k] = value / 100;
+								}
+							}
+							_that.accountInfo = accountInfo;
+
+							//遍历订单及产品
+							var productList = [];
+							var orderList = report.task_data.order_list;
+							$.each(orderList,function(i){
+								var order = this;
+								$.each(order.product_list,function(j){
+									var product = {
+										order_type:order.order_type,
+										order_time:order.order_time,
+										order_status:order.order_status
+									};
+									product.price = this.product_price / 100;
+									product.name = this.product_name;
+									console.log(product);
+									productList.push(product);
+								})
+							});
+							_that.productList = productList;
+						}
+					});
+				}
+			})
+		</script>
+	</body>
+
+</html>

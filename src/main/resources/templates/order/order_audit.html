@@ -21,9 +21,10 @@
 	</style>
 </head>
 <body>
-<a class="btn btn-info" target='_blank' id="moxieZfbMXReport" style="display:none;">支付宝报告</a>
-<a class="btn btn-info" target='_blank' id="carrierJxReport" style="display:none;">运营商资信报告</a>
-<a class="btn btn-info" target='_blank' id="magicWandReport" style="display:none;">魔杖报告</a>
+<a class="btn btn-info" target='_blank' id="moxieZfbMXReport" style="display:none;">魔方淘宝报告</a>
+<a class="btn btn-info" target='_blank' id="carrierJxReport" style="display:none;">魔方运营商报告</a>
+<a class="btn btn-info" href='javascript:void(0);' id="riskScore" style="display:none;" onclick='userRiskScore()'>风控模型分</a>
+<a class="btn btn-info" href='javascript:void(0);' id="userCall" style="display:none;" onclick='userCallReport()'>通话数据分析</a>
 <a class="btn btn-info" href='javascript:void(0);' id="auditList"  style="display:none;" onclick='userAuditList()'>用户信审记录</a>
 <a class="btn btn-info" href='javascript:void(0);' id="recycleList"  style="display:none;" onclick='userRecycleList()'>用户催收记录</a>
 <div id="zhongxin" align="center">
@@ -252,6 +253,7 @@
 	var uid = [[${uid}]];
 	var orderAuditId = [[${orderAuditId}]];
 	var contextPath="[[@{/}]]";
+	var taskId = "";
 	new Vue({
 		el: '#zhongxin',
 		created() {
@@ -287,23 +289,39 @@
 					if(result.data.countUserOrder > 0){
 						$("#auditList").show();
 						$("#recycleList").show();
+						$("#riskScore").show();
+					}
+					taskId = result.data.moheTaskId;
+					if(taskId){
+						$("#userCall").show();
 					}
 
-					if(result.data.moxieMobileTaskId){
-						var moxieMobileTaskId = result.data.moxieMobileTaskId;
-						$("#carrierJxReport").attr("href",contextPath + "user/user_carrier_jxreport?taskId="+moxieMobileTaskId);
-						$("#carrierJxReport").show();
+					// if(result.data.moxieMobileTaskId){
+					// 	var moxieMobileTaskId = result.data.moxieMobileTaskId;
+					// 	$("#carrierJxReport").attr("href",contextPath + "user/user_carrier_jxreport?taskId="+moxieMobileTaskId);
+					// 	$("#carrierJxReport").show();
+					//
+					// 	$("#magicWandReport").attr("href",contextPath + "user/user_magic_wand_report?taskId="+moxieMobileTaskId);
+					// 	$("#magicWandReport").show();
+					//
+					// }
+					//
+					// if(result.data.moxieZfbTaskId){
+					// 	var moxieZfbTaskId = result.data.moxieZfbTaskId;
+					// 	$("#moxieZfbMXReport").attr("href",contextPath + "user/user_zfb_mxreport?taskId="+moxieZfbTaskId);
+					// 	$("#moxieZfbMXReport").show();
+					//
+					// }
 
-						$("#magicWandReport").attr("href",contextPath + "user/user_magic_wand_report?taskId="+moxieMobileTaskId);
-						$("#magicWandReport").show();
-
-					}
-
-					if(result.data.moxieZfbTaskId){
-						var moxieZfbTaskId = result.data.moxieZfbTaskId;
-						$("#moxieZfbMXReport").attr("href",contextPath + "user/user_zfb_mxreport?taskId="+moxieZfbTaskId);
+					//同盾数据魔盒淘宝报告
+					if(result.data.moheTaobaoReportUrl){
+						$("#moxieZfbMXReport").attr("href", result.data.moheTaobaoReportUrl);
 						$("#moxieZfbMXReport").show();
-
+					}
+					//同盾数据魔盒运营商报告
+					if(result.data.moheMobileReportUrl){
+						$("#carrierJxReport").attr("href", result.data.moheMobileReportUrl);
+						$("#carrierJxReport").show();
 					}
 				},
 				complete : function(){
@@ -459,6 +477,32 @@
 		diag.Drag = true;
 		diag.Title = "通讯录";
 		diag.URL = contextPath + "user/user_address_list_detail?id=" + uid;
+		diag.Width = 600;
+		diag.Height = 600;
+		diag.CancelEvent = function(){ //关闭事件
+			diag.close();
+		};
+		diag.show();
+	}
+
+	function userCallReport() {
+		var diag = new top.Dialog();
+		diag.Drag = true;
+		diag.Title = "通话数据分析";
+		diag.URL = contextPath + "user/user_call_report?uid=" + id + "&taskId=" + taskId;
+		diag.Width = 800;
+		diag.Height = 600;
+		diag.CancelEvent = function () { //关闭事件
+			diag.close();
+		};
+		diag.show();
+	}
+
+	function userRiskScore(){
+		var diag = new top.Dialog();
+		diag.Drag = true;
+		diag.Title = "风控分";
+		diag.URL = contextPath + "user/user_risk_score?id=" + uid;
 		diag.Width = 600;
 		diag.Height = 600;
 		diag.CancelEvent = function(){ //关闭事件
