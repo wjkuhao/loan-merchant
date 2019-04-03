@@ -252,17 +252,29 @@
         }
 
         function riskAgain(orderId){
-            var diag = new top.Dialog();
-            diag.Drag = true;
-            diag.Title = "重新风控";
-            diag.URL = contextPath + "order/risk_again?orderId=" + orderId;
-            diag.Width = 1200;
-            diag.Height = 600;
-            diag.CancelEvent = function(){ //关闭事件
-                query();
-                diag.close();
-            };
-            diag.show();
+            Dialog.confirm("确定要重新风控吗?", function() {
+                $.ajax({
+                    url : contextPath+"order/risk_again",
+                    type : "POST",
+                    dataType : "json",
+                    data : {
+                        "orderId" : orderId
+                    },
+                    beforeSend : function(){
+                        maskScreen();
+                    },
+                    success : function(data) {
+                        if(data.status==2000){
+                            query();
+                        }else{
+                            Dialog.alert(data.message);
+                        }
+                    },
+                    complete : function(){
+                        unMaskScreen();
+                    }
+                });
+            });
         }
 
         function getPayTypeList() {
