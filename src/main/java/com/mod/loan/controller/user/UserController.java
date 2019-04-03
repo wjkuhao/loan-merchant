@@ -97,9 +97,9 @@ public class UserController {
     public ResultMessage user_detail_ajax(Long id, HttpServletRequest request) {
         Map<String, Object> data = new HashMap<>();
         User user = userService.selectByPrimaryKey(id);
-//        if (!user.getMerchant().equals(RequestThread.get().getMerchant())) {
-//            return new ResultMessage(ResponseEnum.M4004);
-//        }
+        if (!user.getMerchant().equals(RequestThread.get().getMerchant())) {
+            return new ResultMessage(ResponseEnum.M4004);
+        }
         data.put("user", user);
         UserInfo userInfo = userInfoMapper.selectByPrimaryKey(id);
         data.put("userInfo", userInfo);
