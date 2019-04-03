@@ -87,7 +87,6 @@ public class UserController {
      */
     @RequestMapping(value = "user_detail")
     public ModelAndView user_detail(ModelAndView view, Long id) {
-        //七天通讯录数据url
         view.addObject("moheTaskId", getTaskIdFromItf(id, "mobile"));
         view.addObject("id", id);
         view.setViewName("user/user_detail");
@@ -121,7 +120,9 @@ public class UserController {
         String contextPath = (StringUtil.isEmpty(request.getContextPath()) ? "/" : request.getContextPath());
         data.put("moheTaobaoReportUrl", "http://" + request.getServerName() + ":" + request.getServerPort() + contextPath + "user/user_taobao_report?taskId=" + getTaskIdFromItf(id, "taobao"));
         //获取数据魔盒运营商报告url
-        data.put("moheMobileReportUrl", getMoheReportUrl(getTaskIdFromItf(id, "mobile")));
+        String taskId = getTaskIdFromItf(id, "mobile");
+        data.put("moheMobileReportUrl", getMoheReportUrl(taskId));
+        data.put("moheTaskId", taskId);
         // 共债记录
         data.putAll(orderMapper.countDebtRecord(user.getUserPhone()));
         // 提单历史

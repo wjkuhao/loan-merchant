@@ -253,7 +253,7 @@
 	var uid = [[${uid}]];
 	var orderAuditId = [[${orderAuditId}]];
 	var contextPath="[[@{/}]]";
-	var taskId = "[[${moheTaskId}]]";
+	var taskId = "";
 	new Vue({
 		el: '#zhongxin',
 		created() {
@@ -291,6 +291,7 @@
 						$("#recycleList").show();
 						$("#riskScore").show();
 					}
+					taskId = result.data.moheTaskId;
 					if(taskId){
 						$("#userCall").show();
 					}
