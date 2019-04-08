@@ -38,7 +38,7 @@ public class UserRiskController {
         this.orderService = orderService;
     }
 
-    @GetMapping(value = "risk_again")
+    @RequestMapping(value = "risk_again")
     public ResultMessage risk_again(Long orderId) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("orderId", orderId);

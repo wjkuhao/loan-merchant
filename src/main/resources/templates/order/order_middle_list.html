@@ -254,7 +254,7 @@
         function riskAgain(orderId){
             Dialog.confirm("确定要重新风控吗?", function() {
                 $.ajax({
-                    url : contextPath+"order/risk_again",
+                    url : contextPath+"user/risk_again",
                     type : "POST",
                     dataType : "json",
                     data : {
