@@ -96,6 +96,7 @@ public class UserRiskController {
     @RequestMapping(value = "user_risk_score_ajax")
     public ResultMessage user_risk_score_ajax(Long id) { //uid
         Long orderId = orderService.selectLastOneByUid(id).getId();
+        logger.info("user_risk_score_ajax uid={},orderId={}",id, orderId);
         OrderRiskInfo orderRiskInfo = orderRiskInfoService.getByOrderId(orderId);
         if (orderRiskInfo==null){
             return new ResultMessage(ResponseEnum.M4000);

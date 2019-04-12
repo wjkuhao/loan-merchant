@@ -33,7 +33,7 @@
     </insert>
 
     <select id="findOriginRegisterByManagerId" resultType="map">
-        select user_phone,create_time from tb_user
+        select user_phone,create_time from tb_user_deduction
         <where>
             and user_origin in (select CONCAT(origin_id, '') from tb_merchant_manager_origin where manager_id=#{managerId})
             <if test="originId!=null ">
@@ -50,7 +50,7 @@
     </select>
 
     <select id="countOriginRegisterByManagerId" resultType="int">
-        select count(*) from tb_user
+        select count(*) from tb_user_deduction
         <where>
             and user_origin in (select CONCAT(origin_id, '') from tb_merchant_manager_origin where manager_id=#{managerId})
             <if test="originId!=null ">
