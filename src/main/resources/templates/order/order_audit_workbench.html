@@ -160,7 +160,7 @@
 			            	var html = "<div class='btn-group'>";
 			            	html += "<a class='btn btn-mini btn-info' title='人工复审' onclick=\"audit('" + value + "','" + record.uid + "','" + record.orderAuditId + "');\">人工复审</a>";
                             html += "<a class='btn btn-mini btn-info' title='重新风控' onclick=\"riskAgain('" + value + "','" + record.uid + "','" + record.orderAuditId + "');\">重新风控</a>";
-                            html += "<a class='btn btn-mini btn-info' title='重新风控' onclick=\"riskResult('" + value + "','" + record.uid + "','" + record.orderAuditId + "');\">重新风控</a>";
+                            html += "<a class='btn btn-mini btn-info' title='风控结果' onclick=\"riskResult('" + value + "','" + record.uid + "','" + record.orderAuditId + "');\">风控结果</a>";
                             html += "</div>";
 				        	return html;
 		            	}else{
@@ -243,7 +243,7 @@
                     maskScreen();
                 },
                 success : function(data) {
-                    Dialog.alert(data.message);
+                    Dialog.alert(data.data);
                 },
                 complete : function(){
                     unMaskScreen();

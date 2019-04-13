@@ -151,7 +151,8 @@
 		            id : "id",
 		            renderer : function(idValue,value,record){
 		            	var html = "<div class='btn-group'>";
-			            html += "<a class='btn btn-mini btn-info' onclick=\"payDetail(" + value + ");\">放款详情</a>";
+                        html += "<a class='btn btn-mini btn-info' title='详情' onclick=\"detail(" + record.uid + ");\">详情</a>";
+                        html += "<a class='btn btn-mini btn-info' onclick=\"payDetail(" + value + ");\">放款详情</a>";
 			            if(record.status == 21 || record.status == 23){
 				            html += "<a class='btn btn-mini btn-info' onclick=\"cancel(" + value + ");\">取消放款</a>";
 			            }
@@ -196,6 +197,21 @@
 			 };
 			 diag.show();
 		}
+
+        function detail(id){
+            var diag = new top.Dialog();
+            diag.Drag = true;
+            diag.Title = "详情";
+            diag.URL = contextPath + "user/user_detail?id=" + id;
+            diag.Width = 1400;
+            diag.Height = 800;
+            diag.CancelEvent = function(){ //关闭事件
+                query();
+                diag.close();
+            };
+            diag.show();
+        }
+
 
 		function makeLoans(){
 			var ids = getCheckedValuesByContainer().join(",");
@@ -290,7 +306,7 @@
                     maskScreen();
                 },
                 success : function(data) {
-                    Dialog.alert(data.message);
+                    Dialog.alert(data.data);
                 },
                 complete : function(){
                     unMaskScreen();
