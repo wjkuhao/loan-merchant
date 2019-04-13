@@ -156,6 +156,7 @@
 				            html += "<a class='btn btn-mini btn-info' onclick=\"cancel(" + value + ");\">取消放款</a>";
 			            }
                         html += "<a class='btn btn-mini btn-info' onclick=\"riskAgain(" + value + ");\">重新风控</a>";
+                        html += "<a class='btn btn-mini btn-info' onclick=\"riskResult(" + value + ");\">风控结果</a>";
                         html += "</div>";
 				        return html;
 			        }
@@ -274,6 +275,26 @@
                         unMaskScreen();
                     }
                 });
+            });
+        }
+
+        function riskResult(orderId){
+            $.ajax({
+                url : contextPath+"user/risk_result",
+                type : "GET",
+                dataType : "json",
+                data : {
+                    "orderId" : orderId
+                },
+                beforeSend : function(){
+                    maskScreen();
+                },
+                success : function(data) {
+                    Dialog.alert(data.message);
+                },
+                complete : function(){
+                    unMaskScreen();
+                }
             });
         }
 

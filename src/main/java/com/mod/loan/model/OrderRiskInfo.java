@@ -46,5 +46,4 @@ public class OrderRiskInfo {
 
     @Column(name = "update_time")
     private String updateTime;
-
 }

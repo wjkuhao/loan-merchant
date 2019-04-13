@@ -49,7 +49,7 @@ public class UserRiskController {
 
     @GetMapping(value = "risk_result")
     public ResultMessage risk_result(Long orderId) {
-        OrderRiskInfo orderRiskInfo = orderRiskInfoService.getByOrderId(orderId);
+        OrderRiskInfo orderRiskInfo = orderRiskInfoService.getLastOneByOrderId(orderId);
         if (orderRiskInfo==null){
             return new ResultMessage(ResponseEnum.M4000);
         }
@@ -58,7 +58,7 @@ public class UserRiskController {
 
     @GetMapping(value = "risk_tianji_score")
     public ResultMessage risk_tianji_score(Long orderId) {
-        OrderRiskInfo orderRiskInfo = orderRiskInfoService.getByOrderId(orderId);
+        OrderRiskInfo orderRiskInfo = orderRiskInfoService.getLastOneByOrderId(orderId);
         if (orderRiskInfo==null){
             return new ResultMessage(ResponseEnum.M4000);
         }
@@ -68,7 +68,7 @@ public class UserRiskController {
 
     @GetMapping(value = "risk_paipai_score")
     public ResultMessage risk_paipai_score(Long orderId) {
-        OrderRiskInfo orderRiskInfo = orderRiskInfoService.getByOrderId(orderId);
+        OrderRiskInfo orderRiskInfo = orderRiskInfoService.getLastOneByOrderId(orderId);
         if (orderRiskInfo==null){
             return new ResultMessage(ResponseEnum.M4000);
         }
@@ -78,7 +78,7 @@ public class UserRiskController {
 
     @GetMapping(value = "risk_antifraud_score")
     public ResultMessage risk_antifraud_score(Long orderId) {
-        OrderRiskInfo orderRiskInfo = orderRiskInfoService.getByOrderId(orderId);
+        OrderRiskInfo orderRiskInfo = orderRiskInfoService.getLastOneByOrderId(orderId);
         if (orderRiskInfo==null){
             return new ResultMessage(ResponseEnum.M4000);
         }
@@ -97,7 +97,7 @@ public class UserRiskController {
     public ResultMessage user_risk_score_ajax(Long id) { //uid
         Long orderId = orderService.selectLastOneByUid(id).getId();
         logger.info("user_risk_score_ajax uid={},orderId={}",id, orderId);
-        OrderRiskInfo orderRiskInfo = orderRiskInfoService.getByOrderId(orderId);
+        OrderRiskInfo orderRiskInfo = orderRiskInfoService.getLastOneByOrderId(orderId);
         if (orderRiskInfo==null){
             return new ResultMessage(ResponseEnum.M4000);
         }
@@ -111,6 +111,9 @@ public class UserRiskController {
 
     private String pullRiskData(String riskId, String dataType){
         //riskId为 R2-reportId 格式
+        if (riskId == null) {
+            return "风控ID不存在";
+        }
         String[] riskIds = riskId.split("-");
         if (riskIds.length<2){
             return null;
@@ -125,9 +128,15 @@ public class UserRiskController {
 
         String result = okHttpReader.get(riskUrl,null, null);
         JSONObject object = JSON.parseObject(result);
+
+        String returnMsg;
         if (Integer.parseInt(object.getString("status"))==200) {
-            return object.getString("data");
+            returnMsg = object.getString("data");
+            if (returnMsg != null) {
+                return returnMsg;
+            }
         }
-        return null;
+
+        return "无相关信息";
     }
 }

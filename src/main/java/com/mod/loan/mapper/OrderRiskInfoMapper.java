@@ -5,4 +5,5 @@ import com.mod.loan.model.OrderRiskInfo;
 
 public interface OrderRiskInfoMapper extends MyBaseMapper<OrderRiskInfo> {
 
+    OrderRiskInfo getLastOneByOrderId(Long orderId);
 }
