@@ -160,6 +160,7 @@
 			            	var html = "<div class='btn-group'>";
 			            	html += "<a class='btn btn-mini btn-info' title='人工复审' onclick=\"audit('" + value + "','" + record.uid + "','" + record.orderAuditId + "');\">人工复审</a>";
                             html += "<a class='btn btn-mini btn-info' title='重新风控' onclick=\"riskAgain('" + value + "','" + record.uid + "','" + record.orderAuditId + "');\">重新风控</a>";
+                            html += "<a class='btn btn-mini btn-info' title='风控结果' onclick=\"riskResult('" + value + "','" + record.uid + "','" + record.orderAuditId + "');\">风控结果</a>";
                             html += "</div>";
 				        	return html;
 		            	}else{
@@ -229,7 +230,27 @@
                 });
             });
         }
-		
+
+        function riskResult(orderId, uid,orderAuditId){
+            $.ajax({
+                url : contextPath+"user/risk_result",
+                type : "GET",
+                dataType : "json",
+                data : {
+                    "orderId" : orderId
+                },
+                beforeSend : function(){
+                    maskScreen();
+                },
+                success : function(data) {
+                    Dialog.alert(data.data);
+                },
+                complete : function(){
+                    unMaskScreen();
+                }
+            });
+        }
+
 		function getAuditOrderMessage(){
 			$.post(contextPath+"order/audit_order_message_ajax",{},function(data){
 				$("#syddfss").html(data.data.syddfss);

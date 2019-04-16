@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mod.loan.mapper.OrderRiskInfoMapper">
+	<resultMap id="BaseResultMap" type="com.mod.loan.model.OrderRiskInfo">
+		<!-- WARNING - @mbg.generated -->
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="order_id" jdbcType="BIGINT" property="orderId" />
+		<result column="risk_id" jdbcType="VARCHAR" property="riskId" />
+		<result column="risk_result" jdbcType="VARCHAR" property="riskResult" />
+		<result column="user_phone" jdbcType="VARCHAR" property="userPhone" />
+		<result column="user_name" jdbcType="VARCHAR" property="userName" />
+		<result column="user_cert_no" jdbcType="VARCHAR" property="userCertNo" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+	</resultMap>
+
+	<select id="getLastOneByOrderId" resultMap="BaseResultMap">
+		select order_id,risk_id,risk_status,risk_result from tb_order_risk_info
+		 where  order_id = #{orderId}
+		order by id desc limit 1
+	</select>
+
+</mapper>

@@ -21,6 +21,8 @@
     <select id="reportPartnerEffectDeductionCount" resultType="int">
         select count(1) from report_partner_effect_deduction
         <where>
+            and user_origin in (select CONCAT(origin_id, '') from tb_merchant_manager_origin where manager_id=#{managerId})
+
             <if test="merchant != null">
                 and merchant = #{merchant}
             </if>
@@ -39,6 +41,8 @@
     <select id="findReportPartnerEffectDeductionList" resultType="map">
         select * from report_partner_effect_deduction pe left join tb_merchant_origin mo on pe.user_origin = mo.id
         <where>
+            and pe.user_origin in (select CONCAT(origin_id, '') from tb_merchant_manager_origin where manager_id=#{managerId})
+
             <if test="merchant != null">
                 and pe.merchant = #{merchant}
             </if>
@@ -60,6 +64,8 @@
         pe.submit_order_cnt,pe.first_submit_cnt,pe.login_cnt,pe.first_submit_amount from report_partner_effect_deduction pe left
         join tb_merchant_origin mo on pe.user_origin = mo.id
         <where>
+            and pe.user_origin in (select CONCAT(origin_id, '') from tb_merchant_manager_origin where manager_id=#{managerId})
+
             <if test="merchant != null">
                 and pe.merchant = #{merchant}
             </if>

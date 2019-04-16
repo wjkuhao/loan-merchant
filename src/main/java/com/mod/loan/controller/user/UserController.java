@@ -292,12 +292,12 @@ public class UserController {
                 //step 2.查询数据魔盒免密token
                 url = String.format("%s?partner_code=%s&partner_key=%s", data.getString("tokenUrl"), data.getString("partnerCode"), data.getString("partnerKey"));
                 String result = okHttpReader.get(url, null, null);
-                logger.info("mohe token result:", result);
+                logger.info("mohe token result:{}", result);
                 JSONObject json = JSONObject.parseObject(result);
 
                 //step 3.获取报告url地址
                 url = data.getString("reportUrl") + String.format("/%s/%s", taskId, json.getString("data"));
-                logger.info("mohe report url:", url);
+                logger.info("mohe report url:{}", url);
             }
         } catch (Exception e) {
             logger.error("getMoheReportUrl error", e);

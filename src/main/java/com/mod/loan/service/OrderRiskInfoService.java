@@ -5,6 +5,6 @@ import com.mod.loan.model.OrderRiskInfo;
 
 public interface OrderRiskInfoService extends BaseService<OrderRiskInfo, Long> {
 
-    OrderRiskInfo getByOrderId(Long orderId);
+    OrderRiskInfo getLastOneByOrderId(Long orderId);
 
 }

@@ -129,6 +129,7 @@ public class StatisticsController {
         param.put("userOrigin", StringUtils.isNotEmpty(userOrigin) ? userOrigin : null);
         param.put("startTime", StringUtils.isNotEmpty(startTime) ? startTime : null);
         param.put("endTime", StringUtils.isNotEmpty(endTime) ? endTime : null);
+        param.put("managerId", RequestThread.get().getUid());
         return new ResultMessage(ResponseEnum.M2000, reportPartnerEffectDeductionService.findReportPartnerEffectDeductionList(param, page), page);
     }
 
@@ -221,7 +222,7 @@ public class StatisticsController {
             param.put("status", status);
             param.put("userPhone", StringUtils.isNotEmpty(userPhone) ? userPhone : null);
             param.put("userOrigin", StringUtils.isNotEmpty(userOrigin) ? userOrigin : null);
-
+            param.put("managerId", RequestThread.get().getUid());
 
             downloadFileName += "-渠道统计";
             // 定义excel第一行的信息
