@@ -82,12 +82,12 @@
     </select>
 
     <select id="countAlipayUserNumberToDay" resultType="int">
-        SELECT COUNT(mz.id) FROM tb_moxie_zfb mz LEFT JOIN tb_user u ON mz.uid = u.id
+        SELECT COUNT(mz.uid) FROM tb_tongdun_taobao mz LEFT JOIN tb_user u ON mz.uid = u.id
 		WHERE u.merchant = #{merchant} AND mz.status = 'report' AND mz.create_time BETWEEN #{searchTime} AND DATE_ADD(#{searchTime},INTERVAL 1 DAY)
     </select>
 
     <select id="countMobileUserNumberToDay" resultType="int">
-        SELECT COUNT(mm.id) FROM tb_moxie_mobile mm LEFT JOIN tb_user u ON mm.uid = u.id
+        SELECT COUNT(mm.uid) FROM tb_tongdun_mobile mm LEFT JOIN tb_user u ON mm.uid = u.id
 		WHERE u.merchant = #{merchant} AND mm.status = 'report' AND mm.create_time BETWEEN #{searchTime} AND DATE_ADD(#{searchTime},INTERVAL 1 DAY)
 	</select>
 
