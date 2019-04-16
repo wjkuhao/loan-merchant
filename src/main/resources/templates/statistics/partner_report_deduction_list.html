@@ -10,7 +10,10 @@
 					<!-- 检索  -->
 					<div>
 						<span>渠道编号:</span>
-						<input id="userOrigin" name="userOrigin" type="text" />
+                        <input id="userOrigin" name="userOrigin" type="text" style="display:none"/>
+                        <select id="originId" name="originId"  style="width:100px">
+                            <option value="">所有</option>
+                        </select>
 						<span>注册时间:</span>
 						<input id="startTime" name="startTime" type="text" readonly="readonly" placeholder="开始时间" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})"/>
 						~
@@ -99,7 +102,8 @@
 			myTable.page.totalRowNum = 0;
 			myTable.onLoad({
 				userOrigin:$("#userOrigin").val(),
-				startTime:$("#startTime").val(),
+                originId:$("#originId").val(),
+                startTime:$("#startTime").val(),
 				endTime:$("#endTime").val()
 			});
 		}
@@ -120,9 +124,19 @@
 		
 		function exportReport(){
 			Dialog.confirm("确认按条件导出渠道统计报表吗？",function () {
-				location.href = contextPath+"statistics/export_report_deduction?reportName=partner_effect&userOrigin=" + $("#userOrigin").val() + "&startTime=" + $("#startTime").val() + "&endTime=" + $("#endTime").val();
+				location.href = contextPath+"statistics/export_report_deduction?reportName=partner_effect&userOrigin=" + $("#originId").val() + "&startTime=" + $("#startTime").val() + "&endTime=" + $("#endTime").val();
 			});
 		}
+
+        getMyOriginList();
+        function getMyOriginList(){
+            $.post(contextPath+"origin/my_origin",{},function(jsonObject){
+                originList = jsonObject.data;
+                $.each(originList,function(i){
+                    $("#originId").append("<option value='"+originList[i].id+"'>"+originList[i].originName+"</option>");
+                });
+            });
+        }
 	</script>
 </body>
 </html>·
