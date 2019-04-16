@@ -101,8 +101,7 @@
 		function query() {
 			myTable.page.totalRowNum = 0;
 			myTable.onLoad({
-				userOrigin:$("#userOrigin").val(),
-                originId:$("#originId").val(),
+				userOrigin:$("#originId").val(), //关联渠道查询
                 startTime:$("#startTime").val(),
 				endTime:$("#endTime").val()
 			});
