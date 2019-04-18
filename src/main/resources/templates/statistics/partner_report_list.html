@@ -16,6 +16,8 @@
 						~
 						<input id="endTime" name="endTime" type="text" readonly="readonly" placeholder="结束时间" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})"/>
 						<button id="query" class="btn btn-small btn-success" onclick="search()"><i class="icon-search"></i> 查询</button>
+						<button id="flash" class="btn btn-small btn-success" onclick="reportFlash()"><i class="icon-search"></i> 刷新报表</button>
+
 						<button class="btn btn-small btn-success" onclick="exportReport()">EXCEL导出</button>
 						<a class="btn btn-small btn-success" target='_blank' href= "/origin/origin_statistics_list">渠道统计（近两天）</a>
 						<a class="btn btn-small btn-success" target="_blank" href="/origin/origin_order_statistics_list">渠道订单统计</a>
@@ -108,7 +110,15 @@
 			myTable.page.pageNo = 1;
 			query();
 		}
-		
+
+        function reportFlash() {
+            $.post(contextPath+"report_flash/partner_report_list_flash",{},function(){
+                alert("报表刷新成功");
+                search();
+                $("#flash").attr("disabled", true);
+            });
+        }
+
 		function getOriginName(){
 			$.post(contextPath+"statistics/partner_report_list_ajax",{},function(jsonObject){
 				var originNameList = jsonObject.data;

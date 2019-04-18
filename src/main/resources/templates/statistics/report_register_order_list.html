@@ -14,6 +14,8 @@
 					~
 					<input id="endTime" name="endTime" type="text" readonly="readonly" placeholder="结束时间" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})"/>
 					<button id="query" class="btn btn-small btn-success" onclick="search()"><i class="icon-search"></i> 查询</button>
+					<button id="flash" class="btn btn-small btn-success" onclick="reportFlash()"><i class="icon-search"></i> 刷新报表</button>
+
 				</div>
 				<!-- 检索  -->
 				<table id="table_report" class="table table-striped table-bordered table-hover">
@@ -108,6 +110,15 @@
 		myTable.page.pageNo = 1;
 		query();
 	}
+
+    function reportFlash() {
+        $.post(contextPath+"report_flash/report_register_order_flash",{},function(){
+            alert("报表刷新成功");
+            search();
+            $("#flash").attr("disabled", true);
+        });
+    }
+
 </script>
 </body>
 </html>

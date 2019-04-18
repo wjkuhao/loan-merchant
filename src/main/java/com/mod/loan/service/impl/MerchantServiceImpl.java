@@ -10,6 +10,8 @@ import com.mod.loan.mapper.MerchantMapper;
 import com.mod.loan.model.Merchant;
 import com.mod.loan.service.MerchantService;
 
+import java.util.List;
+
 @Service
 public class MerchantServiceImpl extends BaseServiceImpl<Merchant, String> implements MerchantService {
 
@@ -29,6 +31,11 @@ public class MerchantServiceImpl extends BaseServiceImpl<Merchant, String> imple
 			}
 		}
 		return merchant;
+	}
+
+	@Override
+	public List<Merchant> selectMerchantAliasByStatus(int status) {
+		return merchantMapper.selectMerchantAliasByStatus(status);
 	}
 
 }

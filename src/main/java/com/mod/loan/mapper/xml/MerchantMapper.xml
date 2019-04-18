@@ -21,4 +21,9 @@
 		<result column="huiju_md5_key" jdbcType="VARCHAR" property="huiju_md5_key" />
 		<result column="merchant_channel" jdbcType="VARCHAR" property="merchantChannel" />
 	</resultMap>
+
+	<select id="selectMerchantAliasByStatus" resultMap="BaseResultMap">
+		select merchant_alias from tb_merchant where merchant_status = #{status}
+	</select>
+
 </mapper>
