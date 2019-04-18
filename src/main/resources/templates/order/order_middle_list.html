@@ -40,6 +40,7 @@
 								<th class="center">放款金额(元)</th>
 								<th class="center">创建时间</th>
 								<th class="center">审核时间</th>
+								<th class="center">客群</th>
 								<th class="center">操作</th>
 							</tr>
 						</thead>
@@ -147,7 +148,21 @@
 		            renderer : function(idValue,value,record){
 			            return value ? moment(value).format("YYYY-MM-DD HH:mm:ss") : "---";
 			        }
-	        	},{
+	        	}, {
+                    id: "user_type",
+                    renderer: function (idValue, value, record) {
+                        if (value == 1) {
+                            return "<font color='red'>新客</font>";
+                        }
+                        if (value == 2) {
+                            return "<font color='orange'>次新</font>";
+                        }
+                        if (value == 3) {
+                            return "<font color='green'>老客</font>";
+                        }
+                        return "---";
+                    }
+                },{
 		            id : "id",
 		            renderer : function(idValue,value,record){
 		            	var html = "<div class='btn-group'>";

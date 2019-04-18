@@ -51,7 +51,7 @@ public class UserRiskController {
     public ResultMessage risk_result(Long orderId) {
         OrderRiskInfo orderRiskInfo = orderRiskInfoService.getLastOneByOrderId(orderId);
         if (orderRiskInfo==null){
-            return new ResultMessage(ResponseEnum.M4000);
+            return new ResultMessage(ResponseEnum.M4000, "无风控信息");
         }
         return new ResultMessage(ResponseEnum.M2000, orderRiskInfo.getRiskResult());
     }
