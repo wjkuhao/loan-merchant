@@ -45,6 +45,9 @@
             <if test="endTime!=null and endTime!=''">
                 and create_time &lt;=#{endTime}
             </if>
+            <if test="merchant != null">
+                and merchant = #{merchant}
+            </if>
         </where>
         order by id desc limit #{startIndex},#{pageSize}
     </select>
@@ -61,6 +64,9 @@
             </if>
             <if test="endTime!=null and endTime!=''">
                 and create_time &lt;=#{endTime}
+            </if>
+            <if test="merchant != null">
+                and merchant = #{merchant}
             </if>
         </where>
     </select>

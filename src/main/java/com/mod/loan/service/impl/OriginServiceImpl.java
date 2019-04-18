@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.mod.loan.common.model.RequestThread;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -64,6 +65,7 @@ public class OriginServiceImpl extends BaseServiceImpl<MerchantOrigin, Long> imp
         param.put("endTime", endTime);
         param.put("startIndex", page.getStartIndex());
         param.put("pageSize", page.getPageSize());
+        param.put("merchant", RequestThread.get().getMerchant());
         page.setTotalCount(merchantOriginMapper.countOriginRegisterByManagerId(param));
         return merchantOriginMapper.findOriginRegisterByManagerId(param);
     }
