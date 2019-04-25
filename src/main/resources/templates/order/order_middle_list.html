@@ -354,6 +354,9 @@
 					if(payType.huiju && payType.huiju.pay && payType.huiju.pay == 1) {
 						$("#payType").append("<option value='huiju'>汇聚</option>");
 					}
+                    if(payType.yeepay && payType.yeepay.pay && payType.yeepay.pay == 1) {
+                        $("#payType").append("<option value='yeepay'>易宝</option>");
+                    }
 				},
 				complete : function(){
 					unMaskScreen();
