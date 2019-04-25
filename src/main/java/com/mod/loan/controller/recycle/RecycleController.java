@@ -1,16 +1,15 @@
 package com.mod.loan.controller.recycle;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
-
+import com.mod.loan.common.enums.ResponseEnum;
+import com.mod.loan.common.model.Page;
+import com.mod.loan.common.model.RequestThread;
+import com.mod.loan.common.model.ResultMessage;
+import com.mod.loan.mapper.RecycleOrderExportMapper;
+import com.mod.loan.model.*;
+import com.mod.loan.service.*;
+import com.mod.loan.service.form.OrderQuery;
+import com.mod.loan.util.ArrayUtil;
+import com.mod.loan.util.TimeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,23 +19,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.mod.loan.common.enums.ResponseEnum;
-import com.mod.loan.common.model.Page;
-import com.mod.loan.common.model.RequestThread;
-import com.mod.loan.common.model.ResultMessage;
-import com.mod.loan.mapper.RecycleOrderExportMapper;
-import com.mod.loan.model.Manager;
-import com.mod.loan.model.Order;
-import com.mod.loan.model.OrderRecycleRecord;
-import com.mod.loan.model.RecycleOrderExport;
-import com.mod.loan.model.User;
-import com.mod.loan.service.ManagerService;
-import com.mod.loan.service.OrderService;
-import com.mod.loan.service.RecycleService;
-import com.mod.loan.service.UserService;
-import com.mod.loan.service.form.OrderQuery;
-import com.mod.loan.util.ArrayUtil;
-import com.mod.loan.util.TimeUtils;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "recycle")
@@ -58,6 +49,9 @@ public class RecycleController {
     @Autowired
     private RecycleOrderExportMapper recycleOrderExportMapper;
 
+    @Autowired
+    private RecycleUserService recycleUserService;
+
     /**
      * 催收分单
      *
@@ -70,12 +64,19 @@ public class RecycleController {
         return view;
     }
 
+    /**
+     * 催收分配表格数据查询
+     */
     @RequestMapping(value = "recycle_list_ajax")
-    public ResultMessage recycle_list_ajax(String userPhone, String repayTimeDown, String repayTimeUp, Integer overdueDayDown, Integer overdueDayUp, Long followUserId, Integer orderStatus, Integer userType, Page page) {
+    public ResultMessage recycle_list_ajax(String userPhone, String repayTimeDown, String repayTimeUp, Integer overdueDayDown, Integer overdueDayUp, Long followUserId, Integer orderStatus, Integer userType, String groupId, Page page) {
         OrderQuery query = new OrderQuery();
         query.setMerchant(RequestThread.get().getMerchant());
-        query.setOverdueDayDown(overdueDayDown);
-        query.setOverdueDayUp(overdueDayUp);
+        if (StringUtils.isNotEmpty(groupId)) {
+            query.setGroupId(Long.parseLong(groupId));
+        } else {
+            query.setOverdueDayDown(overdueDayDown);
+            query.setOverdueDayUp(overdueDayUp);
+        }
         query.setFollowUserId(followUserId);
         query.setUserType(userType);
         if (orderStatus != 33 && orderStatus != 42 && orderStatus != 34) {
@@ -102,6 +103,12 @@ public class RecycleController {
      */
     @RequestMapping(value = "recycle_fenpei_list")
     public ModelAndView recycle_fenpei_list(ModelAndView view) {
+        RecycleUser user = recycleUserService.selectByPrimaryKey(RequestThread.get().getUid());
+        if (user != null && user.getGroupId() != null) {
+            view.addObject("myGroupId", user.getGroupId());
+        } else {
+            view.addObject("myGroupId", "");
+        }
         view.setViewName("recycle/recycle_fenpei_list");
         return view;
     }
@@ -121,11 +128,15 @@ public class RecycleController {
      * @return
      */
     @RequestMapping(value = "recycle_fenpei_list_ajax")
-    public ResultMessage recycle_fenpei_list_ajax(String userPhone, String repayTimeDown, String repayTimeUp, Integer overdueDayDown, Integer overdueDayUp, Long followUserId, Integer orderStatus, Integer userType, Page page) {
+    public ResultMessage recycle_fenpei_list_ajax(String userPhone, String repayTimeDown, String repayTimeUp, Integer overdueDayDown, Integer overdueDayUp, Long followUserId, Integer orderStatus, Integer userType, String groupId, Page page) {
         OrderQuery query = new OrderQuery();
         query.setMerchant(RequestThread.get().getMerchant());
-        query.setOverdueDayDown(overdueDayDown);
-        query.setOverdueDayUp(overdueDayUp);
+        if (StringUtils.isNotEmpty(groupId)) {
+            query.setGroupId(Long.parseLong(groupId));
+        } else {
+            query.setOverdueDayDown(overdueDayDown);
+            query.setOverdueDayUp(overdueDayUp);
+        }
         query.setOrderStatus(orderStatus);
         query.setUserType(userType);
         if (followUserId != null) {
@@ -133,6 +144,7 @@ public class RecycleController {
         } else {
             query.setFollowUserId(RequestThread.get().getUid());
         }
+
         if (orderStatus != 33 && orderStatus != 42 && orderStatus != 34) {
             return new ResultMessage(ResponseEnum.M4000);
         }
@@ -413,5 +425,4 @@ public class RecycleController {
         param.put("endTime", StringUtils.isBlank(endTime) ? TimeUtils.getNowString() : endTime);
         return new ResultMessage(ResponseEnum.M2000, recycleService.findRecycleRepayList(param));
     }
-
 }

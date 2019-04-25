@@ -35,7 +35,11 @@
 						<span>应还时间:</span>
 						<input id="repayTimeDown" style="width:100px" name="repayTimeDown" type="text" readonly="readonly" placeholder="开始时间" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})"/>
 						~
-						<input id="repayTimeUp" style="width:100px" name="repayTimeUp" type="text" readonly="readonly" placeholder="结束时间" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})"/>				
+						<input id="repayTimeUp" style="width:100px" name="repayTimeUp" type="text" readonly="readonly" placeholder="结束时间" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})"/>
+						<span>逾期分组:</span>
+						<select id="groupId" name="groupId">
+
+						</select>
 						<button id="query" class="btn btn-small btn-success" onclick="search()"><i class="icon-search"></i> 查询</button>
 						<button id="query" class="btn btn-small btn-success" onclick="fendan()">分单</button>
 						<!-- <button id="query" class="btn btn-small btn-success" onclick="export()">导出</button> -->
@@ -73,6 +77,7 @@
 	</a>
 	<script type="text/javascript">
 		var contextPath="[[@{/}]]";
+		var myGroupId = "[[${myGroupId}]]";
 		$(top.hangge());
 		var myTable = new MaxTable();
 		myTable.initialize({
@@ -195,7 +200,8 @@
 				repayTimeDown:$("#repayTimeDown").val(),
 				repayTimeUp:$("#repayTimeUp").val(),
 				followUserId:$("#followUserId").val(),
-				userType:$("#userType").val()
+				userType:$("#userType").val(),
+				groupId:$("#groupId").val()
 			});
 		}
 		function search(){
@@ -204,6 +210,7 @@
 		}
 		
 		getManagerList();
+		getGroupList();
 		var managerList;
 		function getManagerList(){
 			//催收人员列表
@@ -213,6 +220,26 @@
 					$("#followUserId").append("<option value='"+managerList[i].followUserId+"'>"+managerList[i].groupName+" - "+managerList[i].recycleName+" - "+managerList[i].remark+"</option>");
 				});
 				query();
+			});
+		}
+
+		var groupList;
+		function getGroupList(){
+			//逾期S组列表
+			$.post(contextPath+"recycle/recycle_enable_group_list_ajax",{},function(jsonObject){
+				groupList = jsonObject.data;
+				if(myGroupId){
+					$.each(groupList,function(i){
+						if(groupList[i].id == myGroupId){
+							$("#groupId").append("<option value='"+groupList[i].id+"'>"+groupList[i].groupName+"</option>");
+						}
+					});
+				}else{
+					$("#groupId").append("<option value=''>所有</option>");
+					$.each(groupList,function(i){
+						$("#groupId").append("<option value='"+groupList[i].id+"'>"+groupList[i].groupName+"</option>");
+					});
+				}
 			});
 		}
 		

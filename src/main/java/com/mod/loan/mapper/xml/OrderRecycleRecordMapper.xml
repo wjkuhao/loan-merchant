@@ -47,6 +47,9 @@
             <if test="userPhone !=null">
                 and b.user_phone=#{userPhone}
             </if>
+            <if test="groupId !=null">
+                and a.group_id=#{groupId}
+            </if>
         </where>
         order by
         <choose>
@@ -59,7 +62,7 @@
         </choose>
         limit #{startIndex},#{pageSize}
     </select>
-    
+
     <select id="countOverdueList" resultType="int">
         select count(0) from tb_order a
         <where>
@@ -90,6 +93,9 @@
             <if test="userPhone !=null">
                 and a.uid = (select id from tb_user u where u.user_phone=#{userPhone} and u.merchant = #{merchant})
             </if>
+            <if test="groupId !=null">
+                and a.group_id=#{groupId}
+            </if>
         </where>
     </select>
 
@@ -109,7 +115,7 @@
         </where>
         ORDER BY id desc
     </select>
-    
+
     <select id="findAllRecycleList" resultType="map">
         select a.uid,c.user_name,c.user_phone,a.id, b.user_name as
         follow_name,a.follow_status,a.remark,a.create_time,a.type
@@ -131,7 +137,7 @@
         </where>
         ORDER BY a.id desc limit #{startIndex},#{pageSize}
     </select>
-    
+
     <select id="countAuditList" resultType="int">
         select count(*)
         from tb_order_recycle_record a left join tb_merchant_manager b on a.follow_user_id =b.id left join tb_user c on
@@ -151,15 +157,15 @@
             </if>
         </where>
     </select>
-    
-	<select id="selectOverdueUserMessageCount" resultType="int">
-		select count(distinct(o.uid))
-		from tb_order o
-		left join tb_user u on u.id = o.uid
-		left join tb_user_info ui on ui.uid = o.uid
-		left join tb_moxie_mobile mm on mm.uid = o.uid
-		left join tb_user_address_list ual on ual.uid = o.uid
-		left join tb_merchant m on m.merchant_alias = o.merchant
+
+    <select id="selectOverdueUserMessageCount" resultType="int">
+        select count(distinct(o.uid))
+        from tb_order o
+        left join tb_user u on u.id = o.uid
+        left join tb_user_info ui on ui.uid = o.uid
+        left join tb_moxie_mobile mm on mm.uid = o.uid
+        left join tb_user_address_list ual on ual.uid = o.uid
+        left join tb_merchant m on m.merchant_alias = o.merchant
         <where>
             <if test="orderStatus !=null">
                 and o.status=#{orderStatus}

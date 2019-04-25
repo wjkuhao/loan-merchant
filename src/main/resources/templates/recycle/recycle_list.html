@@ -37,7 +37,11 @@
 						<span>应还时间:</span>
 						<input id="repayTimeDown" style="width:100px" name="repayTimeDown" type="text" readonly="readonly" placeholder="开始时间" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})"/>
 						~
-						<input id="repayTimeUp" style="width:100px" name="repayTimeUp" type="text" readonly="readonly" placeholder="结束时间" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})"/>				
+						<input id="repayTimeUp" style="width:100px" name="repayTimeUp" type="text" readonly="readonly" placeholder="结束时间" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})"/>
+						<span>逾期分组:</span>
+						<select id="groupId" name="groupId">
+							<option value="">所有</option>
+						</select>
 						<button id="query" class="btn btn-small btn-success" onclick="search()"><i class="icon-search"></i> 查询</button>
 						<button id="fendan" class="btn btn-small btn-success" onclick="fendan()">分单</button>
 						<button id="exportOverdueUserMessage" class="btn btn-small btn-success" onclick="exportOverdueUserMessage()">信息导出</button>
@@ -203,10 +207,12 @@
 				repayTimeDown:$("#repayTimeDown").val(),
 				repayTimeUp:$("#repayTimeUp").val(),
 				followUserId:$("#followUserId").val(),
-				userType:$("#userType").val()
+				userType:$("#userType").val(),
+				groupId:$("#groupId").val()
 			});
 		}
 		getManagerList();
+		getGroupList();
 		query();
 		function search(){
 			myTable.page.pageNo= 1;
@@ -312,6 +318,17 @@
 				managerList = jsonObject.data;
 				$.each(managerList,function(i){
 					$("#followUserId").append("<option value='"+managerList[i].followUserId+"'>"+managerList[i].groupName+" - "+managerList[i].recycleName+" - "+managerList[i].remark+"</option>");
+				});
+			});
+		}
+
+		var groupList;
+		function getGroupList(){
+			//逾期S组列表
+			$.post(contextPath+"recycle/recycle_enable_group_list_ajax",{},function(jsonObject){
+				groupList = jsonObject.data;
+				$.each(groupList,function(i){
+					$("#groupId").append("<option value='"+groupList[i].id+"'>"+groupList[i].groupName+"</option>");
 				});
 			});
 		}

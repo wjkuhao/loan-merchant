@@ -33,6 +33,22 @@
 							</select>
 						</td>
 					</tr>
+					<tr>
+						<td>
+							<label class="col-sm-2 control-label">逾期起始时间</label>
+						</td>
+						<td>
+							<input name="startDay" id="startDay" class="form-control"  />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label class="col-sm-2 control-label">逾期结束时间</label>
+						</td>
+						<td>
+							<input name="endDay" id="endDay" class="form-control"  />
+						</td>
+					</tr>
 				</table>
 		</form>
 		<div>
@@ -50,6 +66,8 @@
 				$("#id").val(obj.id);
 				$("#groupName").val(obj.groupName);
 				$("#status").val(obj.status);
+				$("#startDay").val(obj.startDay);
+				$("#endDay").val(obj.endDay);
 			});
 		}
 		getAllMessage();
@@ -68,7 +86,26 @@
 				$("#groupName").focus();
 				return false;
 	        }
-
+			if ($("#startDay").val() == "") {
+				$("#startDay").tips({
+					side: 3,
+					msg: "请输入逾期开始时间",
+					bg: "#AE81FF",
+					time: 2
+				});
+				$("#startDay").focus();
+				return false;
+			}
+			if ($("#endDay").val() == "") {
+				$("#endDay").tips({
+					side: 3,
+					msg: "请输入逾期结束时间",
+					bg: "#AE81FF",
+					time: 2
+				});
+				$("#endDay").focus();
+				return false;
+			}
 			$.ajax({
         		url : contextPath+"recycle/recycle_group_edit_ajax",
         		type : "POST",

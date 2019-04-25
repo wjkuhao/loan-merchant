@@ -31,6 +31,7 @@ public class OrderQuery {
 	private String userName;
 	private int startIndex = 0;
 	private int pageSize = 20;
+	private Long groupId;
 
 	public String getMerchant() {
 		return merchant;
@@ -176,4 +177,11 @@ public class OrderQuery {
 		this.userType = userType;
 	}
 
+	public Long getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(Long groupId) {
+		this.groupId = groupId;
+	}
 }

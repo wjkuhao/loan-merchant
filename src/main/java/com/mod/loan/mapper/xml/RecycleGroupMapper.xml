@@ -10,10 +10,12 @@
         <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
         <result column="merchant" jdbcType="VARCHAR" property="merchant"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="start_day" jdbcType="INTEGER" property="startDay"/>
+        <result column="end_day" jdbcType="INTEGER" property="endDay"/>
     </resultMap>
 
     <select id="findRecycleGroupList" parameterType="map" resultType="map">
-        SELECT id,status,group_name,create_time FROM tb_recycle_group
+        SELECT id,status,group_name,create_time,start_day,end_day FROM tb_recycle_group
         <where>
             <if test="groupName != null and groupName != ''">
                 and group_name = #{groupName}

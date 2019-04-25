@@ -31,6 +31,18 @@ public class RecycleGroup {
     private String merchant;
 
     /**
+     * 逾期开始天数
+     */
+    @Column(name = "start_day")
+    private Integer startDay;
+
+    /**
+     * 逾期结束时间
+     */
+    @Column(name = "end_day")
+    private Integer endDay;
+
+    /**
      * @return merchant
      */
     public String getMerchant() {
@@ -106,5 +118,33 @@ public class RecycleGroup {
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    /**
+     * @return start_day
+     */
+    public Integer getStartDay() {
+        return startDay;
+    }
+
+    /**
+     * @param startDay
+     */
+    public void setStartDay(Integer startDay) {
+        this.startDay = startDay;
+    }
+
+    /**
+     * @return end_day
+     */
+    public Integer getEndDay() {
+        return endDay;
+    }
+
+    /**
+     * @param endDay
+     */
+    public void setEndDay(Integer endDay) {
+        this.endDay = endDay;
     }
 }
