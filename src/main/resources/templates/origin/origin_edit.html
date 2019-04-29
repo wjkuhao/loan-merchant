@@ -18,7 +18,17 @@
 						</td>
 						<td>
 							<input name="id" id="id" maxlength="32" class="form-control" th:value="${origin.id}" type="hidden"/>
-							<input name="originName" id="originName" maxlength="32" class="form-control" th:value="${origin.originName}" />
+							<input name="originName" id="originName" maxlength="32" class="form-control" th:value="${origin.originName}" />						</td>
+					</tr>
+					<tr>
+						<td>
+							<label class="col-sm-2 control-label">状态</label>
+						</td>
+						<td>
+							<select th:field="${origin.status}" name="status" id="status" class="form-control" >
+								<option th:selected="${origin.status==0}" value="0">正常</option>
+                                <option th:selected="${origin.status==1}" value="1">停用</option>
+							</select>
 						</td>
 					</tr>
 					<tr>
@@ -27,6 +37,15 @@
 						</td>
 						<td>
 							<input name="deductionRate" id="deductionRate" maxlength="32" class="form-control" th:value="${origin.deductionRate}" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label class="col-sm-2 control-label">风控token</label>
+						</td>
+						<td>
+                        <textarea name="mxRiskToken" id="mxRiskToken" class="form-control" th:text="${origin.mxRiskToken}"
+								  style="resize:none; width: 180px; height: 100px; ">  </textarea>
 						</td>
 					</tr>
 				</table>
