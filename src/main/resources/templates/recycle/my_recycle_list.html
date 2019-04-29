@@ -37,6 +37,7 @@
 								<th class="center">状态</th>
 								<th class="center">用户姓名</th>
 								<th class="center">逾期天数</th>
+								<th class="center">借款组</th>
 								<th class="center">借款金额</th>
 								<th class="center">逾期费</th>
 								<th class="center">减免金额</th>
@@ -107,6 +108,11 @@
 			            return "<font  color='red'>"+value+"</font>";
 			        }
 	        	},{
+					id : "group_name",
+					renderer : function(idValue,value,record){
+						return "<font  color='red'>"+value+"</font>";
+					}
+				},{
 		            id : "borrow_money",
 		            renderer : function(idValue,value,record){
 			            return value;

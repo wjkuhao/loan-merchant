@@ -17,8 +17,9 @@
         select
         a.id,a.uid,a.borrow_day,a.borrow_money,a.actual_money,a.overdue_day,a.overdue_fee,a.should_repay,a.reduce_money,a.status,a.user_type,
         a.arrive_time,a.repay_time,a.real_repay_time,b.user_phone,b.user_name,c.user_name as
-        follow_name,a.real_repay_time,a.recycle_type
+        follow_name,a.real_repay_time,a.recycle_type,g.group_name
         from tb_order a left join tb_user b on a.uid=b.id left join tb_merchant_manager c on a.follow_user_id=c.id
+        left join tb_recycle_group g on a.group_id=g.id
         <where>
             <if test="orderStatus !=null">
                 and a.status=#{orderStatus}
