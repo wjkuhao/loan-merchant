@@ -11,25 +11,45 @@
 		<form action="" name="myForm" id="myForm" method="post">
 			<fieldset>
 				<legend>新增渠道</legend>
-				<table style="border-collapse:separate; border-spacing:10px;">
-					<tr>
-						<td>
-							<label class="col-sm-2 control-label">渠道别名</label>
-						</td>
-						<td>
-							<input name="originName" id="originName" maxlength="32" class="form-control" />
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label class="col-sm-2 control-label">扣量率</label>
-						</td>
-						<td>
-							<input name="deductionRate" id="deductionRate" maxlength="32" class="form-control" />
-						</td>
-					</tr>
-				</table>
-			</fieldset>
+            </fieldset>
+            <table>
+                <tr>
+                    <td>
+                        <label class="col-sm-2 control-label">渠道别名</label>
+                    </td>
+                    <td>
+                        <input name="originName" id="originName" maxlength="20" class="form-control" required="required"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="col-sm-2 control-label">状态</label>
+                    </td>
+                    <td>
+                        <select name="status" id="status" class="form-control">
+                            <option value="0">正常</option>
+                            <option value="1">停用</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="col-sm-2 control-label">扣量率</label>
+                    </td>
+                    <td>
+                        <input name="deductionRate" id="deductionRate" maxlength="10" class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="col-sm-2 control-label">风控token</label>
+                    </td>
+                    <td>
+                        <textarea name="mxRiskToken" id="mxRiskToken" class="form-control"
+                              style="resize:none; width: 180px; height: 100px;"></textarea>
+                    </td>
+                </tr>
+            </table>
 		</form>
 		<div>
 			<a class="btn btn-mini btn-primary" id="saveButton">保存</a>

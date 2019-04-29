@@ -1,7 +1,9 @@
 package com.mod.loan.model;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
-import javax.persistence.*;
 
 @Table(name = "tb_merchant_origin")
 public class MerchantOrigin {
@@ -25,6 +27,24 @@ public class MerchantOrigin {
     @Column(name = "deduction_rate")
     private Integer deductionRate;
 
+    private Integer status;
+
+    private String mxRiskToken;
+
+    public String getMxRiskToken() {
+        return mxRiskToken;
+    }
+
+    public void setMxRiskToken(String mxRiskToken) {
+        this.mxRiskToken = mxRiskToken;
+    }
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
     public Integer getDeductionRate() {
         return deductionRate;
     }
