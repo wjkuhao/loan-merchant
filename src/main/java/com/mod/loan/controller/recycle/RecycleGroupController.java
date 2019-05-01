@@ -94,4 +94,13 @@ public class RecycleGroupController {
         recycleGroup.setStatus(0);
         return new ResultMessage(ResponseEnum.M2000, recycleGroupService.select(recycleGroup));
     }
+
+
+    @RequestMapping(value = "group_list_ajax", method = {RequestMethod.POST})
+    public ResultMessage group_list_ajax() {
+        RecycleGroup recycleGroup = new RecycleGroup();
+        recycleGroup.setMerchant(RequestThread.get().getMerchant());
+        recycleGroup.setStatus(0);
+        return new ResultMessage(ResponseEnum.M2000, recycleGroupService.select(recycleGroup));
+    }
 }
