@@ -106,7 +106,7 @@ public class OrderController {
         param.put("endRealRepayTime", StringUtils.isBlank(endRealRepayTime) ? null : endRealRepayTime);
         param.put("startCreateTime", StringUtils.isBlank(startCreateTime) ? null : startCreateTime);
         param.put("endCreateTime", StringUtils.isBlank(endCreateTime) ? null : endCreateTime);
-        if (order.getUserType() > 0) {
+        if (order != null && order.getUserType() != null && order.getUserType() > 0) {
             param.put("userType", order.getUserType());
         } else {
             param.put("userType", null);
