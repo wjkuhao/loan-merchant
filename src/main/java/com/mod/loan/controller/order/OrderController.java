@@ -80,10 +80,10 @@ public class OrderController {
 
     @RequestMapping(value = "order_pass_list_ajax", method = {RequestMethod.POST})
     public ResultMessage order_pass_list_ajax(Order order, String startTime, String endTime, Page page) {
-    	int timeDiff = TimeUtils.getTimeDiff(startTime, endTime);
-		if (timeDiff > 7 || timeDiff < 0) {
-			return null;
-		}
+        int timeDiff = TimeUtils.getTimeDiff(startTime, endTime);
+        if (timeDiff > 7 || timeDiff < 0) {
+            return null;
+        }
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("merchant", RequestThread.get().getMerchant());
         param.put("userType", order.getUserType() != null ? order.getUserType() : null);
@@ -106,6 +106,11 @@ public class OrderController {
         param.put("endRealRepayTime", StringUtils.isBlank(endRealRepayTime) ? null : endRealRepayTime);
         param.put("startCreateTime", StringUtils.isBlank(startCreateTime) ? null : startCreateTime);
         param.put("endCreateTime", StringUtils.isBlank(endCreateTime) ? null : endCreateTime);
+        if (order.getUserType() > 0) {
+            param.put("userType", order.getUserType());
+        } else {
+            param.put("userType", null);
+        }
         return new ResultMessage(ResponseEnum.M2000, orderService.findOrderList(param, page), page);
     }
 
@@ -180,16 +185,16 @@ public class OrderController {
         String merchant = RequestThread.get().getMerchant();
         Merchant record = merchantService.selectByPrimaryKey(merchant);
         JSONObject merchantChannel = JSONObject.parseObject(record.getMerchantChannel());
-        
+
         // 支付通道是否合法
-		if (merchantChannel.get(payType) == null) {
-			return new ResultMessage(ResponseEnum.M4000.getCode(), "请选择正确的支付通道");
-		} else if (merchantChannel.get(payType) instanceof Integer && merchantChannel.getInteger(payType) != 1) {
-			return new ResultMessage(ResponseEnum.M4000.getCode(), "没有开通此支付通道");
-		} else if (merchantChannel.getJSONObject(payType).getInteger("pay") != 1) {
-			return new ResultMessage(ResponseEnum.M4000.getCode(), "没有开通此支付通道");
-		}
-		
+        if (merchantChannel.get(payType) == null) {
+            return new ResultMessage(ResponseEnum.M4000.getCode(), "请选择正确的支付通道");
+        } else if (merchantChannel.get(payType) instanceof Integer && merchantChannel.getInteger(payType) != 1) {
+            return new ResultMessage(ResponseEnum.M4000.getCode(), "没有开通此支付通道");
+        } else if (merchantChannel.getJSONObject(payType).getInteger("pay") != 1) {
+            return new ResultMessage(ResponseEnum.M4000.getCode(), "没有开通此支付通道");
+        }
+
         if (!redisMapper.getLock(RedisConst.REDIS_LOCK + merchant, 10)) {
             return new ResultMessage(ResponseEnum.M4000.getCode(), "系统忙，请重试。");
         }
@@ -233,11 +238,11 @@ public class OrderController {
 
     @RequestMapping(value = "export_report_order_list")
     public void export_report(String reportName, String startTime, String endTime, String startRealRepayTime, String endRealRepayTime, HttpServletResponse response, String userPhone, Integer status, String startCreateTime, String endCreateTime) {
-		// 安全校验
-		if (redisMapper.get(RedisConst.USER_SECURITY_CODE_SECOND + RequestThread.get().getUid()) == null) {
-			return;
-		}
-		// 导出功能
+        // 安全校验
+        if (redisMapper.get(RedisConst.USER_SECURITY_CODE_SECOND + RequestThread.get().getUid()) == null) {
+            return;
+        }
+        // 导出功能
         try {
             String[] title = null;
             String sheetName = null;

@@ -114,6 +114,9 @@
             <if test="endCreateTime != null">
                 and o.create_time &lt;= DATE_ADD(#{endCreateTime},INTERVAL 1 DAY)
             </if>
+            <if test="userType != null">
+                and o.user_type = #{userType}
+            </if>
         </where>
         order by o.id desc limit #{startIndex},#{pageSize}
     </select>

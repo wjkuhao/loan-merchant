@@ -43,6 +43,13 @@
                     ~
                     <input id="endRealRepayTime" name="endRealRepayTime" type="text" readonly="readonly" placeholder="结束时间" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})"/>
                     <br>
+                    <span>客群状态:</span>
+                    <select id="userType" name="userType" class="form-control" onchange="this.blur()">
+                        <option value="0">全部</option>
+                        <option value="1">新客</option>
+                        <option value="2">次新</option>
+                        <option value="3">老客</option>
+                    </select>
                     <button id="query" class="btn btn-small btn-success" onclick="search()"><i class="icon-search"></i> 查询</button>
                     <button class="btn btn-small btn-success" onclick="exportReport()">EXCEL导出</button>
                 </div>
@@ -248,7 +255,8 @@
             endRealRepayTime: $("#endRealRepayTime").val(),
             endCreateTime: $("#endCreateTime").val(),
             startCreateTime: $("#startCreateTime").val(),
-            status: $("#status").val()
+            status: $("#status").val(),
+            userType:$("#userType").val()
         });
     }
 //    query();
