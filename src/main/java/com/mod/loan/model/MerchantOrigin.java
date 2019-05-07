@@ -31,6 +31,39 @@ public class MerchantOrigin {
 
     private String mxRiskToken;
 
+    @Column(name = "check_repay")
+    private Integer checkRepay;
+
+    @Column(name = "check_overdue")
+    private Integer checkOverdue;
+
+    @Column(name = "check_blacklist")
+    private Integer checkBlacklist;
+
+    public Integer getCheckRepay() {
+        return checkRepay;
+    }
+
+    public void setCheckRepay(Integer checkRepay) {
+        this.checkRepay = checkRepay;
+    }
+
+    public Integer getCheckOverdue() {
+        return checkOverdue;
+    }
+
+    public void setCheckOverdue(Integer checkOverdue) {
+        this.checkOverdue = checkOverdue;
+    }
+
+    public Integer getCheckBlacklist() {
+        return checkBlacklist;
+    }
+
+    public void setCheckBlacklist(Integer checkBlacklist) {
+        this.checkBlacklist = checkBlacklist;
+    }
+
     public String getMxRiskToken() {
         return mxRiskToken;
     }
