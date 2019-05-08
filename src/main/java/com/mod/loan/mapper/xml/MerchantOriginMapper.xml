@@ -72,7 +72,7 @@
     </select>
 
     <select id="findOriginList" resultType="map">
-        select id,merchant,origin_name,create_time from tb_merchant_origin
+        select id,merchant,origin_name,create_time,status from tb_merchant_origin
         <where>
             <if test="merchant != null">
                 and merchant = #{merchant}

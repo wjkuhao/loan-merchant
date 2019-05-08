@@ -20,6 +20,7 @@
 								<th class="center">渠道链接</th>
 								<th class="center">渠道名</th>
 								<th class="center">创建时间</th>
+                                <th class="center">状态</th>
 								<th class="center">操作</th>
 							</tr>
 						</thead>
@@ -42,6 +43,7 @@
 	<a href="#" id="btn-scroll-up" class="btn btn-small btn-inverse">
 		<i class="icon-double-angle-up icon-only"></i>
 	</a>
+    <script type="text/javascript" src="/static/js/base64.min.js"></script>
 	<script type="text/javascript">
 		var contextPath="[[@{/}]]";
 		var server_h5_url="[(${server_h5_url})]";
@@ -68,7 +70,13 @@
 		            renderer : function(idValue,value,record){
 			            return value == null ? "---" : moment(value).format("YYYY-MM-DD HH:mm:ss");
 			        }
-	        	},{
+	        	},
+                {
+                    id : "status",
+                    renderer : function(idValue,value,record){
+                        return value === true ? "停用" : "正常";
+                    }
+                },{
 		            id : "id",
 		            renderer : function(idValue,value,record){
 			            var html = "<div class='btn-group'>";
