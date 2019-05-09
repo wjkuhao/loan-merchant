@@ -58,7 +58,11 @@
 				},{
 		            id : "id",
 		            renderer : function(idValue,value,record){
-			            return server_h5_url+"register/"+record.merchant+".html?origin="+value;
+                        var encodeOrigin = value;
+		                if (record.merchant==="haitun") {
+                            encodeOrigin = Base64.encode(value)+"=";
+                        }
+                        return server_h5_url+"register/"+record.merchant+".html?origin="+encodeOrigin;
 			        }
 	        	},{
 		            id : "origin_name",
