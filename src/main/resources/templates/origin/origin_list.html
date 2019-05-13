@@ -43,8 +43,13 @@
 	<a href="#" id="btn-scroll-up" class="btn btn-small btn-inverse">
 		<i class="icon-double-angle-up icon-only"></i>
 	</a>
+
     <script type="text/javascript" src="/static/js/base64.min.js"></script>
-	<script type="text/javascript">
+	<script type="text/javascript" src="/static/js/tripledes.js" ></script>
+    <script type="text/javascript" src="/static/js/mode-ecb.js" ></script>
+
+
+    <script type="text/javascript">
 		var contextPath="[[@{/}]]";
 		var server_h5_url="[(${server_h5_url})]";
 		$(top.hangge());
@@ -61,6 +66,9 @@
                         var encodeOrigin = value;
 		                if (record.merchant==="haitun") {
                             encodeOrigin = Base64.encode(value)+"=";
+                        }else if(record.merchant==="huijie"){
+		                    var desKey = "1234abcd";
+                            encodeOrigin = encryptByDES(""+value, desKey);
                         }
                         return server_h5_url+"register/"+record.merchant+".html?origin="+encodeOrigin;
 			        }
@@ -90,7 +98,20 @@
 			        }
 	        	}]
 		});
-		
+
+        function encryptByDES(message, key) {
+            //把私钥转换成16进制的字符串
+            var keyHex = CryptoJS.enc.Utf8.parse(key);
+            //模式为ECB padding为Pkcs7
+            var encrypted = CryptoJS.DES.encrypt(message, keyHex, {
+                mode: CryptoJS.mode.ECB,
+                padding: CryptoJS.pad.Pkcs7
+            });
+            //加密出来是一个16进制的字符串
+            return encrypted.toString();
+        }
+
+
 		function query() {
 			myTable.page.totalRowNum = 0;
 			myTable.page.pageSize = 20;
