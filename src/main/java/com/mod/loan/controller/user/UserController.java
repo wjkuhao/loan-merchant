@@ -127,6 +127,18 @@ public class UserController {
         data.putAll(orderMapper.countDebtRecord(user.getUserPhone()));
         // 提单历史
         data.putAll(orderMapper.countUserOrderRecord(RequestThread.get().getMerchant(), id));
+
+        try {
+            //获取用户展期信息
+            String url = Constant.server_api_url + "order_defer/user_defer_detail?uid=" + id;
+            Response execute = Jsoup.connect(url).ignoreContentType(true).ignoreHttpErrors(true).execute();
+            JSONObject defer = JSONObject.parseObject(execute.body());
+            if (defer != null && !defer.isEmpty()) {
+                data.putAll(defer);
+            }
+        } catch (IOException e) {
+            logger.error("user_defer_detail error", e);
+        }
         return new ResultMessage(ResponseEnum.M2000, data);
     }
 

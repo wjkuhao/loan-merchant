@@ -215,6 +215,15 @@
 			<td><span v-text="countUserOrderFailByRisk"></span></td>
 		</tr>
 	</table>
+	<h4 align="left">用户续期</h4>
+	<table class="table table-striped table-bordered table-hover">
+		<tr>
+			<td>用户续期总数</td>
+			<td><span v-text="userDeferCount"></span></td>
+			<td>当前续期状态</td>
+			<td><span v-text="userDeferStatus"></span></td>
+		</tr>
+	</table>
 
 	<template v-if="feedbackList">
 		<h4 align="left">用户反馈</h4>
@@ -285,6 +294,16 @@
 					_that.countUserOrderSuccess = result.data.countUserOrderSuccess;
 					_that.countUserOrderFail = result.data.countUserOrderFail;
 					_that.countUserOrderFailByRisk = result.data.countUserOrderFailByRisk;
+					//展期信息
+					if(result.data.userDeferCount){
+						_that.userDeferCount = result.data.userDeferCount;
+					}
+					if(result.data.userDeferMsg){
+						//这个是状态值
+						//_that.userDeferStatus = result.data.userDeferStatus;
+						//这个是状态信息
+						_that.userDeferStatus = result.data.userDeferMsg;
+					}
 
 					if(result.data.countUserOrder > 0){
 						$("#auditList").show();
@@ -357,7 +376,9 @@
 			countUserOrderSuccess: {},
 			countUserOrderFail: {},
 			countUserOrderFailByRisk: {},
-			feedbackList: []
+			feedbackList: [],
+			userDeferCount: "---",
+			userDeferStatus: "---"
 		},
 		methods: {
 			getIdentValue(status){
