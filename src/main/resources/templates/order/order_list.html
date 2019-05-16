@@ -21,8 +21,13 @@
                         <option value="32">还款确认中</option>
                         <option value="33">逾期</option>
                         <option value="34">坏账</option>
+                        <option value="35">展期</option>
+                        <option value="36">逾期后展期</option>
+                        <option value="37">展期后逾期</option>
+                        <option value="38">展期后坏账</option>
                         <option value="41">已结清</option>
                         <option value="42">逾期还款</option>
+                        <option value="43">展期还款</option>
                         <option value="51">自动审核失败</option>
                         <option value="52">复审失败</option>
                         <option value="53">取消</option>
@@ -143,11 +148,26 @@
                 if (value == 34) {
                     return "<font color='red'>坏账</font>";
                 }
+                if (value == 35) {
+                    return "<font color='red'>展期</font>";
+                }
+                if (value == 36) {
+                    return "<font color='red'>逾期后展期</font>";
+                }
+                if (value == 37) {
+                    return "<font color='red'>展期后逾期</font>";
+                }
+                if (value == 38) {
+                    return "<font color='red'>展期后坏账</font>";
+                }
                 if (value == 41) {
                     return "<font color='green'>已结清</font>";
                 }
                 if (value == 42) {
                     return "<font color='green'>逾期还款</font>";
+                }
+                if (value == 43) {
+                    return "<font color='green'>展期还款</font>";
                 }
                 if (value == 51) {
                     return "<font color='red'>自动审核失败</font>";
