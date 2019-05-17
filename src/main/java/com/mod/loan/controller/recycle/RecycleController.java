@@ -80,7 +80,7 @@ public class RecycleController {
         query.setFollowUserId(followUserId);
         query.setUserType(userType);
         if (orderStatus != 33 && orderStatus != 42 && orderStatus != 34
-                && orderStatus != 37 && orderStatus != 38) {
+                && orderStatus != 36 && orderStatus != 37 && orderStatus != 38) {
             return new ResultMessage(ResponseEnum.M4000);
         }
         query.setOrderStatus(orderStatus);
@@ -147,7 +147,7 @@ public class RecycleController {
         }
 
         if (orderStatus != 33 && orderStatus != 42 && orderStatus != 34
-                && orderStatus != 37 && orderStatus != 38) {
+                && orderStatus != 36 && orderStatus != 37 && orderStatus != 38) {
             return new ResultMessage(ResponseEnum.M4000);
         }
         if (!StringUtils.isBlank(userPhone)) {
@@ -241,7 +241,8 @@ public class RecycleController {
         query.setOverdueDayDown(overdueDayDown);
         query.setOverdueDayUp(overdueDayUp);
         query.setFollowUserId(RequestThread.get().getUid());
-        if (orderStatus != 33 && orderStatus != 42 && orderStatus != 34) {
+        if (orderStatus != 33 && orderStatus != 42 && orderStatus != 34
+                && orderStatus != 36 && orderStatus != 37 && orderStatus != 38) {
             return new ResultMessage(ResponseEnum.M4000);
         }
         query.setOrderStatus(orderStatus);
@@ -325,7 +326,8 @@ public class RecycleController {
         query.setOverdueDayUp(overdueDayUp);
         query.setFollowUserId(followUserId);
         query.setUserType(userType);
-        if (orderStatus != 33 && orderStatus != 34) {
+        if (orderStatus != 33 && orderStatus != 34
+                && orderStatus != 36 && orderStatus != 37 && orderStatus != 38) {
             return new ResultMessage(ResponseEnum.M4000);
         }
         query.setOrderStatus(orderStatus);
