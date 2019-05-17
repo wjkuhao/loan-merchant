@@ -20,6 +20,7 @@
 							<option value="33">逾期</option>
 							<option value="42">逾期还款</option>
 							<option value="34">坏账</option>
+							<option value="36">逾期后展期</option>
 							<option value="37">展期后逾期</option>
 							<option value="38">展期后坏账</option>
 					    </select>
@@ -117,11 +118,14 @@
 		            	if(value==34){
 		            		return "坏账";
 		            	}
+						if (value == 36) {
+							return "<font color='red'>逾期后展期</font>";
+						}
 						if (value == 37) {
 							return "<font color='red'>展期后逾期</font>";
 						}
 						if (value == 38) {
-							return "<font color='red'>展期后坏账</font>";
+							return "展期后坏账";
 						}
 			            return "---";
 			        }
