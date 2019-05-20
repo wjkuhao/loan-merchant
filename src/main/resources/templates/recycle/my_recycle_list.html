@@ -122,7 +122,7 @@
 	        	},{
 					id : "group_name",
 					renderer : function(idValue,value,record){
-						return "<font  color='red'>"+value+"</font>";
+						return value ? "<font  color='red'>"+value+"</font>" : "---";
 					}
 				},{
 		            id : "borrow_money",
