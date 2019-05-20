@@ -80,7 +80,7 @@
 		var contextPath="[[@{/}]]";
 
 		function getAllMessage() {
-			$.post(contextPath+"order/order_defer_for_offline_compute",{"id":id},function(data){
+			$.post(contextPath+"order/order_defer_for_offline_compute",{"id":id, "deferDay": 6},function(data){
 				var obj = data.data;
 				$("#userPhone").val(obj.userPhone);
 				$("#userName").val(obj.userName);
