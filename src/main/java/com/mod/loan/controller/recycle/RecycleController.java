@@ -79,9 +79,10 @@ public class RecycleController {
         }
         query.setFollowUserId(followUserId);
         query.setUserType(userType);
-        if (orderStatus != 33 && orderStatus != 42 && orderStatus != 34
-                && orderStatus != 36 && orderStatus != 37 && orderStatus != 38) {
-            return new ResultMessage(ResponseEnum.M4000);
+        //查展期和逾期后展期时候,重置逾期天数
+        if(orderStatus == 35 || orderStatus == 36){
+            query.setOverdueDayUp(0);
+            query.setOverdueDayDown(0);
         }
         query.setOrderStatus(orderStatus);
         if (!StringUtils.isBlank(userPhone)) {
@@ -146,10 +147,6 @@ public class RecycleController {
             query.setFollowUserId(RequestThread.get().getUid());
         }
 
-        if (orderStatus != 33 && orderStatus != 42 && orderStatus != 34
-                && orderStatus != 36 && orderStatus != 37 && orderStatus != 38) {
-            return new ResultMessage(ResponseEnum.M4000);
-        }
         if (!StringUtils.isBlank(userPhone)) {
             query.setUserPhone(userPhone);
         }
@@ -241,10 +238,6 @@ public class RecycleController {
         query.setOverdueDayDown(overdueDayDown);
         query.setOverdueDayUp(overdueDayUp);
         query.setFollowUserId(RequestThread.get().getUid());
-        if (orderStatus != 33 && orderStatus != 42 && orderStatus != 34
-                && orderStatus != 36 && orderStatus != 37 && orderStatus != 38) {
-            return new ResultMessage(ResponseEnum.M4000);
-        }
         query.setOrderStatus(orderStatus);
         if (!StringUtils.isBlank(userPhone)) {
             query.setUserPhone(userPhone);
@@ -326,10 +319,7 @@ public class RecycleController {
         query.setOverdueDayUp(overdueDayUp);
         query.setFollowUserId(followUserId);
         query.setUserType(userType);
-        if (orderStatus != 33 && orderStatus != 34
-                && orderStatus != 36 && orderStatus != 37 && orderStatus != 38) {
-            return new ResultMessage(ResponseEnum.M4000);
-        }
+
         query.setOrderStatus(orderStatus);
         if (!StringUtils.isBlank(userPhone)) {
             query.setUserPhone(userPhone);

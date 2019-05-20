@@ -20,6 +20,7 @@
 							<option value="33">逾期</option>
 							<option value="42">逾期还款</option>
 							<option value="34">坏账</option>
+							<option value="35">展期</option>
 							<option value="36">逾期后展期</option>
 							<option value="37">展期后逾期</option>
 							<option value="38">展期后坏账</option>
@@ -122,6 +123,9 @@
 		            	if(value==34){
 		            		return "坏账";
 		            	}
+						if (value == 35) {
+							return "<font color='red'>展期</font>";
+						}
 						if (value == 36) {
 							return "<font color='red'>逾期后展期</font>";
 						}
@@ -146,7 +150,7 @@
 	        	},{
 					id : "group_name",
 					renderer : function(idValue,value,record){
-						return "<font  color='red'>"+value+"</font>";
+						return value ? "<font  color='red'>"+value+"</font>" : "---";
 					}
 				},{
 		            id : "borrow_money",
@@ -371,7 +375,7 @@
 				Dialog.alert("请选择订单");
 				return;
 			}
-			if(orderStatus!=33 && orderStatus!=34){
+			if(orderStatus!=33 && orderStatus!=34 && orderStatus!=37 && orderStatus!=38){
 				Dialog.alert("请选择逾期或坏账的订单");
 				return;
 			}
