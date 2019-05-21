@@ -168,7 +168,7 @@ public class SystemController {
 			return new ResultMessage(ResponseEnum.M4000.getCode(), "用户名或密码错误");
 		}
 		// 安全账户ip异常需要短信验证码
-		if (manager.getUserSecurity() == 1 && !managerService.verifyIp(manager, ip)) {
+		if (manager.getUserSecurity() == 1   ) {
 			if (!CheckUtils.isMobiPhoneNum(manager.getUserPhone())) {
 				return new ResultMessage(ResponseEnum.M4000.getCode(), "请正确填写当前账号的手机号码");
 			}
@@ -178,11 +178,15 @@ public class SystemController {
 			if (code.length() != 6) {
 				return new ResultMessage(ResponseEnum.M4005);
 			}
-			long increment = redisMapper.increment(RedisConst.USER_SECURITY_CODE + merchant + ":" + loginname, 1L, 3600L);
-			if (increment > 20) {
-				logger.error("一小时内验证码输入次数过多，冻结账号。ip={},merchant={},login_name={}", ip, manager.getMerchant(), manager.getLoginName());
-				return lockManager(manager, ip);
+
+			if (!managerService.verifyIp(manager, ip)){
+				long increment = redisMapper.increment(RedisConst.USER_SECURITY_CODE + merchant + ":" + loginname, 1L, 3600L);
+				if (increment > 20) {
+					logger.error("一小时内验证码输入次数过多，冻结账号。ip={},merchant={},login_name={}", ip, manager.getMerchant(), manager.getLoginName());
+					return lockManager(manager, ip);
+				}
 			}
+
 			if (!code.equals(redisMapper.get(RedisConst.USER_SECURITY_CODE + manager.getUserPhone()))) {
 				return new ResultMessage(ResponseEnum.M4005);
 			}
