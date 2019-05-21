@@ -79,10 +79,10 @@ public class RecycleController {
         }
         query.setFollowUserId(followUserId);
         query.setUserType(userType);
-        //查展期和逾期后展期时候,重置逾期天数
-        if(orderStatus == 35 || orderStatus == 36){
-            query.setOverdueDayUp(0);
-            query.setOverdueDayDown(0);
+        //非逾期的状态查询,逾期时间都设置为空
+        if(orderStatus != 33 && orderStatus != 34 && orderStatus != 37 && orderStatus != 38){
+            query.setOverdueDayUp(null);
+            query.setOverdueDayDown(null);
         }
         query.setOrderStatus(orderStatus);
         if (!StringUtils.isBlank(userPhone)) {
@@ -138,6 +138,11 @@ public class RecycleController {
         } else {
             query.setOverdueDayDown(overdueDayDown);
             query.setOverdueDayUp(overdueDayUp);
+        }
+        //非逾期的状态查询,逾期时间都设置为空
+        if(orderStatus != 33 && orderStatus != 34 && orderStatus != 37 && orderStatus != 38){
+            query.setOverdueDayUp(null);
+            query.setOverdueDayDown(null);
         }
         query.setOrderStatus(orderStatus);
         query.setUserType(userType);
@@ -239,6 +244,11 @@ public class RecycleController {
         query.setOverdueDayUp(overdueDayUp);
         query.setFollowUserId(RequestThread.get().getUid());
         query.setOrderStatus(orderStatus);
+        //非逾期的状态查询,逾期时间都设置为空
+        if(orderStatus != 33 && orderStatus != 34 && orderStatus != 37 && orderStatus != 38){
+            query.setOverdueDayUp(null);
+            query.setOverdueDayDown(null);
+        }
         if (!StringUtils.isBlank(userPhone)) {
             query.setUserPhone(userPhone);
         }

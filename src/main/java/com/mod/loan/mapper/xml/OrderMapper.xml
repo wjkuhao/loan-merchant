@@ -136,7 +136,7 @@
     </select>
     
     <update id="updateOrderFollowUser">
-        update tb_order a set a.follow_user_id = #{followUserId} where a.merchant = #{merchant} and a.status in(33,34,37,38) and
+        update tb_order a set a.follow_user_id = #{followUserId} where a.merchant = #{merchant} and a.status in(31,33,34,35,36,37,38,42) and
         a.id in
         <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
             #{item}
