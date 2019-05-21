@@ -18,14 +18,15 @@
 					    <span>状态:</span>
 					    <select id="orderStatus" name="orderStatus">
 							<option value="31">还款中</option>
-							<option value="32">还款确认中</option>
 							<option value="33">逾期</option>
 							<option value="34">坏账</option>
 							<option value="35">展期</option>
 							<option value="36">逾期后展期</option>
 							<option value="37">展期后逾期</option>
 							<option value="38">展期后坏账</option>
+							<option value="41">已结清</option>
 							<option value="42">逾期还款</option>
+							<option value="43">展期还款</option>
 					    </select>
 						<br>
 						<span>应还时间:</span>
@@ -95,14 +96,11 @@
 						if (value == 31) {
 							return "<font color='green'>还款中</font>";
 						}
-						if (value == 32) {
-							return "<font color='orange'>还款确认中</font>";
-						}
 						if (value == 33) {
 							return "<font color='red'>逾期</font>";
 						}
 						if (value == 34) {
-							return "<font color='red'>坏账</font>";
+							return "坏账";
 						}
 						if (value == 35) {
 							return "<font color='red'>展期</font>";
@@ -116,10 +114,16 @@
 						if (value == 38) {
 							return "展期后坏账";
 						}
-						if(value==42){
-							return "<font  color='green'>已还</font>";
+						if (value == 41) {
+							return "<font color='green'>已结清</font>";
 						}
-			            return "---";
+						if (value == 42) {
+							return "<font color='green'>逾期还款</font>";
+						}
+						if (value == 43) {
+							return "<font color='green'>展期还款</font>";
+						}
+						return "---";
 			        }
 	        	},{
 		            id : "user_name",

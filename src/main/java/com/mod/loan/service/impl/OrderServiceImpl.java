@@ -123,11 +123,26 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
             if (map.get("status").equals(34)) {
                 map.put("status", "坏账");
             }
+            if (map.get("status").equals(35)) {
+                map.put("status", "展期");
+            }
+            if (map.get("status").equals(36)) {
+                map.put("status", "逾期后展期");
+            }
+            if (map.get("status").equals(37)) {
+                map.put("status", "展期后逾期");
+            }
+            if (map.get("status").equals(38)) {
+                map.put("status", "展期后坏账");
+            }
             if (map.get("status").equals(41)) {
                 map.put("status", "已结清");
             }
             if (map.get("status").equals(42)) {
                 map.put("status", "逾期还款");
+            }
+            if (map.get("status").equals(43)) {
+                map.put("status", "展期还款");
             }
             if (map.get("status").equals(51)) {
                 map.put("status", "自动审核失败");

@@ -18,14 +18,15 @@
 					    <span>状态:</span>
 					    <select id="orderStatus" name="orderStatus" style="width:100px">
 							<option value="31">还款中</option>
-							<option value="32">还款确认中</option>
 							<option value="33">逾期</option>
 							<option value="34">坏账</option>
 							<option value="35">展期</option>
 							<option value="36">逾期后展期</option>
 							<option value="37">展期后逾期</option>
 							<option value="38">展期后坏账</option>
+							<option value="41">已结清</option>
 							<option value="42">逾期还款</option>
+							<option value="43">展期还款</option>
 					    </select>
 					    <span>催收人:</span>
 						<select id="followUserId" name="followUserId"  >
@@ -122,7 +123,7 @@
 							return "<font color='red'>逾期</font>";
 						}
 						if (value == 34) {
-							return "<font color='red'>坏账</font>";
+							return "坏账";
 						}
 						if (value == 35) {
 							return "<font color='red'>展期</font>";
@@ -136,8 +137,14 @@
 						if (value == 38) {
 							return "展期后坏账";
 						}
-						if(value==42){
-							return "<font  color='green'>已还</font>";
+						if (value == 41) {
+							return "<font color='green'>已结清</font>";
+						}
+						if (value == 42) {
+							return "<font color='green'>逾期还款</font>";
+						}
+						if (value == 43) {
+							return "<font color='green'>展期还款</font>";
 						}
 			            return "---";
 			        }
@@ -279,8 +286,8 @@
 				Dialog.alert("请选择订单");
 				return;
 			}
-			if(orderStatus!=33 && orderStatus!=34 && orderStatus!=37 && orderStatus!=38){
-				Dialog.alert("请选择逾期或坏账的订单");
+			if(orderStatus > 38){
+				Dialog.alert("请勿选择已结清和已还款的订单");
 				return;
 			}
 			var diag = new Dialog();
