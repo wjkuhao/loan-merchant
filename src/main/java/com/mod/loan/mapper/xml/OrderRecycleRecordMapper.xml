@@ -119,9 +119,9 @@
 
     <select id="findAllRecycleList" resultType="map">
         select a.uid,c.user_name,c.user_phone,a.id, b.user_name as
-        follow_name,a.follow_status,a.remark,a.create_time,a.type
+        follow_name,a.follow_status,a.remark,a.create_time,a.type,o.status
         from tb_order_recycle_record a left join tb_merchant_manager b on a.follow_user_id =b.id left join tb_user c on
-        a.uid=c.id
+        a.uid=c.id left join tb_order o on a.order_id=o.id
         <where>
             <if test="merchant !=null ">
                 and a.merchant=#{merchant}

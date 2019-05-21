@@ -23,6 +23,7 @@
 							<th class="center">序号</th>
 							<th class="center">催收人</th>
 							<th class="center">用户姓名</th>
+							<th class="center">订单状态</th>
 							<th class="center">类型</th>
 							<th class="center">备注</th>
 							<th class="center">时间</th>
@@ -66,6 +67,38 @@
                     return value ? value + "(" + record.user_phone + ")" : "---" ;
                 }
             },{
+				id : "status",
+				renderer : function(idValue,value,record){
+					if (value == 31) {
+						return "<font color='green'>还款中</font>";
+					}
+					if (value == 32) {
+						return "<font color='orange'>还款确认中</font>";
+					}
+					if (value == 33) {
+						return "<font color='red'>逾期</font>";
+					}
+					if (value == 34) {
+						return "<font color='red'>坏账</font>";
+					}
+					if (value == 35) {
+						return "<font color='red'>展期</font>";
+					}
+					if (value == 36) {
+						return "<font color='red'>逾期后展期</font>";
+					}
+					if (value == 37) {
+						return "<font color='red'>展期后逾期</font>";
+					}
+					if (value == 38) {
+						return "展期后坏账";
+					}
+					if(value==42){
+						return "<font  color='green'>已还</font>";
+					}
+					return "---";
+				}
+			},{
                 id: "type",
                 renderer: function (idValue, value, record) {
                     if (value == 0) {
