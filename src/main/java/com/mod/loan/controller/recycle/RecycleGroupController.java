@@ -62,11 +62,14 @@ public class RecycleGroupController {
         if (StringUtils.isBlank(recycleGroup.getGroupName())) {
             return new ResultMessage(ResponseEnum.M4000.getCode(), "请输入组名");
         }
-        if (recycleGroup.getStartDay() == null || recycleGroup.getStartDay() <= 0) {
+        if (recycleGroup.getStartDay() == null || recycleGroup.getStartDay() < 0) {
             return new ResultMessage(ResponseEnum.M4000.getCode(), "请输入逾期开始时间");
         }
-        if (recycleGroup.getEndDay() == null || recycleGroup.getEndDay() <= 0) {
+        if (recycleGroup.getEndDay() == null || recycleGroup.getEndDay() < 0) {
             return new ResultMessage(ResponseEnum.M4000.getCode(), "请输入逾期结束时间");
+        }
+        if(recycleGroup.getStartDay() >= recycleGroup.getEndDay()){
+            return new ResultMessage(ResponseEnum.M4000.getCode(), "结束时间必须大于开始时间");
         }
         recycleGroup.setMerchant(RequestThread.get().getMerchant());
         if (recycleGroup.getId() == null) {
