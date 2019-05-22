@@ -10,27 +10,7 @@ import javax.persistence.*;
  */
 @Table(name = "tb_order_defer")
 public class OrderDefer {
-    //
-    //`id` int(11) NOT NULL AUTO_INCREMENT,
-    //`order_id` bigint(20) DEFAULT NULL COMMENT '订单号',
-    //`user_name` VARCHAR(30) DEFAULT NULL COMMENT '姓名',
-    //`user_phone` VARCHAR(20) DEFAULT NULL COMMENT '手机',
-    //`overdue_day` TINYINT(2) default NUll COMMENT '逾期天数',
-    //`overdue_fee` DOUBLE(7, 2) DEFAULT NULL COMMENT '逾期费',
-    //`defer_day` TINYINT(2) default NUll COMMENT '续期天数',
-    //`daily_defer_fee` DOUBLE(7, 2) DEFAULT NULL COMMENT '日续期费',
-    //`defer_fee` DOUBLE(7, 2) DEFAULT NULL COMMENT '续期费',
-    //`defer_times` TINYINT(2) DEFAULT NULL COMMENT '当前第几次续期',
-    //`defer_total_fee` DOUBLE(7, 2) DEFAULT NULL COMMENT '续期总额: 逾期费+续期费',
-    //`pay_type` CHAR(10) DEFAULT NULL COMMENT '支付方式:线上/线下',
-    //`pay_no` VARCHAR(255) DEFAULT NULL COMMENT '支付单号:线上支付',
-    //`pay_status` TINYINT(1) DEFAULT 0 COMMENT '续期订单状态:0-初始；1:受理成功；2:受理失败； 3:还款成功；4:还款失败;5:回调信息异常
-    //`pay_time` CHAR(19) DEFAULT NULL COMMENT '续期支付时间',
-    //`create_time` CHAR(19) DEFAULT NULL COMMENT '续期申请时间',
-    //`repay_date` CHAR(10) DEFAULT NULL COMMENT '原始到期日',
-    //`defer_repay_date` CHAR(10) DEFAULT NULL COMMENT '续期到期日',
-    //`remark` VARCHAR(255) DEFAULT null COMMENT '备注',
-    //
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -44,6 +24,8 @@ public class OrderDefer {
     private Integer overdueDay;
     @Column(name = "overdue_fee")
     private Double overdueFee;
+    @Column(name = "reduce_fee")
+    private Double reduceFee;
     @Column(name = "defer_day")
     private Integer deferDay;
     @Column(name = "daily_defer_fee")
@@ -127,6 +109,14 @@ public class OrderDefer {
 
     public void setOverdueFee(Double overdueFee) {
         this.overdueFee = overdueFee;
+    }
+
+    public Double getReduceFee() {
+        return reduceFee;
+    }
+
+    public void setReduceFee(Double reduceFee) {
+        this.reduceFee = reduceFee;
     }
 
     public Integer getDeferDay() {
