@@ -174,15 +174,11 @@
 	        	},{
 		            id : "id",
 		            renderer : function(idValue,value,record){
-		            	if(record.status == 31 || record.status == 33 || record.status == 34){
-				        	var html = "<div class='btn-group'>";
-				        	html += "<a class='btn btn-mini btn-info'  onclick=\"offlineRepay(" + value + ");\">还款确认</a>";
-				        	html += "<a class='btn btn-mini btn-info' onclick=\"reduce(" + value + ");\">减免金额</a>";
-							html += "</div>";
-					        return html;
-		            	}else{
-		            		return "";
-		            	}
+						var html = "<div class='btn-group'>";
+						html += "<a class='btn btn-mini btn-info'  onclick=\"offlineRepay(" + value + ");\">还款确认</a>";
+						html += "<a class='btn btn-mini btn-info' onclick=\"reduce(" + value + ");\">减免金额</a>";
+						html += "</div>";
+						return html;
 			        }
 	        	}]
 		});
