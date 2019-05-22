@@ -117,14 +117,24 @@ public class OrderDeferController {
     }
 
     @RequestMapping("/order_defer_for_offline_repay")
-    public ResultMessage offlineRepayCallback(Long orderId, Double repayMoney, String repayCert, String remark) {
+    public ResultMessage offlineRepayCallback(Long orderId, // 订单号
+                                              Double repayMoney, // 线下还款金额
+                                              Double reduceMoney, // 减免金额
+                                              String repayCert, // 支付凭证
+                                              String remark) {
         OrderDefer orderDefer = orderDeferService.findLastValidByOrderId(orderId);
         if (null == orderDefer) {
             return new ResultMessage(ResponseEnum.M4000.getCode(), "展期单不存在");
         }
+        // 如果有减免金额 加上
+        if (null != reduceMoney && reduceMoney >= 0.0D) {
+            repayMoney += reduceMoney;
+        }
+        // 线下支付总额要等于续期总额
         if (!repayMoney.equals(orderDefer.getDeferTotalFee())) {
             return new ResultMessage(ResponseEnum.M4000.getCode(), "线下展期金额不对");
         }
+        orderDefer.setReduceFee(reduceMoney);// 减免金额
         orderDefer.setRemark(remark);
         orderDefer.setPayNo(repayCert);
         orderDefer.setPayType("线下");
