@@ -49,6 +49,25 @@ public class Constant {
     public final static Integer ORDER_BAD_LOAN = 34;
 
     /**
+     * 订单状态：展期
+     */
+    public final static Integer ORDER_DEFER = 35;
+    /**
+     * 订单状态：逾期后展期
+     */
+    public final static Integer ORDER_OVERDUE_DEFER = 36;
+
+    /**
+     * 订单状态：展期后逾期
+     */
+    public final static Integer ORDER_DEFER_OVERDUE = 37;
+
+    /**
+     * 订单状态：展期后坏账
+     */
+    public final static Integer ORDER_DEFER_BAD = 38;
+
+    /**
      * 订单状态：正常还款
      */
     public final static Integer ORDER_REPAYED = 41;
@@ -57,6 +76,11 @@ public class Constant {
      * 订单状态：逾期还款
      */
     public final static Integer ORDER_OVERDUE_REPAYED = 42;
+
+    /**
+     * 订单状态：展期还款
+     */
+    public final static Integer ORDER_DEFER_REPAYED = 43;
 
     /**
      * 订单状态：复审失败

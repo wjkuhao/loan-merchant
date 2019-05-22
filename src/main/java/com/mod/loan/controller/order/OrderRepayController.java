@@ -115,6 +115,12 @@ public class OrderRepayController {
 			record.setStatus(Constant.ORDER_REPAYED);
 		} else if (order.getStatus() == Constant.ORDER_IS_OVERDUE || order.getStatus() == Constant.ORDER_BAD_LOAN) {
 			record.setStatus(Constant.ORDER_OVERDUE_REPAYED);
+		} else if(order.getStatus() == Constant.ORDER_DEFER || order.getStatus() == Constant.ORDER_OVERDUE_DEFER){
+			//展期/逾期后展期都是展期还款
+			record.setStatus(Constant.ORDER_DEFER_REPAYED);
+		} else if(order.getStatus() == Constant.ORDER_DEFER_OVERDUE || order.getStatus() == Constant.ORDER_DEFER_BAD){
+			//展期后逾期和展期后坏账都是逾期还款
+			record.setStatus(Constant.ORDER_OVERDUE_REPAYED);
 		} else {
 			return new ResultMessage(ResponseEnum.M4000.getCode(), "当前订单状态不能线下还款");
 		}
