@@ -29,6 +29,7 @@ public class MerchantDeferConfig {
     private Integer id;
     private String merchant;
     private Integer status;
+    private Integer deferDay;// 续期天数
     private Double dailyDeferRate;
     private Double dailyDeferFee;
     private Double dailyOtherFee;
@@ -59,6 +60,14 @@ public class MerchantDeferConfig {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getDeferDay() {
+        return deferDay;
+    }
+
+    public void setDeferDay(Integer deferDay) {
+        this.deferDay = deferDay;
     }
 
     public Double getDailyDeferRate() {
