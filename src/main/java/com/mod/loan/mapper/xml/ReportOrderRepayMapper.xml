@@ -73,5 +73,16 @@
 	</where>
 	order by day_key
 	</select>
-	
+
+	<select id="oldUserRepayRate" resultType="map" statementType="CALLABLE">
+		CALL OldUserRepayRate(#{merchant})
+	</select>
+
+	<select id="newUserRepayRate" resultType="map" statementType="CALLABLE">
+		CALL NewUserRepayRate(#{merchant})
+	</select>
+
+	<select id="totalUserRepayRate" resultType="map" statementType="CALLABLE">
+		CALL TotalUserRepayRate(#{merchant})
+	</select>
 </mapper>

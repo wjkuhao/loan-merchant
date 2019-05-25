@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="common/top :: head">
+</head>
+<body>
+	<div class="container-fluid" id="main-container">
+		<div id="page-content" class="clearfix">
+  			<div class="row-fluid">
+				<div class="row-fluid">
+					<!-- 检索  -->
+					<div>
+						<span>应还时间:</span>
+						<input id="startTime" name="startTime" type="text" readonly="readonly" placeholder="开始时间" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})"/>
+						~
+						<input id="endTime" name="endTime" type="text" readonly="readonly" placeholder="结束时间" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})"/>
+						<button id="query" class="btn btn-small btn-success" onclick="search()"><i class="icon-search"></i> 查询</button>
+						<button id="flash" class="btn btn-small btn-success" onclick="reportFlash()"><i class="icon-search"></i> 刷新报表</button>
+
+						<button class="btn btn-small btn-success" onclick="exportReport()">EXCEL导出</button>
+					</div>
+					<!-- 检索  -->
+					<table id="table_report" class="table table-striped table-bordered table-hover">
+						<thead>
+							<tr>
+								<th class="center">打款日期</th>
+								<th class="center">自然到期日</th>
+								<th class="center">借款金额</th>
+								<th class="center">老客数</th>
+								<th class="center">实时老客首逾率</th>
+								<th class="center">老客在逾率</th>
+								<th class="center">老客还本率</th>
+								<th class="center">老客在展率</th>
+								<th class="center">老客提前还款</th>
+								<th class="center">老客正常还款</th>
+								<th class="center">老客逾期还款</th>
+								<th class="center">老客逾期中</th>
+								<th class="center">老客提前展期</th>
+								<th class="center">老客正常展期</th>
+								<th class="center">老客逾期展期</th>
+								<th class="center">老客展期逾期中</th>
+								<th class="center">老客展期次数</th>
+							</tr>
+						</thead>
+						<tbody id="myTable"></tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 返回顶部  -->
+	<a href="#" id="btn-scroll-up" class="btn btn-small btn-inverse">
+		<i class="icon-double-angle-up icon-only"></i>
+	</a>
+	<script type="text/javascript">
+		var contextPath="[[@{/}]]";
+		$(top.hangge());
+		var myTable = new MaxTable();
+		myTable.initialize({
+			table : "myTable",
+			id : "id",
+			queryUrl : contextPath+"statistics/user_repay_rate_ajax?type=oldUserRepayRate",
+			headerColumns : [{
+		            id : "give_time",
+		            renderer : function(idValue,value,record){
+		            	//return value ? moment(value).format("YYYY-MM-DD") : "---";
+						return value ? value : "--";
+				    }
+    			},{
+		            id : "nature_give_time",
+		            renderer : function(idValue,value,record){
+		            	return value ? value : "--";
+				    }
+	        	},{
+		            id : "borrow_money",
+		            renderer : function(idValue,value,record){
+			            return value ? value : "--";
+			        }
+	        	},{
+		            id : "old_user_count",
+		            renderer : function(idValue,value,record){
+		            	return value ? value : "--";
+			        }
+	        	},{
+		            id : "time_old_over_rate",
+		            renderer : function(idValue,value,record){
+			            return value ? value : "--";
+			        }
+	        	},{
+		            id : "old_over_now_rate",
+		            renderer : function(idValue,value,record){
+			            return value ? value : "--";
+			        }
+	        	},{
+		            id : "old_principal_pay_rate",
+		            renderer : function(idValue,value,record){
+			            return value ? value : "--";
+			        }
+	        	},{
+		            id : "old_defer_rate",
+		            renderer : function(idValue,value,record){
+			            return value ? value : "--";
+			        }
+	        	},{
+		            id : "old_ahead_repay",
+		            renderer : function(idValue,value,record){
+			            return value ? value : "--";
+			        }
+	        	},{
+		            id : "old_normal_repay",
+		            renderer : function(idValue,value,record){
+			            return value ? value : "--";
+			        }
+	        	},{
+		            id : "old_over_repay",
+		            renderer : function(idValue,value,record){
+			            return value ? value : "--";
+			        }
+	        	},{
+		            id : "old_over",
+		            renderer : function(idValue,value,record){
+			            return value ? value : "--";
+			        }
+	        	},{
+		            id : "old_ahead_defer",
+		            renderer : function(idValue,value,record){
+			            return value ? value : "--";
+			        }
+	        	},{
+		            id : "old_nature_defer",
+		            renderer : function(idValue,value,record){
+		            	return value ? value : "--";
+			        }
+	        	},{
+		            id : "old_over_defer",
+		            renderer : function(idValue,value,record){
+		            	return value ? value : "--";
+			        }
+	        	},{
+		            id : "old_defer_over",
+		            renderer : function(idValue,value,record){
+		            	return value ? value : "--";
+			        }
+	        	},{
+		            id : "old_total_defer_time",
+		            renderer : function(idValue,value,record){
+		            	return value ? value : "--";
+			        }
+	        	}]
+		});
+		
+		function query() {
+			myTable.page.totalRowNum = 0;
+			myTable.onLoad({
+				startTime:$("#startTime").val(),
+				endTime:$("#endTime").val()
+			});
+		}
+		query();
+		function search() {
+			myTable.page.pageNo = 1;
+			query();
+		}
+
+        function reportFlash() {
+            $.post(contextPath+"report_flash/report_order_repay_flash",{},function(){
+                alert("报表刷新成功");
+                search();
+                $("#flash").attr("disabled", true);
+            });
+        }
+
+		function exportReport(){
+			Dialog.confirm("确认按条件导出还款统计报表吗？",function () {
+				location.href = contextPath+"statistics/export_report?reportName=old_user_repay_rate";
+			});
+      	}
+	</script>
+</body>
+</html>
+

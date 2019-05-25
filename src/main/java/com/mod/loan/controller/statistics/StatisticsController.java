@@ -194,6 +194,36 @@ public class StatisticsController {
                     // 获取信息
                     list = reportPartnerEffectService.exportReport(param);
                     break;
+                case "old_user_repay_rate":
+                    downloadFileName+="-老客回款率(包括展期)统计";
+                    // 定义excel第一行的信息
+                    title = new String[]{"打款日期", "自然到期日", "借款金额", "老客数", "实时老客首逾率", "老客在逾率", "老客还本率", "老客在展率", "老客提前还款", "老客正常还款", "老客逾期还款", "老客逾期中", "老客提前展期", "老客正常展期", "老客逾期展期", "老客展期逾期中", "老总展期次数"};
+                    sheetName = "老客回款率(包括展期)";
+                    // 设置插入值的名称
+                    columns = new String[]{"give_time", "nature_give_time", "borrow_money", "old_user_count", "time_old_over_rate", "old_over_now_rate", "old_principal_pay_rate", "old_defer_rate", "old_ahead_repay", "old_normal_repay", "old_over_repay", "old_over", "old_ahead_defer", "old_nature_defer", "old_over_defer", "old_defer_over", "old_total_defer_time"};
+                    // 获取信息
+                    list = reportOrderRepayService.exportUserRepayRate(param, "oldUserRepayRate");
+                    break;
+                case "new_user_repay_rate":
+                    downloadFileName+="-新客回款率(包括展期)统计";
+                    // 定义excel第一行的信息
+                    title = new String[]{"打款日期", "自然到期日", "商户名称", "打款数", "新客数", "次新数", "老客数", "实时新客首逾率", "新客在逾率", "新客还本率", "新客在展率", "新客提前还款", "新客正常还款", "新客逾期还款", "新客逾期中", "新客提前展期", "新客正常展期", "新客逾期展期", "新客展期逾期中", "新总展期次数"};
+                    sheetName = "新客回款率(包括展期)";
+                    // 设置插入值的名称
+                    columns = new String[]{"give_time", "nature_give_time", "merchant_name", "pay_count", "new_user_count", "two_user_count", "old_user_count", "time_new_over_rate", "new_over_now_rate", "new_principal_pay_rate", "new_defer_rate", "new_ahead_repay", "new_normal_repay", "new_over_repay", "new_over", "new_ahead_defer", "new_nature_defer", "new_over_defer", "new_defer_over", "new_total_defer_time"};
+                    // 获取信息
+                    list = reportOrderRepayService.exportUserRepayRate(param, "newUserRepayRate");
+                    break;
+                case "total_user_repay_rate":
+                    downloadFileName+="-总客户回款率(包括展期)统计";
+                    // 定义excel第一行的信息
+                    title = new String[]{"打款日期", "自然到期日", "商户名称", "总打款", "总首逾率", "总在逾率", "总还本率", "总在展率", "新客数", "次新数", "新客首逾率", "新客在逾率", "新客还本率", "新客在展率", "老客数", "老客首逾率", "老客在逾率", "老客还本率", "老客在展率"};
+                    sheetName = "总客户回款率(包括展期)";
+                    // 设置插入值的名称
+                    columns = new String[]{"give_time", "nature_give_time", "merchant_name", "pay_count", "time_total_over_rate", "total_over_now_rate", "total_principal_pay_rate", "total_defer_rate", "new_user_count", "two_user_count", "new_over_rate", "new_time_over_rate", "new_principal_repay_rate", "new_defer_rate", "old_user_count", "old_over_rate", "old_time_over_rate", "old_principal_repay_rate", "old_defer_rate"};
+                    // 获取信息
+                    list = reportOrderRepayService.exportUserRepayRate(param, "totalUserRepayRate");
+                    break;
                 default:
                     logger.info("无法导出不存在的报表:" + reportName);
                     return;
@@ -241,4 +271,55 @@ public class StatisticsController {
             logger.error(reportName + "报告导出异常。", e);
         }
     }
+
+    /**
+     *老客回款率首页
+     * */
+    @RequestMapping(value = "old_user_repay_rate_list")
+    public ModelAndView old_user_repay_rate_list(ModelAndView view) {
+        //老客回款率
+        view.setViewName("statistics/old_user_repay_rate_list");
+        return view;
+    }
+
+    /**
+     *新客回款率首页
+     * */
+    @RequestMapping(value = "new_user_repay_rate_list")
+    public ModelAndView new_user_repay_rate_list(ModelAndView view) {
+        //新客回款率
+        view.setViewName("statistics/new_user_repay_rate_list");
+        return view;
+    }
+
+    /**
+     *总回款率首页
+     * */
+    @RequestMapping(value = "total_user_repay_rate_list")
+    public ModelAndView total_user_repay_rate_list(ModelAndView view) {
+        //总体回款率
+        view.setViewName("statistics/total_user_repay_rate_list");
+        return view;
+    }
+
+    /**
+     * 用户回款率(包括展期)查询
+     * */
+    @RequestMapping(value = "user_repay_rate_ajax", method = {RequestMethod.POST})
+    public ResultMessage ser_repay_rate_ajax(String type, Page page) {
+        Map<String, Object> param = new HashMap();
+        param.put("merchant", RequestThread.get().getMerchant());
+        if("oldUserRepayRate".equals(type)){
+            //老客回款率
+            return new ResultMessage(ResponseEnum.M2000, reportOrderRepayService.oldUserRepayRate(param, page), page);
+        }else if("newUserRepayRate".equals(type)){
+            //新客回款率
+            return new ResultMessage(ResponseEnum.M2000, reportOrderRepayService.newUserRepayRate(param, page), page);
+        }else if("totalUserRepayRate".equals(type)){
+            //总体回款率
+            return new ResultMessage(ResponseEnum.M2000, reportOrderRepayService.totalUserRepayRate(param, page), page);
+        }
+        return new ResultMessage(ResponseEnum.M4000.getCode(), "请选择正确的回款率报表类型");
+    }
+
 }

@@ -13,5 +13,12 @@ public interface ReportOrderRepayMapper extends MyBaseMapper<ReportOrderRepay> {
 	int reportOrderRepayCount(Map<String, Object> param);
 
 	List<Map<String, Object>> exportReport(Map<String, Object> param);
+
+	List<Map<String, Object>> oldUserRepayRate(Map<String, Object> param);
+
+	List<Map<String, Object>> newUserRepayRate(Map<String, Object> param);
+
+	List<Map<String, Object>> totalUserRepayRate(Map<String, Object> param);
+
 	
 }
