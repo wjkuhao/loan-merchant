@@ -31,6 +31,8 @@
         <result column="product_id" jdbcType="BIGINT" property="productId"/>
         <result column="user_type" jdbcType="INTEGER" property="userType"/>
         <result column="recycle_type" jdbcType="INTEGER" property="recycleType"/>
+        <result column="recycle_date" jdbcType="VARCHAR" property="recycleDate"/>
+
     </resultMap>
 
     <select id="orderCount" resultType="int">
@@ -136,8 +138,12 @@
     </select>
     
     <update id="updateOrderFollowUser">
-        update tb_order a set a.follow_user_id = #{followUserId} where a.merchant = #{merchant} and a.status in(31,33,34,35,36,37,38) and
-        a.id in
+        update tb_order a
+        set a.follow_user_id = #{followUserId},
+            a.recycle_date = date_format(NOW(), '%Y-%m-%d')
+        where a.merchant = #{merchant}
+        and a.status in(31,33,34,35,36,37,38)
+        and a.id in
         <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>

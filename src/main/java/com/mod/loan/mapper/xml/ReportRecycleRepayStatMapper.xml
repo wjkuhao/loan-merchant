@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mod.loan.mapper.ReportRecycleRepayStatMapper">
+	<resultMap id="BaseResultMap" type="com.mod.loan.model.ReportRecycleRepayStat">
+		<!-- WARNING - @mbg.generated -->
+
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="merchant" jdbcType="VARCHAR" property="merchant" />
+		<result column="recycled_id" jdbcType="INTEGER" property="recycledId" />
+		<result column="recycled_name" jdbcType="VARCHAR" property="recycledName" />
+        <result column="recycle_cnt" jdbcType="INTEGER" property="recycleCnt" />
+        <result column="not_return_cnt" jdbcType="INTEGER" property="notReturnCnt" />
+        <result column="overdue_day" jdbcType="INTEGER" property="overdueDay" />
+        <result column="repay_1_rate" jdbcType="DECIMAL" property="repay_1_rate" />
+        <result column="repay_3_rate" jdbcType="DECIMAL" property="repay_3_rate" />
+        <result column="repay_7_rate" jdbcType="DECIMAL" property="repay_7_rate" />
+        <result column="repay_60_rate" jdbcType="DECIMAL" property="repay_60_rate" />
+        <result column="recycle_date" jdbcType="VARCHAR" property="recycleDate" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+	</resultMap>
+
+    <select id="findAllEnable" resultType="com.mod.loan.model.ReportRecycleRepayStat">
+      SELECT
+        m.user_name AS recycledName,
+        m.merchant as merchant,
+        u.follow_user_id as recycledId
+      FROM tb_recycle_user u
+      LEFT JOIN tb_merchant_manager m ON u.follow_user_id = m.id
+      WHERE u.status=0
+    </select>
+
+    <select id="findRecycleRepayStatList" resultType="map">
+        SELECT
+        recycled_name,
+        recycle_cnt,
+        not_return_cnt,
+        repay_1_rate,
+        repay_3_rate,
+        repay_7_rate,
+        repay_60_rate,
+        not_return_cnt/recycle_cnt as sum_repay_rate
+        FROM
+        report_recycle_repay_stat cr
+        <where>
+            <if test="merchant != null">
+                and cr.merchant = #{merchant}
+            </if>
+            <if test="startTime != null">
+                and cr.recycle_date &gt;= #{startTime}
+            </if>
+            <if test="endTime != null">
+                and cr.recycle_date &lt; DATE_ADD(#{endTime},INTERVAL 1 DAY)
+            </if>
+        </where>
+    </select>
+
+    <update id="decreaseNotReturnCnt">
+        update report_recycle_repay_stat
+        set not_return_cnt = not_return_cnt - 1,
+            update_time = NOW()
+        where recycle_date = #{recycleDate}
+        and recycled_id = #{recycledId}
+    </update>
+
+
+</mapper>

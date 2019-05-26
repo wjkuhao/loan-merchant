@@ -52,6 +52,9 @@ public class RecycleController {
     @Autowired
     private RecycleUserService recycleUserService;
 
+    @Autowired
+    private ReportRecycleRepayStatService reportRecycleRepayStatService;
+
     /**
      * 催收分单
      *
@@ -278,6 +281,12 @@ public class RecycleController {
             return new ResultMessage(ResponseEnum.M4000);
         }
         orderService.updateOrderFollowUser(followUserId, manager.getMerchant(), longArray);
+
+        //更新入催还款报表 催收人的总数
+        ReportRecycleRepayStat reportRecycleRepayStat = reportRecycleRepayStatService.updateUserRecycleCnt(followUserId, longArray.length);
+        if (reportRecycleRepayStat==null){
+            return new ResultMessage(ResponseEnum.M4000.getCode(), "统计数据不存在,请联系技术人员");
+        }
         return new ResultMessage(ResponseEnum.M2000);
     }
 
@@ -428,5 +437,25 @@ public class RecycleController {
         param.put("startTime", StringUtils.isBlank(startTime) ? TimeUtils.getNowString() : startTime);
         param.put("endTime", StringUtils.isBlank(endTime) ? TimeUtils.getNowString() : endTime);
         return new ResultMessage(ResponseEnum.M2000, recycleService.findRecycleRepayList(param));
+    }
+
+    @RequestMapping(value = "recycle_repay_stat_list")
+    public ModelAndView recycle_repay_stat_list(ModelAndView view) {
+        view.setViewName("recycle/recycle_repay_stat_list");
+        return view;
+    }
+
+    @RequestMapping(value = "recycle_repay_stat_list_ajax")
+    public ResultMessage recycle_repay_stat_list_ajax(String startTime, String endTime) {
+        int timeDiff = TimeUtils.getTimeDiff(startTime, endTime);
+        if (timeDiff > 38 || timeDiff < 0) {
+            return null;
+        }
+
+        Map<String, Object> param = new HashMap<>();
+        param.put("merchant", RequestThread.get().getMerchant());
+        param.put("startTime", StringUtils.isBlank(startTime) ? TimeUtils.getNowString() : startTime);
+        param.put("endTime", StringUtils.isBlank(endTime) ? TimeUtils.getNowString() : endTime);
+        return new ResultMessage(ResponseEnum.M2000, reportRecycleRepayStatService.findRecycleRepayStatList(param));
     }
 }
