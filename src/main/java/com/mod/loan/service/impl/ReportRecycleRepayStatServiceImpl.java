@@ -54,7 +54,7 @@ public class ReportRecycleRepayStatServiceImpl extends BaseServiceImpl<ReportRec
 
             ReportRecycleRepayStat reportRecycleRepayStat = selectOne(reportQry);
 
-            Double rate = Double.valueOf(reportRecycleRepayStat.getNotReturnCnt())
+            Double rate = (reportRecycleRepayStat.getRecycleCnt() - reportRecycleRepayStat.getNotReturnCnt())
                 / Double.valueOf(reportRecycleRepayStat.getRecycleCnt());
 
             if (TimeUtil.nowDatePlusDay(-1).compareTo(recycleDate)<=0){
