@@ -39,7 +39,10 @@
         repay_3_rate,
         repay_7_rate,
         repay_60_rate,
-        not_return_cnt/recycle_cnt as sum_repay_rate
+        case when recycle_cnt>0 then
+          (recycle_cnt-not_return_cnt)/recycle_cnt
+        else 0
+        end as sum_repay_rate
         FROM
         report_recycle_repay_stat cr
         <where>
