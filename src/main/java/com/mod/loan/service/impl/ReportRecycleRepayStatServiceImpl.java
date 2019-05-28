@@ -46,7 +46,32 @@ public class ReportRecycleRepayStatServiceImpl extends BaseServiceImpl<ReportRec
 
     @Override
     public void decreaseNotReturnCnt(Long recycleUserId, String recycleDate) {
-	    reportRecycleRepayStatMapper.decreaseNotReturnCnt(recycleUserId,recycleDate);
-    }
+	    if(recycleUserId!=null && recycleUserId.compareTo(0L)>0){
 
+            ReportRecycleRepayStat reportQry = new ReportRecycleRepayStat();
+            reportQry.setRecycleDate(recycleDate);
+            reportQry.setRecycledId(recycleUserId);
+
+            ReportRecycleRepayStat reportRecycleRepayStat = selectOne(reportQry);
+
+            Double rate = (reportRecycleRepayStat.getRecycleCnt() - reportRecycleRepayStat.getNotReturnCnt())
+                / Double.valueOf(reportRecycleRepayStat.getRecycleCnt());
+
+            if (TimeUtil.nowDatePlusDay(-1).compareTo(recycleDate)<=0){
+                reportRecycleRepayStat.setRepay_1_rate(rate);
+            }else if (TimeUtil.nowDatePlusDay(-3).compareTo(recycleDate)<=0){
+                reportRecycleRepayStat.setRepay_3_rate(rate);
+            }else if (TimeUtil.nowDatePlusDay(-7).compareTo(recycleDate)<=0){
+                reportRecycleRepayStat.setRepay_7_rate(rate);
+            }else {
+                reportRecycleRepayStat.setRepay_60_rate(rate);
+            }
+
+            reportRecycleRepayStat.setNotReturnCnt(reportRecycleRepayStat.getNotReturnCnt()-1);
+            reportRecycleRepayStat.setUpdateTime(new Date());
+            updateByPrimaryKey(reportRecycleRepayStat);
+
+            //reportRecycleRepayStatMapper.decreaseNotReturnCnt(recycleUserId,recycleDate);
+	    }
+    }
 }
