@@ -34,5 +34,7 @@ public interface RecycleService extends BaseService<OrderRecycleRecord, Long> {
 
     List<Map<String, Object>> findDownloadList(Map<String, Object> param);
 
+    List<Map<String, Object>> findS0List(OrderQuery query, Page page);
 
+    List<Map<String, Object>> findBadList(OrderQuery query, Page page);
 }

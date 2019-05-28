@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -283,10 +284,10 @@ public class RecycleController {
         orderService.updateOrderFollowUser(followUserId, manager.getMerchant(), longArray);
 
         //更新入催还款报表 催收人的总数
-        ReportRecycleRepayStat reportRecycleRepayStat = reportRecycleRepayStatService.updateUserRecycleCnt(followUserId, longArray.length);
-        if (reportRecycleRepayStat==null){
-            return new ResultMessage(ResponseEnum.M4000.getCode(), "统计数据不存在,请联系技术人员");
-        }
+//        ReportRecycleRepayStat reportRecycleRepayStat = reportRecycleRepayStatService.updateUserRecycleCnt(followUserId, longArray.length);
+//        if (reportRecycleRepayStat==null){
+//            return new ResultMessage(ResponseEnum.M4000.getCode(), "统计数据不存在,请联系技术人员");
+//        }
         return new ResultMessage(ResponseEnum.M2000);
     }
 
@@ -458,4 +459,68 @@ public class RecycleController {
         param.put("endTime", StringUtils.isBlank(endTime) ? TimeUtils.getNowString() : endTime);
         return new ResultMessage(ResponseEnum.M2000, reportRecycleRepayStatService.findRecycleRepayStatList(param));
     }
+
+    /**
+     * 催收S0组菜单
+     * */
+    @RequestMapping(value = "recycle_fenpei_s0_list")
+    public ModelAndView recycle_fenpei_s0_list(ModelAndView view) {
+        view.setViewName("recycle/recycle_fenpei_s0_list");
+        return view;
+    }
+
+    /**
+     * 催收分配S0组查询
+     * */
+    @RequestMapping(value = "recycle_fenpei_s0_ajax")
+    public ResultMessage recycle_fenpei_s0_ajax(String userPhone, Long followUserId, Integer orderStatus, Integer userType, Page page) {
+        OrderQuery query = new OrderQuery();
+        query.setMerchant(RequestThread.get().getMerchant());
+        query.setFollowUserId(followUserId);
+        query.setUserType(userType);
+        if(orderStatus != null && orderStatus != 0){
+            query.setOrderStatus(orderStatus);
+        }
+        if (!StringUtils.isBlank(userPhone)) {
+            query.setUserPhone(userPhone);
+        }
+        //应还款时间为今天
+        query.setRepayTimeUp(DateFormat.getDateInstance(DateFormat.DEFAULT).format(new Date()));
+        query.setRepayTimeDown(DateFormat.getDateInstance(DateFormat.DEFAULT).format(new Date()));
+        return new ResultMessage(ResponseEnum.M2000, recycleService.findS0List(query, page), page);
+    }
+
+    /**
+     * 催收分配坏账账单查询
+     * */
+    @RequestMapping(value = "recycle_fenpei_bad_list")
+    public ModelAndView recycle_fenpei_bad_list(ModelAndView view) {
+        view.setViewName("recycle/recycle_fenpei_bad_list");
+        return view;
+    }
+
+    /**
+     * 催收分配坏账查询
+     * */
+    @RequestMapping(value = "recycle_fenpei_bad_ajax")
+    public ResultMessage recycle_fenpei_bad_ajax(String userPhone, Long followUserId, Integer overdueDayDown, Integer overdueDayUp, Integer orderStatus, Integer userType, Page page) {
+        OrderQuery query = new OrderQuery();
+        query.setMerchant(RequestThread.get().getMerchant());
+        query.setFollowUserId(followUserId);
+        query.setUserType(userType);
+        if(orderStatus != null && orderStatus != 0){
+            query.setOrderStatus(orderStatus);
+        }
+        if (!StringUtils.isBlank(userPhone)) {
+            query.setUserPhone(userPhone);
+        }
+        if(overdueDayUp != null && overdueDayUp > 0){
+            query.setOverdueDayUp(overdueDayUp);
+        }
+        if(overdueDayDown != null && overdueDayDown > 0){
+            query.setOverdueDayDown(overdueDayDown);
+        }
+        return new ResultMessage(ResponseEnum.M2000, recycleService.findBadList(query, page), page);
+    }
+
 }

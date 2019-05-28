@@ -13,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -200,5 +201,15 @@ public class OriginController {
         } catch (Exception e) {
             logger.error(reportName + "报告导出异常。", e);
         }
+    }
+
+    /**
+     * 根据merchant查询所有渠道信息列表
+     * */
+    @RequestMapping(value = "origin_list_by_merchant", method = {RequestMethod.POST})
+    public ResultMessage origin_list_by_merchant() {
+        MerchantOrigin mo = new MerchantOrigin();
+        mo.setMerchant(RequestThread.get().getMerchant());
+        return new ResultMessage(ResponseEnum.M2000, originService.select(mo));
     }
 }

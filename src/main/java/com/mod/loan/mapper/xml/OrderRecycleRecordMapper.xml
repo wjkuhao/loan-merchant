@@ -268,4 +268,154 @@
         </where>
         GROUP BY 1
     </select>
+
+    <select id="findS0List" resultType="map">
+        select
+        a.id,a.uid,a.borrow_day,a.borrow_money,a.actual_money,a.overdue_day,a.overdue_fee,a.should_repay,a.reduce_money,a.status,a.user_type,
+        a.arrive_time,a.repay_time,a.real_repay_time,b.user_phone,b.user_name,c.user_name as
+        follow_name,a.real_repay_time,a.recycle_type,g.group_name
+        from tb_order a left join tb_user b on a.uid=b.id left join tb_merchant_manager c on a.follow_user_id=c.id
+        left join tb_recycle_group g on a.group_id=g.id
+        <where>
+            <if test="orderStatus == null">
+                and a.status in (31,35,36)
+            </if>
+            <if test="orderStatus != null">
+                and a.status=#{orderStatus}
+            </if>
+            <if test="followUserId !=null">
+                and a.follow_user_id=#{followUserId}
+            </if>
+            <if test="merchant !=null">
+                and a.merchant=#{merchant}
+            </if>
+            <if test="repayTimeDown !=null">
+                and a.repay_time>=#{repayTimeDown}
+            </if>
+            <if test="repayTimeUp !=null">
+                and a.repay_time &lt;=#{repayTimeUp}
+            </if>
+            <if test="userType !=null">
+                and a.user_type=#{userType}
+            </if>
+            <if test="userPhone !=null">
+                and b.user_phone=#{userPhone}
+            </if>
+        </where>
+        order by
+        <choose>
+            <when test="orderStatus ==42">
+                a.real_repay_time desc
+            </when>
+            <otherwise>
+                a.id desc
+            </otherwise>
+        </choose>
+        limit #{startIndex},#{pageSize}
+    </select>
+
+    <select id="countS0List" resultType="int">
+        select count(0) from tb_order a
+        <where>
+            <if test="orderStatus !=null">
+                and a.status=#{orderStatus}
+            </if>
+            <if test="orderStatus ==null">
+                and a.status in (31,35,36)
+            </if>
+            <if test="followUserId !=null">
+                and a.follow_user_id=#{followUserId}
+            </if>
+            <if test="merchant !=null">
+                and a.merchant=#{merchant}
+            </if>
+            <if test="repayTimeDown !=null">
+                and a.repay_time>=#{repayTimeDown}
+            </if>
+            <if test="repayTimeUp !=null">
+                and a.repay_time &lt;=#{repayTimeUp}
+            </if>
+            <if test="userType !=null">
+                and a.user_type=#{userType}
+            </if>
+            <if test="userPhone !=null">
+                and a.uid = (select id from tb_user u where u.user_phone=#{userPhone} and u.merchant = #{merchant})
+            </if>
+        </where>
+    </select>
+
+    <select id="findBadList" resultType="map">
+        select
+        a.id,a.uid,a.borrow_day,a.borrow_money,a.actual_money,a.overdue_day,a.overdue_fee,a.should_repay,a.reduce_money,a.status,a.user_type,
+        a.arrive_time,a.repay_time,a.real_repay_time,b.user_phone,b.user_name,c.user_name as
+        follow_name,a.real_repay_time,a.recycle_type,g.group_name
+        from tb_order a left join tb_user b on a.uid=b.id left join tb_merchant_manager c on a.follow_user_id=c.id
+        left join tb_recycle_group g on a.group_id=g.id
+        <where>
+            <if test="orderStatus == null">
+                and a.status in (33,34,37,38)
+            </if>
+            <if test="orderStatus != null">
+                and a.status=#{orderStatus}
+            </if>
+            <if test="followUserId !=null">
+                and a.follow_user_id=#{followUserId}
+            </if>
+            <if test="merchant !=null">
+                and a.merchant=#{merchant}
+            </if>
+            <if test="overdueDayDown !=null">
+                and a.overdue_day>=#{overdueDayDown}
+            </if>
+            <if test="overdueDayUp !=null">
+                and a.overdue_day &lt;=#{overdueDayUp}
+            </if>
+            <if test="userType !=null">
+                and a.user_type=#{userType}
+            </if>
+            <if test="userPhone !=null">
+                and b.user_phone=#{userPhone}
+            </if>
+        </where>
+        order by
+        <choose>
+            <when test="orderStatus ==42">
+                a.real_repay_time desc
+            </when>
+            <otherwise>
+                a.id desc
+            </otherwise>
+        </choose>
+        limit #{startIndex},#{pageSize}
+    </select>
+
+    <select id="countBadList" resultType="int">
+        select count(0) from tb_order a
+        <where>
+            <if test="orderStatus !=null">
+                and a.status=#{orderStatus}
+            </if>
+            <if test="orderStatus ==null">
+                and a.status in (33,34,37,38)
+            </if>
+            <if test="followUserId !=null">
+                and a.follow_user_id=#{followUserId}
+            </if>
+            <if test="merchant !=null">
+                and a.merchant=#{merchant}
+            </if>
+            <if test="overdueDayDown !=null">
+                and a.overdue_day>=#{overdueDayDown}
+            </if>
+            <if test="overdueDayUp !=null">
+                and a.overdue_day &lt;=#{overdueDayUp}
+            </if>
+            <if test="userType !=null">
+                and a.user_type=#{userType}
+            </if>
+            <if test="userPhone !=null">
+                and a.uid = (select id from tb_user u where u.user_phone=#{userPhone} and u.merchant = #{merchant})
+            </if>
+        </where>
+    </select>
 </mapper>
