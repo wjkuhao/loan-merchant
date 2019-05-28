@@ -4,6 +4,7 @@ import com.mod.loan.common.enums.ResponseEnum;
 import com.mod.loan.common.model.Page;
 import com.mod.loan.common.model.RequestThread;
 import com.mod.loan.common.model.ResultMessage;
+import com.mod.loan.model.MerchantOrigin;
 import com.mod.loan.service.*;
 import com.mod.loan.util.ExcelUtil;
 import com.mod.loan.util.TimeUtils;
@@ -306,9 +307,13 @@ public class StatisticsController {
      * 用户回款率(包括展期)查询
      * */
     @RequestMapping(value = "user_repay_rate_ajax", method = {RequestMethod.POST})
-    public ResultMessage ser_repay_rate_ajax(String type, Page page) {
+    public ResultMessage ser_repay_rate_ajax(String type, String userSource, String userOrigin, String startTime, String endTime, Page page) {
         Map<String, Object> param = new HashMap();
         param.put("merchant", RequestThread.get().getMerchant());
+        param.put("userSource", userSource);
+        param.put("userOrigin", userOrigin);
+        param.put("startTime", startTime);
+        param.put("endTime", endTime);
         if("oldUserRepayRate".equals(type)){
             //老客回款率
             return new ResultMessage(ResponseEnum.M2000, reportOrderRepayService.oldUserRepayRate(param, page), page);

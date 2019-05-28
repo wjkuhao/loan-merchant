@@ -13,8 +13,19 @@
 						<input id="startTime" name="startTime" type="text" readonly="readonly" placeholder="开始时间" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})"/>
 						~
 						<input id="endTime" name="endTime" type="text" readonly="readonly" placeholder="结束时间" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})"/>
+						<span>用户来源:</span>
+						<select id="userSource" name="userSource" style="width:100px">
+							<option value="">全部</option>
+							<option value="wechat">微信</option>
+							<option value="qq">QQ</option>
+							<option value="pc">PC端</option>
+							<option value="other">其他</option>
+						</select>
+						<span>渠道编号:</span>
+						<select id="userOrigin" name="userOrigin" style="width:100px">
+							<option value="">全部</option>
+						</select>
 						<button id="query" class="btn btn-small btn-success" onclick="search()"><i class="icon-search"></i> 查询</button>
-						<button id="flash" class="btn btn-small btn-success" onclick="reportFlash()"><i class="icon-search"></i> 刷新报表</button>
 
 						<button class="btn btn-small btn-success" onclick="exportReport()">EXCEL导出</button>
 					</div>
@@ -151,6 +162,8 @@
 		function query() {
 			myTable.page.totalRowNum = 0;
 			myTable.onLoad({
+				userSource:$("#userSource").val(),
+				userOrigin:$("#userOrigin").val(),
 				startTime:$("#startTime").val(),
 				endTime:$("#endTime").val()
 			});
@@ -161,16 +174,21 @@
 			query();
 		}
 
-        function reportFlash() {
-            $.post(contextPath+"report_flash/report_order_repay_flash",{},function(){
-                alert("报表刷新成功");
-                search();
-                $("#flash").attr("disabled", true);
-            });
-        }
+		getOriginList();
+		var originList;
+		function getOriginList(){
+			//用户渠道列表
+			$.post(contextPath+"origin/origin_list_by_merchant",{},function(jsonObject){
+				originList = jsonObject.data;
+				$.each(originList,function(i){
+					$("#userOrigin").append("<option value='"+originList[i].id+"'>"+originList[i].originName+"</option>");
+				});
+				query();
+			});
+		}
 
 		function exportReport(){
-			Dialog.confirm("确认按条件导出还款统计报表吗？",function () {
+			Dialog.confirm("确认按条件导出老客回款率(包括展期)统计报表吗？",function () {
 				location.href = contextPath+"statistics/export_report?reportName=old_user_repay_rate";
 			});
       	}

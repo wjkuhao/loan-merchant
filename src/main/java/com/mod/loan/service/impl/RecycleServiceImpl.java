@@ -103,4 +103,22 @@ public class RecycleServiceImpl extends BaseServiceImpl<OrderRecycleRecord, Long
         return recycleOrderExportMapper.findDownloadList(param);
     }
 
+    @Override
+    public List<Map<String, Object>> findS0List(OrderQuery query, Page page) {
+        query.setStartIndex(page.getStartIndex());
+        query.setPageSize(page.getPageSize());
+        int totalCount = recycleMapper.countS0List(query);
+        page.setTotalCount(totalCount);
+        return totalCount > 0 ? recycleMapper.findS0List(query) : new ArrayList();
+    }
+
+    @Override
+    public List<Map<String, Object>> findBadList(OrderQuery query, Page page){
+        query.setStartIndex(page.getStartIndex());
+        query.setPageSize(page.getPageSize());
+        int totalCount = recycleMapper.countBadList(query);
+        page.setTotalCount(totalCount);
+        return totalCount > 0 ? recycleMapper.findBadList(query) : new ArrayList();
+    }
+
 }

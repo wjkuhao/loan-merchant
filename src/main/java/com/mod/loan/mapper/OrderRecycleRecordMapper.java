@@ -27,4 +27,25 @@ public interface OrderRecycleRecordMapper extends MyBaseMapper<OrderRecycleRecor
 	 * 催单excel导出计数
 	 */
 	int selectOverdueUserMessageCount(OrderQuery query);
+
+	/**
+	 * 查询S0分组列表
+	 * */
+	List<Map<String, Object>> findS0List(OrderQuery query);
+
+	/**
+	 * 查询S0分组列表大小
+	 * */
+	int countS0List(OrderQuery query);
+
+	/**
+	 * 查询坏账分组列表
+	 * */
+	List<Map<String, Object>> findBadList(OrderQuery query);
+
+	/**
+	 * 查询坏账分组列表大小
+	 * */
+	int countBadList(OrderQuery query);
+
 }
