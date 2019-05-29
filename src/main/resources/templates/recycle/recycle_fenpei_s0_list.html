@@ -98,11 +98,34 @@
 						if (value == 31) {
 							return "<font color='green'>还款中</font>";
 						}
-
+						if (value == 33) {
+							return "<font color='red'>逾期</font>";
+						}
+						if (value == 34) {
+							return "<font color='red'>坏账</font>";
+						}
 						if (value == 35) {
 							return "<font color='red'>展期</font>";
 						}
-			            return "---";
+						if (value == 36) {
+							return "<font color='red'>逾期后展期</font>";
+						}
+						if (value == 37) {
+							return "<font color='red'>展期后逾期</font>";
+						}
+						if (value == 38) {
+							return "<font color='red'>展期后坏账</font>";
+						}
+						if (value == 41) {
+							return "<font color='green'>已结清</font>";
+						}
+						if (value == 42) {
+							return "<font color='green'>逾期还款</font>";
+						}
+						if (value == 43) {
+							return "<font color='green'>展期还款</font>";
+						}
+						return "---";
 			        }
 	        	},{
 		            id : "user_name",

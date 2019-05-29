@@ -277,10 +277,10 @@
         from tb_order a left join tb_user b on a.uid=b.id left join tb_merchant_manager c on a.follow_user_id=c.id
         left join tb_recycle_group g on a.group_id=g.id
         <where>
-            <if test="orderStatus == null">
+            <if test="orderStatus == 0">
                 and a.status in (31,35,36)
             </if>
-            <if test="orderStatus != null">
+            <if test="orderStatus != 0">
                 and a.status=#{orderStatus}
             </if>
             <if test="followUserId !=null">
@@ -317,10 +317,10 @@
     <select id="countS0List" resultType="int">
         select count(0) from tb_order a
         <where>
-            <if test="orderStatus !=null">
+            <if test="orderStatus !=0">
                 and a.status=#{orderStatus}
             </if>
-            <if test="orderStatus ==null">
+            <if test="orderStatus ==0">
                 and a.status in (31,35,36)
             </if>
             <if test="followUserId !=null">
@@ -352,10 +352,10 @@
         from tb_order a left join tb_user b on a.uid=b.id left join tb_merchant_manager c on a.follow_user_id=c.id
         left join tb_recycle_group g on a.group_id=g.id
         <where>
-            <if test="orderStatus == null">
+            <if test="orderStatus == 0">
                 and a.status in (33,34,37,38)
             </if>
-            <if test="orderStatus != null">
+            <if test="orderStatus != 0">
                 and a.status=#{orderStatus}
             </if>
             <if test="followUserId !=null">
@@ -392,10 +392,10 @@
     <select id="countBadList" resultType="int">
         select count(0) from tb_order a
         <where>
-            <if test="orderStatus !=null">
+            <if test="orderStatus != 0">
                 and a.status=#{orderStatus}
             </if>
-            <if test="orderStatus ==null">
+            <if test="orderStatus == 0">
                 and a.status in (33,34,37,38)
             </if>
             <if test="followUserId !=null">

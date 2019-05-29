@@ -307,7 +307,7 @@ public class StatisticsController {
      * 用户回款率(包括展期)查询
      * */
     @RequestMapping(value = "user_repay_rate_ajax", method = {RequestMethod.POST})
-    public ResultMessage ser_repay_rate_ajax(String type, String userSource, String userOrigin, String startTime, String endTime, Page page) {
+    public ResultMessage user_repay_rate_ajax(String type, String userSource, String userOrigin, String startTime, String endTime, Page page) {
         Map<String, Object> param = new HashMap();
         param.put("merchant", RequestThread.get().getMerchant());
         param.put("userSource", userSource);

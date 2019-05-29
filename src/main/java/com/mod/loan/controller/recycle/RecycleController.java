@@ -478,9 +478,7 @@ public class RecycleController {
         query.setMerchant(RequestThread.get().getMerchant());
         query.setFollowUserId(followUserId);
         query.setUserType(userType);
-        if(orderStatus != null && orderStatus != 0){
-            query.setOrderStatus(orderStatus);
-        }
+        query.setOrderStatus(orderStatus);
         if (!StringUtils.isBlank(userPhone)) {
             query.setUserPhone(userPhone);
         }
@@ -508,9 +506,7 @@ public class RecycleController {
         query.setMerchant(RequestThread.get().getMerchant());
         query.setFollowUserId(followUserId);
         query.setUserType(userType);
-        if(orderStatus != null && orderStatus != 0){
-            query.setOrderStatus(orderStatus);
-        }
+        query.setOrderStatus(orderStatus);
         if (!StringUtils.isBlank(userPhone)) {
             query.setUserPhone(userPhone);
         }
