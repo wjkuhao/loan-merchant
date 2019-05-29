@@ -69,7 +69,7 @@
 		myTable.initialize({
 			table : "myTable",
 			id : "id",
-			queryUrl : contextPath+"statistics/user_repay_rate_ajax?type=oldUserRepayRate",
+			queryUrl : contextPath+"statistics/user_repay_rate_ajax",
 			headerColumns : [{
 		            id : "give_time",
 		            renderer : function(idValue,value,record){
@@ -162,6 +162,7 @@
 		function query() {
 			myTable.page.totalRowNum = 0;
 			myTable.onLoad({
+				type:"oldUserRepayRate",
 				userSource:$("#userSource").val(),
 				userOrigin:$("#userOrigin").val(),
 				startTime:$("#startTime").val(),
