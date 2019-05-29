@@ -289,18 +289,13 @@
             <if test="merchant !=null">
                 and a.merchant=#{merchant}
             </if>
-            <if test="repayTimeDown !=null">
-                and a.repay_time>=#{repayTimeDown}
-            </if>
-            <if test="repayTimeUp !=null">
-                and a.repay_time &lt;=#{repayTimeUp}
-            </if>
             <if test="userType !=null">
                 and a.user_type=#{userType}
             </if>
             <if test="userPhone !=null">
                 and b.user_phone=#{userPhone}
             </if>
+            and a.repay_time=DATE_FORMAT(now(),'%y-%m-%d')
         </where>
         order by
         <choose>
@@ -329,12 +324,6 @@
             <if test="merchant !=null">
                 and a.merchant=#{merchant}
             </if>
-            <if test="repayTimeDown !=null">
-                and a.repay_time>=#{repayTimeDown}
-            </if>
-            <if test="repayTimeUp !=null">
-                and a.repay_time &lt;=#{repayTimeUp}
-            </if>
             <if test="userType !=null">
                 and a.user_type=#{userType}
             </if>
@@ -342,6 +331,7 @@
                 and a.uid = (select id from tb_user u where u.user_phone=#{userPhone} and u.merchant = #{merchant})
             </if>
         </where>
+        and a.repay_time=DATE_FORMAT(now(),'%y-%m-%d')
     </select>
 
     <select id="findBadList" resultType="map">

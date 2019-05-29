@@ -184,4 +184,29 @@ public class OrderQuery {
 	public void setGroupId(Long groupId) {
 		this.groupId = groupId;
 	}
+
+	@Override
+	public String toString() {
+		return "OrderQuery{" +
+				"merchant='" + merchant + '\'' +
+				", orderStatus=" + orderStatus +
+				", followUserId=" + followUserId +
+				", userType=" + userType +
+				", borrowDayDown=" + borrowDayDown +
+				", borrowDayUp=" + borrowDayUp +
+				", overdueDayDown=" + overdueDayDown +
+				", overdueDayUp=" + overdueDayUp +
+				", createTimeDown='" + createTimeDown + '\'' +
+				", createTimeUp='" + createTimeUp + '\'' +
+				", arriveTimeDown='" + arriveTimeDown + '\'' +
+				", arriveTimeUp='" + arriveTimeUp + '\'' +
+				", repayTimeDown='" + repayTimeDown + '\'' +
+				", repayTimeUp='" + repayTimeUp + '\'' +
+				", userPhone='" + userPhone + '\'' +
+				", userName='" + userName + '\'' +
+				", startIndex=" + startIndex +
+				", pageSize=" + pageSize +
+				", groupId=" + groupId +
+				'}';
+	}
 }

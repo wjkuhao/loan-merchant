@@ -485,8 +485,8 @@ public class RecycleController {
             query.setUserPhone(userPhone);
         }
         //应还款时间为今天
-        query.setRepayTimeUp(DateFormat.getDateInstance(DateFormat.DEFAULT).format(new Date()));
-        query.setRepayTimeDown(DateFormat.getDateInstance(DateFormat.DEFAULT).format(new Date()));
+        logger.error("repayTimeUp:{}", DateFormat.getDateInstance(DateFormat.DEFAULT).format(new Date()));
+        logger.error("recycle_fenpei_s0_ajax:{}", query.toString());
         return new ResultMessage(ResponseEnum.M2000, recycleService.findS0List(query, page), page);
     }
 
