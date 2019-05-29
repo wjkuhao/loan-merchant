@@ -476,9 +476,11 @@ public class RecycleController {
     public ResultMessage recycle_fenpei_s0_ajax(String userPhone, Long followUserId, Integer orderStatus, Integer userType, Page page) {
         OrderQuery query = new OrderQuery();
         query.setMerchant(RequestThread.get().getMerchant());
-        query.setFollowUserId(followUserId);
         query.setUserType(userType);
         query.setOrderStatus(orderStatus);
+        if(followUserId != null){
+            query.setFollowUserId(followUserId);
+        }
         if (!StringUtils.isBlank(userPhone)) {
             query.setUserPhone(userPhone);
         }
@@ -504,9 +506,11 @@ public class RecycleController {
     public ResultMessage recycle_fenpei_bad_ajax(String userPhone, Long followUserId, Integer overdueDayDown, Integer overdueDayUp, Integer orderStatus, Integer userType, Page page) {
         OrderQuery query = new OrderQuery();
         query.setMerchant(RequestThread.get().getMerchant());
-        query.setFollowUserId(followUserId);
         query.setUserType(userType);
         query.setOrderStatus(orderStatus);
+        if(followUserId != null){
+            query.setFollowUserId(followUserId);
+        }
         if (!StringUtils.isBlank(userPhone)) {
             query.setUserPhone(userPhone);
         }
