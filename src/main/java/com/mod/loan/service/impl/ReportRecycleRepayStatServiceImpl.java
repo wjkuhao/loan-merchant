@@ -54,6 +54,13 @@ public class ReportRecycleRepayStatServiceImpl extends BaseServiceImpl<ReportRec
 
             ReportRecycleRepayStat reportRecycleRepayStat = selectOne(reportQry);
 
+            if (reportRecycleRepayStat==null){
+                logger.error("recycleDate={},recycleUserId={} ReportRecycleRepayStat not exist", recycleDate, recycleUserId);
+                return;
+            }
+
+            reportRecycleRepayStat.setNotReturnCnt(reportRecycleRepayStat.getNotReturnCnt()-1);
+
             Double rate = (reportRecycleRepayStat.getRecycleCnt() - reportRecycleRepayStat.getNotReturnCnt())
                 / Double.valueOf(reportRecycleRepayStat.getRecycleCnt());
 
@@ -67,11 +74,10 @@ public class ReportRecycleRepayStatServiceImpl extends BaseServiceImpl<ReportRec
                 reportRecycleRepayStat.setRepay_60_rate(rate);
             }
 
-            reportRecycleRepayStat.setNotReturnCnt(reportRecycleRepayStat.getNotReturnCnt()-1);
             reportRecycleRepayStat.setUpdateTime(new Date());
             updateByPrimaryKeySelective(reportRecycleRepayStat);
 
-            //reportRecycleRepayStatMapper.decreaseNotReturnCnt(recycleUserId,recycleDate);
+           // reportRecycleRepayStatMapper.decreaseNotReturnCnt(recycleUserId,recycleDate);
 	    }
     }
 }
