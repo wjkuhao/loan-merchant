@@ -295,7 +295,7 @@
             <if test="userPhone !=null">
                 and b.user_phone=#{userPhone}
             </if>
-            and a.repay_time=DATE_FORMAT(now(),'%y-%m-%d')
+            and a.repay_time=DATE_FORMAT(now(),'%Y-%m-%d')
         </where>
         order by
         <choose>
@@ -331,7 +331,7 @@
                 and a.uid = (select id from tb_user u where u.user_phone=#{userPhone} and u.merchant = #{merchant})
             </if>
         </where>
-        and a.repay_time=DATE_FORMAT(now(),'%y-%m-%d')
+        and a.repay_time=DATE_FORMAT(now(),'%Y-%m-%d')
     </select>
 
     <select id="findBadList" resultType="map">
