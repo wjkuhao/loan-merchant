@@ -284,10 +284,10 @@ public class RecycleController {
         orderService.updateOrderFollowUser(followUserId, manager.getMerchant(), longArray);
 
         //更新入催还款报表 催收人的总数
-//        ReportRecycleRepayStat reportRecycleRepayStat = reportRecycleRepayStatService.updateUserRecycleCnt(followUserId, longArray.length);
-//        if (reportRecycleRepayStat==null){
-//            return new ResultMessage(ResponseEnum.M4000.getCode(), "统计数据不存在,请联系技术人员");
-//        }
+        ReportRecycleRepayStat reportRecycleRepayStat = reportRecycleRepayStatService.updateUserRecycleCnt(followUserId, longArray.length);
+        if (reportRecycleRepayStat==null){
+            return new ResultMessage(ResponseEnum.M4000.getCode(), "统计数据不存在,请联系技术人员");
+        }
         return new ResultMessage(ResponseEnum.M2000);
     }
 
