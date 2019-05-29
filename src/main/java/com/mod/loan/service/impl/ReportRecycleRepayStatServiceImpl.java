@@ -69,7 +69,7 @@ public class ReportRecycleRepayStatServiceImpl extends BaseServiceImpl<ReportRec
 
             reportRecycleRepayStat.setNotReturnCnt(reportRecycleRepayStat.getNotReturnCnt()-1);
             reportRecycleRepayStat.setUpdateTime(new Date());
-            updateByPrimaryKey(reportRecycleRepayStat);
+            updateByPrimaryKeySelective(reportRecycleRepayStat);
 
             //reportRecycleRepayStatMapper.decreaseNotReturnCnt(recycleUserId,recycleDate);
 	    }
