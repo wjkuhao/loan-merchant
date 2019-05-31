@@ -4,6 +4,7 @@ import com.mod.loan.common.mapper.BaseServiceImpl;
 import com.mod.loan.mapper.ReportRecycleRepayStatMapper;
 import com.mod.loan.model.ReportRecycleRepayStat;
 import com.mod.loan.service.ReportRecycleRepayStatService;
+import com.mod.loan.util.StringUtil;
 import com.mod.loan.util.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,8 +47,7 @@ public class ReportRecycleRepayStatServiceImpl extends BaseServiceImpl<ReportRec
 
     @Override
     public void decreaseNotReturnCnt(Long recycleUserId, String recycleDate) {
-	    if(recycleUserId!=null && recycleUserId.compareTo(0L)>0){
-
+	    if(StringUtil.isNotEmpty(recycleDate) ){
             ReportRecycleRepayStat reportQry = new ReportRecycleRepayStat();
             reportQry.setRecycleDate(recycleDate);
             reportQry.setRecycledId(recycleUserId);
@@ -77,7 +77,7 @@ public class ReportRecycleRepayStatServiceImpl extends BaseServiceImpl<ReportRec
             reportRecycleRepayStat.setUpdateTime(new Date());
             updateByPrimaryKeySelective(reportRecycleRepayStat);
 
-           // reportRecycleRepayStatMapper.decreaseNotReturnCnt(recycleUserId,recycleDate);
+            //reportRecycleRepayStatMapper.decreaseNotReturnCnt(recycleUserId,recycleDate);
 	    }
     }
 }
