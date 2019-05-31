@@ -66,10 +66,13 @@
                         var encodeOrigin = value;
 		                if (record.merchant==="haitun") {
                             encodeOrigin = Base64.encode(value)+"=";
-                        }else if(record.merchant==="huijie" || record.merchant==="care" || record.merchant==="xiaoxiang"){
+                        }else if(record.merchant==="huijie"){
 		                    var desKey = "1234abcd";
                             encodeOrigin = encryptByDES(""+value, desKey);
-                        }
+                        } else {
+                            var desKey = "1234abcd";
+                            encodeOrigin = encryptByDES(""+value, desKey);
+						}
                         return server_h5_url+"register/"+record.merchant+".html?origin="+encodeOrigin;
 			        }
 	        	},{
