@@ -66,7 +66,7 @@
                         var encodeOrigin = value;
 		                if (record.merchant==="haitun") {
                             encodeOrigin = Base64.encode(value)+"=";
-                        }else if(record.merchant==="huijie" || record.merchant==="care" ){
+                        }else if(record.merchant==="huijie" || record.merchant==="care" || record.merchant==="xiaoxiang"){
 		                    var desKey = "1234abcd";
                             encodeOrigin = encryptByDES(""+value, desKey);
                         }
