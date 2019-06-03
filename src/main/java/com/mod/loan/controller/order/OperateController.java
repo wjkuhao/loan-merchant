@@ -44,10 +44,10 @@ public class OperateController {
 		if (order == null || !order.getMerchant().equals(RequestThread.get().getMerchant())) {
 			return new ResultMessage(ResponseEnum.M4000.getCode(), "非法操作");
 		}
-		if (order.getStatus() != 33 && order.getStatus() != 34 && order.getStatus() != 36
-			&& order.getStatus() != 37 && order.getStatus() != 38) {
-			return new ResultMessage(ResponseEnum.M4000.getCode(), "逾期订单才能减免金额");
-		}
+//		if (order.getStatus() != 33 && order.getStatus() != 34 && order.getStatus() != 36
+//			&& order.getStatus() != 37 && order.getStatus() != 38) {
+//			return new ResultMessage(ResponseEnum.M4000.getCode(), "逾期订单才能减免金额");
+//		}
 		if (money.signum() < 0) {
 			return new ResultMessage(ResponseEnum.M4000.getCode(), "减免金额不应小于0");
 		}
