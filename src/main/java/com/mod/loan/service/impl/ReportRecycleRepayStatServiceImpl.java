@@ -4,6 +4,7 @@ import com.mod.loan.common.mapper.BaseServiceImpl;
 import com.mod.loan.mapper.ReportRecycleRepayStatMapper;
 import com.mod.loan.model.ReportRecycleRepayStat;
 import com.mod.loan.service.ReportRecycleRepayStatService;
+import com.mod.loan.util.StringUtil;
 import com.mod.loan.util.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,13 +47,19 @@ public class ReportRecycleRepayStatServiceImpl extends BaseServiceImpl<ReportRec
 
     @Override
     public void decreaseNotReturnCnt(Long recycleUserId, String recycleDate) {
-	    if(recycleUserId!=null && recycleUserId.compareTo(0L)>0){
-
+	    if(StringUtil.isNotEmpty(recycleDate) ){
             ReportRecycleRepayStat reportQry = new ReportRecycleRepayStat();
             reportQry.setRecycleDate(recycleDate);
             reportQry.setRecycledId(recycleUserId);
 
             ReportRecycleRepayStat reportRecycleRepayStat = selectOne(reportQry);
+
+            if (reportRecycleRepayStat==null){
+                logger.error("recycleDate={},recycleUserId={} ReportRecycleRepayStat not exist", recycleDate, recycleUserId);
+                return;
+            }
+
+            reportRecycleRepayStat.setNotReturnCnt(reportRecycleRepayStat.getNotReturnCnt()-1);
 
             Double rate = (reportRecycleRepayStat.getRecycleCnt() - reportRecycleRepayStat.getNotReturnCnt())
                 / Double.valueOf(reportRecycleRepayStat.getRecycleCnt());
@@ -67,7 +74,6 @@ public class ReportRecycleRepayStatServiceImpl extends BaseServiceImpl<ReportRec
                 reportRecycleRepayStat.setRepay_60_rate(rate);
             }
 
-            reportRecycleRepayStat.setNotReturnCnt(reportRecycleRepayStat.getNotReturnCnt()-1);
             reportRecycleRepayStat.setUpdateTime(new Date());
             updateByPrimaryKeySelective(reportRecycleRepayStat);
 

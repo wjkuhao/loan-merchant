@@ -11,10 +11,10 @@
         <result column="recycle_cnt" jdbcType="INTEGER" property="recycleCnt" />
         <result column="not_return_cnt" jdbcType="INTEGER" property="notReturnCnt" />
         <result column="overdue_day" jdbcType="INTEGER" property="overdueDay" />
-        <result column="repay_1_rate" jdbcType="DECIMAL" property="repay_1_rate" />
-        <result column="repay_3_rate" jdbcType="DECIMAL" property="repay_3_rate" />
-        <result column="repay_7_rate" jdbcType="DECIMAL" property="repay_7_rate" />
-        <result column="repay_60_rate" jdbcType="DECIMAL" property="repay_60_rate" />
+        <result column="repay_1_rate" jdbcType="DOUBLE" property="repay_1_rate" />
+        <result column="repay_3_rate" jdbcType="DOUBLE" property="repay_3_rate" />
+        <result column="repay_7_rate" jdbcType="DOUBLE" property="repay_7_rate" />
+        <result column="repay_60_rate" jdbcType="DOUBLE" property="repay_60_rate" />
         <result column="recycle_date" jdbcType="VARCHAR" property="recycleDate" />
 		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
 		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
