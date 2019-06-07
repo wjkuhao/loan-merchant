@@ -99,14 +99,14 @@ public class UserRiskController {
         logger.info("user_risk_score_ajax uid={},orderId={}",id, orderId);
         OrderRiskInfo orderRiskInfo = orderRiskInfoService.getLastOneByOrderId(orderId);
         if (orderRiskInfo==null){
-            return new ResultMessage(ResponseEnum.M4000);
+            return new ResultMessage(ResponseEnum.M4000,"风控信息不存在");
         }
 
         String allScoreData = pullRiskData(orderRiskInfo.getRiskId(),"all_score");
         if(allScoreData!=null){
             return new ResultMessage(ResponseEnum.M2000, allScoreData);
         }
-        return new ResultMessage(ResponseEnum.M4000);
+        return new ResultMessage(ResponseEnum.M4000, "风控分数不存在");
     }
 
     private String pullRiskData(String riskId, String dataType){

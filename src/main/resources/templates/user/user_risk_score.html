@@ -33,12 +33,17 @@
 					maskScreen();
 				},
 				success : function(scoreData) {
-					if(scoreData) {
-                        var scoreMap = JSON.parse(scoreData.data);
-                        for (var key in scoreMap) {
-                            $("#scoreList").append("<tr><td class='center'>" + key + "</td><td class='center'>" + scoreMap[key] + "</td></tr>");
-                        }
+                    if(scoreData.status == 2000){
+						if(scoreData) {
+							var scoreMap = JSON.parse(scoreData.data);
+							for (var key in scoreMap) {
+								$("#scoreList").append("<tr><td class='center'>" + key + "</td><td class='center'>" + scoreMap[key] + "</td></tr>");
+							}
+						}
                     }
+                    else{
+						Dialog.alert(scoreData.data);
+					}
 				},
 				complete : function(){
 					unMaskScreen();

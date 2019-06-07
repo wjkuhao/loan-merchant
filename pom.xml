@@ -174,9 +174,9 @@
 		</profile>
 		<profile>
 			<!-- 生产环境 -->
-			<id>uat</id>
+			<id>test</id>
 			<properties>
-				<profiles.active>uat</profiles.active>
+				<profiles.active>test</profiles.active>
 			</properties>
 			<activation>
 				<activeByDefault>false</activeByDefault>
