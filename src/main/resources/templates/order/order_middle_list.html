@@ -357,6 +357,12 @@
                     if(payType.yeepay && payType.yeepay.pay && payType.yeepay.pay == 1) {
                         $("#payType").append("<option value='yeepay'>易宝</option>");
                     }
+                    if(payType.changjie && payType.changjie.pay && payType.changjie.pay == 1) {
+                        $("#payType").append("<option value='changjie'>畅捷</option>");
+                    }
+                    if(payType.kuaiqian && payType.kuaiqian.pay && payType.kuaiqian.pay == 1) {
+                        $("#payType").append("<option value='kuaiqian'>快钱</option>");
+                    }
 				},
 				complete : function(){
 					unMaskScreen();

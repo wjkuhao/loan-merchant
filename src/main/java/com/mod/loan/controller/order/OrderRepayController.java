@@ -145,7 +145,6 @@ public class OrderRepayController {
 		orderRepay.setUpdateTime(new Date());
 		orderRepayService.updateOrderOffline(record, orderRepay);
 
-		reportRecycleRepayStatService.decreaseNotReturnCnt(order.getFollowUserId(), order.getRecycleDate());
 		return new ResultMessage(ResponseEnum.M2000);
 	}
 

@@ -32,20 +32,22 @@
 
     <select id="findRecycleRepayStatList" resultType="map">
         SELECT
-        recycled_name,
-        recycle_cnt,
-        not_return_cnt,
-        repay_1_rate,
-        repay_3_rate,
-        repay_7_rate,
-        repay_60_rate,
-        case when recycle_cnt>0 then
-          (recycle_cnt-not_return_cnt)/recycle_cnt
-        else 0
-        end as sum_repay_rate
-        FROM
-        report_recycle_repay_stat cr
+        mm.user_name as 'recycled_name',
+        sum(case when follow_user_id&lt;&gt;0 then 1 else 0 end) 'recycle_cnt',
+        sum(case when real_repay_time is null then 1 else 0 end)'not_return_cnt',
+        sum(case when real_repay_time is null then 1 else 0 end)/count(0) 'current_rate',
+        sum(case when overdue_day&gt;0 and overdue_day&lt;2 and follow_user_id&lt;&gt;0 and real_repay_time is not null then 1 else 0 end)/sum(case when overdue_day&gt;0 then 1 else 0 end) 'repay_1_rate',
+        sum(case when overdue_day&gt;1 and overdue_day&lt;4 and follow_user_id&lt;&gt;0 and real_repay_time is not null then 1 else 0 end)/sum(case when overdue_day&gt;0 then 1 else 0 end) 'repay_3_rate',
+        sum(case when overdue_day&gt;3 and overdue_day&lt;8 and follow_user_id&lt;&gt;0 and real_repay_time is not null then 1 else 0 end)/sum(case when overdue_day&gt;0 then 1 else 0 end) 'repay_7_rate',
+        sum(case when overdue_day&gt;7 and overdue_day&lt;61 and follow_user_id&lt;&gt;0 and real_repay_time is not null then 1 else 0 end)/sum(case when overdue_day&gt;0 then 1 else 0 end) 'repay_60_rate',
+        sum(case when follow_user_id != 0 and real_repay_time is not null then 1 else 0 end)/sum(case when overdue_day&gt;0 then 1 else 0 end) 'sum_repay_rate'
+        from
+        tb_order cr
+        left join tb_merchant_manager mm on cr.follow_user_id = mm.id
         <where>
+            <if test="userType != null">
+                and cr.user_type = #{userType}
+            </if>
             <if test="merchant != null">
                 and cr.merchant = #{merchant}
             </if>
@@ -55,7 +57,9 @@
             <if test="endTime != null">
                 and cr.recycle_date &lt; DATE_ADD(#{endTime},INTERVAL 1 DAY)
             </if>
+            and cr.follow_user_id != 0
         </where>
+        GROUP BY 1
     </select>
 
     <update id="decreaseNotReturnCnt">
