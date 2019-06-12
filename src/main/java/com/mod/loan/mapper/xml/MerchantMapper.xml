@@ -11,9 +11,6 @@
 		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
 		<result column="hlb_id" jdbcType="VARCHAR" property="hlb_id" />
 		<result column="hlb_rsa_private_key" jdbcType="VARCHAR" property="hlb_rsa_private_key" />
-		<result column="hlb_rsa_public_key" jdbcType="VARCHAR" property="hlb_rsa_public_key" />
-		<result column="hlb_md5_key" jdbcType="VARCHAR" property="hlb_md5_key" />
-		<result column="hlb_des_key" jdbcType="VARCHAR" property="hlb_des_key" />
 		<result column="fuyou_merid" jdbcType="VARCHAR" property="fuyou_merid" />
 		<result column="fuyou_secureid" jdbcType="VARCHAR" property="fuyou_secureid" />
 		<result column="fuyou_h5key" jdbcType="VARCHAR" property="fuyou_h5key" />
