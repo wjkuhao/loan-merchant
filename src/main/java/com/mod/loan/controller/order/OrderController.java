@@ -303,13 +303,16 @@ public class OrderController {
 
         Order record = new Order();
         record.setId(orderId);
+        //借款金额
         record.setBorrowMoney(money);
         //综合费用
         BigDecimal num = new BigDecimal("100");
         BigDecimal totalFee= money.multiply(order.getTotalRate().divide(num));
+        record.setTotalFee(totalFee);
         //放款金额
         BigDecimal actualMoneny= money.subtract(totalFee);
         record.setActualMoney(actualMoneny);
+        //应还金额
         record.setShouldRepay(money);
         orderMapper.updateByPrimaryKeySelective(record);
         return new ResultMessage(ResponseEnum.M2000);
