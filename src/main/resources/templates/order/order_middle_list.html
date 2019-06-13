@@ -173,6 +173,7 @@
 			            }
                         html += "<a class='btn btn-mini btn-info' onclick=\"riskAgain(" + value + ");\">重新风控</a>";
                         html += "<a class='btn btn-mini btn-info' onclick=\"riskResult(" + value + ");\">风控结果</a>";
+                        html += "<a class='btn btn-mini btn-info' onclick=\"updateQuota(" + value + ");\">修改额度</a>";
                         html += "</div>";
 				        return html;
 			        }
@@ -327,6 +328,42 @@
                     unMaskScreen();
                 }
             });
+        }
+
+        function updateQuota(orderId){
+            var diag = new Dialog();
+            diag.Title = "修改额度";
+            diag.Width = 400;
+            diag.Height = 50;
+            diag.URL =contextPath+"system/blank";
+            diag.OKEvent = function(){
+                var money = diag.innerFrame.contentWindow.document.getElementById('reduceQuota').value;
+                Dialog.confirm("确定要修改成  "+money+"元  吗?", function() {
+                    $.ajax({
+                        url : contextPath + "order/order_updateQuota",
+                        type : "POST",
+                        dataType : "json",
+                        async : false,
+                        data : {
+                            "orderId":orderId,
+                            "money":money
+                        },
+                        success : function(result) {
+                            if(result.status==2000){
+                                diag.close();
+                                query();
+                            }else{
+                                Dialog.alert(result.message);
+                            }
+                        }
+                    });
+                });
+            };
+            diag.show();
+            var doc=diag.innerFrame.contentWindow.document;
+            doc.open();
+            doc.write('<html><body><div>请输入额度：<input id="reduceQuota" type="text" onkeyup="value=value.replace(/[^\\d$]/,\'\')"/><div></body></html>') ;
+            doc.close();
         }
 
         function getPayTypeList() {

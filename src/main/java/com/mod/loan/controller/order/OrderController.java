@@ -1,5 +1,6 @@
 package com.mod.loan.controller.order;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.mod.loan.mapper.OrderMapper;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.slf4j.Logger;
@@ -47,6 +49,8 @@ public class OrderController {
     private RedisMapper redisMapper;
     @Autowired
     private MerchantService merchantService;
+    @Autowired
+    private OrderMapper orderMapper;
 
     @RequestMapping(value = "order_list")
     public ModelAndView order_list(ModelAndView view) {
@@ -279,5 +283,35 @@ public class OrderController {
             logger.error(reportName + "报告导出异常。", e);
         }
         return;
+    }
+
+    /**
+     * 修改额度
+     */
+    @RequestMapping(value = "order_updateQuota")
+    public ResultMessage order_reduce(Long orderId, BigDecimal money) {
+        Order order = orderMapper.selectByPrimaryKey(orderId);
+        if (money == null) {
+            return new ResultMessage(ResponseEnum.M4000.getCode(), "请输入额度");
+        }
+        if (order == null || !order.getMerchant().equals(RequestThread.get().getMerchant())) {
+            return new ResultMessage(ResponseEnum.M4000.getCode(), "非法操作");
+        }
+        if (money.intValue() <= 0||money.intValue() > 5000) {
+            return new ResultMessage(ResponseEnum.M4000.getCode(), "请输入正确额度范围");
+        }
+
+        Order record = new Order();
+        record.setId(orderId);
+        record.setBorrowMoney(money);
+        //综合费用
+        BigDecimal num = new BigDecimal("100");
+        BigDecimal totalFee= money.multiply(order.getTotalRate().divide(num));
+        //放款金额
+        BigDecimal actualMoneny= money.subtract(totalFee);
+        record.setActualMoney(actualMoneny);
+        record.setShouldRepay(money);
+        orderMapper.updateByPrimaryKeySelective(record);
+        return new ResultMessage(ResponseEnum.M2000);
     }
 }
