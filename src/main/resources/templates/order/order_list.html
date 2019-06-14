@@ -63,6 +63,7 @@
                     <thead>
                     <tr>
                         <th class="center">用户姓名</th>
+                        <th class="center">包名</th>
                         <th class="center">借款期限</th>
                         <th class="center">状态</th>
                         <th class="center">借款金额</th>
@@ -113,7 +114,12 @@
             renderer: function (idValue, value, record) {
                 return value ? value + "(" + record.user_phone + ")" : "---";
             }
-        }, {
+        },{
+            id: "weskit_alias",
+            renderer: function (idValue, value, record) {
+                return value ? value : "---";
+            }
+        },{
             id: "borrow_day",
             renderer: function (idValue, value, record) {
                 return value ? value : "---";
