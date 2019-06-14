@@ -289,7 +289,7 @@ public class OrderController {
      * 修改额度
      */
     @RequestMapping(value = "order_updateQuota")
-    public ResultMessage order_reduce(Long orderId, BigDecimal money) {
+    public ResultMessage order_updateQuota(Long orderId, BigDecimal money) {
         Order order = orderMapper.selectByPrimaryKey(orderId);
         if (money == null) {
             return new ResultMessage(ResponseEnum.M4000.getCode(), "请输入额度");
