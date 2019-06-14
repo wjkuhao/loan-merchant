@@ -1,6 +1,7 @@
 package com.mod.loan.controller.order;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -49,8 +50,6 @@ public class OrderController {
     private RedisMapper redisMapper;
     @Autowired
     private MerchantService merchantService;
-    @Autowired
-    private OrderMapper orderMapper;
 
     @RequestMapping(value = "order_list")
     public ModelAndView order_list(ModelAndView view) {
@@ -290,7 +289,7 @@ public class OrderController {
      */
     @RequestMapping(value = "order_updateQuota")
     public ResultMessage order_updateQuota(Long orderId, BigDecimal money) {
-        Order order = orderMapper.selectByPrimaryKey(orderId);
+        Order order = orderService.selectByPrimaryKey(orderId);
         if (money == null) {
             return new ResultMessage(ResponseEnum.M4000.getCode(), "请输入额度");
         }
@@ -307,14 +306,14 @@ public class OrderController {
         record.setBorrowMoney(money);
         //综合费用
         BigDecimal num = new BigDecimal("100");
-        BigDecimal totalFee= money.multiply(order.getTotalRate().divide(num));
+        BigDecimal totalFee= money.multiply(order.getTotalRate().divide(num ,2, RoundingMode.HALF_UP));
         record.setTotalFee(totalFee);
         //放款金额
         BigDecimal actualMoneny= money.subtract(totalFee);
         record.setActualMoney(actualMoneny);
         //应还金额
         record.setShouldRepay(money);
-        orderMapper.updateByPrimaryKeySelective(record);
+        orderService.updateByPrimaryKeySelective(record);
         return new ResultMessage(ResponseEnum.M2000);
     }
 }
