@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.mod.loan.service.DataCenterService;
 import com.mod.loan.service.ReportRecycleRepayStatService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -50,6 +51,8 @@ public class OrderRepayController {
 
 	@Autowired
 	ReportRecycleRepayStatService reportRecycleRepayStatService;
+	@Autowired
+	DataCenterService dataCenterService;
 
 	@RequestMapping(value = "order_repay_list")
 	public ModelAndView order_repay_list(ModelAndView view) {
@@ -145,6 +148,7 @@ public class OrderRepayController {
 		orderRepay.setUpdateTime(new Date());
 		orderRepayService.updateOrderOffline(record, orderRepay);
 
+		dataCenterService.delMultiLoanOrder(order.getMerchant(), order.getId());
 		return new ResultMessage(ResponseEnum.M2000);
 	}
 

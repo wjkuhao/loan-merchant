@@ -138,6 +138,8 @@ public class Constant {
 
 	public static String mx_risk_token;
 
+    public static String MULTI_LOAN_DEL_URL;
+
 	@Value("${oss.moxie.bucket.name:}")
 	public void setMoxie_bucket_name(String moxie_bucket_name) {
 		Constant.moxie_bucket_name = moxie_bucket_name;
@@ -267,4 +269,8 @@ public class Constant {
 		return viewResolver;
 	}
 
+    @Value("${multi.loan.del.url:}")
+    public void setMultiLoanDelUrl(String multiLoanDelUrl) {
+        MULTI_LOAN_DEL_URL = multiLoanDelUrl;
+    }
 }
