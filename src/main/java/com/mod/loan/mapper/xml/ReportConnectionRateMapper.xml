@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mod.loan.mapper.ReportConnectionRateMapper">
+
+    <select id="findConnectionrRateReportCount" resultType="int">
+        SELECT
+			COUNT(1)
+		FROM
+			(
+				SELECT
+					DATE_FORMAT(recycle_date, "%Y-%m-%d") date,
+					follow_user_id fid
+				FROM
+					tb_order
+				GROUP BY
+					date,
+					fid
+			) a
+		LEFT JOIN tb_merchant_manager tm ON a.fid = tm.id
+        <where>
+            <if test="startTime != null">
+                and a.date &gt;= #{startTime}
+            </if>
+            <if test="endTime != null">
+                and a.date &lt;= DATE_ADD(#{endTime},INTERVAL 1 DAY)
+            </if>
+            <if test="merchant != null">
+                and tm.merchant = #{merchant}
+            </if>
+        </where>
+    </select>
+
+    <select id="findConnectionrRateReportList" resultType="map">
+           SELECT
+            id,
+            recycledName,
+            recycleDate,
+            IFNULL(recycleCnt,0) recycleCnt,
+            IFNULL(connectCnt,0) connectCnt,
+            IFNULL(noconnectCnt,0) noconnectCnt
+            FROM
+                (
+        SELECT
+        a.fid id,
+        tm.user_name recycledName,
+        a.date recycleDate
+        FROM
+        (
+        SELECT
+        DATE_FORMAT(recycle_date, "%Y-%m-%d") date,
+        follow_user_id fid
+        FROM
+        tb_order
+        GROUP BY
+        date,
+        fid
+        ) a
+        LEFT JOIN tb_merchant_manager tm ON a.fid = tm.id
+                <where>
+                    <if test="startTime != null">
+                        and a.date &gt;= #{startTime}
+                    </if>
+                    <if test="endTime != null">
+                        and a.date &lt;= DATE_ADD(#{endTime},INTERVAL 1 DAY)
+                    </if>
+                    <if test="merchant != null">
+                        and tm.merchant = #{merchant}
+                    </if>
+                </where>
+                ) b
+            LEFT JOIN (
+                SELECT
+                    count(id) AS recycleCnt,
+                    follow_user_id fu,
+                    recycle_date rd
+                FROM
+                    tb_order
+                WHERE
+                    STATUS IN (33, 34, 37, 38)
+                GROUP BY
+                    fu,
+                    rd
+            ) AS c ON b.recycleDate = c.rd
+            AND b.id = c.fu
+            LEFT JOIN (
+                SELECT
+                    count(id) AS connectCnt,
+                    follow_user_id fu,
+                    DATE_FORMAT(create_time, "%Y-%m-%d") rd
+                FROM
+                    tb_order_recycle_record
+                WHERE
+                    type IN (0, 1, 2, 3, 10, 11, 12, 14,15,16)
+                GROUP BY
+                    fu,
+                    rd
+            ) AS z ON b.recycleDate = z.rd
+            AND b.id = z.fu
+            LEFT JOIN (
+                SELECT
+                    count(id) AS noConnectCnt,
+                    follow_user_id fu,
+                    DATE_FORMAT(create_time, "%Y-%m-%d") rd
+                FROM
+                    tb_order_recycle_record
+                WHERE
+                    type NOT IN (0, 1, 2, 3, 10, 11, 12, 14,15,16)
+                GROUP BY
+                    fu,
+                    rd
+            ) AS y ON b.recycleDate = y.rd
+            AND b.id = y.fu
+            ORDER BY
+                b.recycleDate DESC limit #{startIndex},#{pageSize}
+    </select>
+
+
+    <select id="exportRecycleDateList" resultType="map">
+        SELECT
+        id,
+        recycledName,
+        recycleDate,
+        IFNULL(recycleCnt,0) recycleCnt,
+        IFNULL(connectCnt,0) connectCnt,
+        IFNULL(noconnectCnt,0) noconnectCnt
+        FROM
+        (
+        SELECT
+        a.fid id,
+        tm.user_name recycledName,
+        a.date recycleDate
+        FROM
+        (
+        SELECT
+        DATE_FORMAT(recycle_date, "%Y-%m-%d") date,
+        follow_user_id fid
+        FROM
+        tb_order
+        GROUP BY
+        date,
+        fid
+        ) a
+        LEFT JOIN tb_merchant_manager tm ON a.fid = tm.id
+        <where>
+            <if test="startTime != null">
+                and a.date &gt;= #{startTime}
+            </if>
+            <if test="endTime != null">
+                and a.date &lt;= DATE_ADD(#{endTime},INTERVAL 1 DAY)
+            </if>
+            <if test="merchant != null">
+                and tm.merchant = #{merchant}
+            </if>
+        </where>
+        ) b
+        LEFT JOIN (
+        SELECT
+        count(id) AS recycleCnt,
+        follow_user_id fu,
+        recycle_date rd
+        FROM
+        tb_order
+        WHERE
+        STATUS IN (33, 34, 37, 38)
+        GROUP BY
+        fu,
+        rd
+        ) AS c ON b.recycleDate = c.rd
+        AND b.id = c.fu
+        LEFT JOIN (
+        SELECT
+        count(id) AS connectCnt,
+        follow_user_id fu,
+        DATE_FORMAT(create_time, "%Y-%m-%d") rd
+        FROM
+        tb_order_recycle_record
+        WHERE
+        type IN (0, 1, 2, 3, 10, 11, 12, 14,15,16)
+        GROUP BY
+        fu,
+        rd
+        ) AS z ON b.recycleDate = z.rd
+        AND b.id = z.fu
+        LEFT JOIN (
+        SELECT
+        count(id) AS noConnectCnt,
+        follow_user_id fu,
+        DATE_FORMAT(create_time, "%Y-%m-%d") rd
+        FROM
+        tb_order_recycle_record
+        WHERE
+        type NOT IN (0, 1, 2, 3, 10, 11, 12, 14,15,16)
+        GROUP BY
+        fu,
+        rd
+        ) AS y ON b.recycleDate = y.rd
+        AND b.id = y.fu
+        ORDER BY
+        b.recycleDate DESC
+    </select>
+</mapper>

@@ -5,7 +5,9 @@ import java.util.Map;
 
 import com.mod.loan.common.mapper.MyBaseMapper;
 import com.mod.loan.model.OrderRecycleRecord;
+import com.mod.loan.model.dto.ReportConnectionRate;
 import com.mod.loan.service.form.OrderQuery;
+import org.apache.ibatis.annotations.Param;
 
 public interface OrderRecycleRecordMapper extends MyBaseMapper<OrderRecycleRecord> {
 
@@ -47,5 +49,4 @@ public interface OrderRecycleRecordMapper extends MyBaseMapper<OrderRecycleRecor
 	 * 查询坏账分组列表大小
 	 * */
 	int countBadList(OrderQuery query);
-
 }

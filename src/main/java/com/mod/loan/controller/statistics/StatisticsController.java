@@ -5,6 +5,7 @@ import com.mod.loan.common.model.Page;
 import com.mod.loan.common.model.RequestThread;
 import com.mod.loan.common.model.ResultMessage;
 import com.mod.loan.model.MerchantOrigin;
+import com.mod.loan.model.Order;
 import com.mod.loan.service.*;
 import com.mod.loan.util.ExcelUtil;
 import com.mod.loan.util.TimeUtils;
@@ -41,14 +42,24 @@ public class StatisticsController {
     @Autowired
     private ReportRegisterOrderService reportRegisterOrderService;
     @Autowired
+    private ReportConnectionRateService reportConnectionRateService;
+    @Autowired
     private ReportPartnerEffectDeductionService reportPartnerEffectDeductionService;
     @Autowired
     private ReportRegisterOrderDeductionService reportRegisterOrderDeductionService;
 
 
+
+
     @RequestMapping(value = "loan_report_list")
     public ModelAndView loan_report_list(ModelAndView view) {
         view.setViewName("statistics/loan_report_list");
+        return view;
+    }
+
+    @RequestMapping(value = "connection_rate_report_list")
+    public ModelAndView connection_rate_report_list(ModelAndView view) {
+        view.setViewName("statistics/connection_rate_report_list");
         return view;
     }
 
@@ -225,6 +236,17 @@ public class StatisticsController {
                     // 获取信息
                     list = reportOrderRepayService.exportUserRepayRate(param, "totalUserRepayRate");
                     break;
+
+                case "connection_rate":
+                    downloadFileName+="-接通率统计";
+                    // 定义excel第一行的信息
+                    title = new String[]{"序号","催收人姓名", "入催订单数", "接通数", "未接通数", "入催日期", "接通率"};
+                    sheetName = "接通率统计";
+                    // 设置插入值的名称
+                    columns = new String[]{"id", "recycledName", "recycleCnt", "connectCnt", "noconnectCnt", "recycleDate", "connectRate"};
+                    // 获取信息
+                    list = reportConnectionRateService.exportConnectionrRateReportList(param);
+                    break;
                 default:
                     logger.info("无法导出不存在的报表:" + reportName);
                     return;
@@ -325,6 +347,15 @@ public class StatisticsController {
             return new ResultMessage(ResponseEnum.M2000, reportOrderRepayService.totalUserRepayRate(param, page), page);
         }
         return new ResultMessage(ResponseEnum.M4000.getCode(), "请选择正确的回款率报表类型");
+    }
+
+    @RequestMapping(value = "connection_rate_report_list_ajax", method = {RequestMethod.POST})
+    public ResultMessage connection_rate_report_list_ajax( String startTime, String endTime, Page page) {
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("merchant", RequestThread.get().getMerchant());
+        param.put("startTime", StringUtils.isNotEmpty(startTime) ? startTime : null);
+        param.put("endTime", StringUtils.isNotEmpty(endTime) ? endTime : null);
+        return new ResultMessage(ResponseEnum.M2000, reportConnectionRateService.findConnectionrRateReportList(param, page), page);
     }
 
 }
