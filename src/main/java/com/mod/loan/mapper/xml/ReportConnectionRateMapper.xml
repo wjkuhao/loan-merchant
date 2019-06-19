@@ -75,8 +75,6 @@
                     recycle_date rd
                 FROM
                     tb_order
-                WHERE
-                    STATUS IN (33, 34, 37, 38)
                 GROUP BY
                     fu,
                     rd
@@ -160,8 +158,6 @@
         recycle_date rd
         FROM
         tb_order
-        WHERE
-        STATUS IN (33, 34, 37, 38)
         GROUP BY
         fu,
         rd
