@@ -30,9 +30,6 @@ public class ReportConnectionRateServiceImpl extends BaseServiceImpl<ReportConne
     public List<Map<String, Object>> findConnectionrRateReportList(Map<String, Object> param, Page page) {
         param.put("startIndex", page.getStartIndex());
         param.put("pageSize", page.getPageSize());
-        /*page.setTotalCount(orderRecycleRecordMapper.countRecycleDate(param));
-        //获取日期和催收人信息
-        List<ReportConnectionRate> reportConnectionRateList = orderRecycleRecordMapper.RecycleDateList(param);*/
         page.setTotalCount(reportConnectionRateMapper.findConnectionrRateReportCount(param));
         return reportConnectionRateMapper.findConnectionrRateReportList(param);
     }
