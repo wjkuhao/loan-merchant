@@ -1,25 +1,5 @@
 package com.mod.loan.controller.order;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
-
-import com.mod.loan.mapper.OrderMapper;
-import org.apache.commons.lang.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.alibaba.fastjson.JSONObject;
 import com.mod.loan.common.enums.ResponseEnum;
 import com.mod.loan.common.model.Page;
@@ -35,6 +15,23 @@ import com.mod.loan.service.OrderAuditService;
 import com.mod.loan.service.OrderService;
 import com.mod.loan.util.ExcelUtil;
 import com.mod.loan.util.TimeUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "order")
@@ -296,7 +293,7 @@ public class OrderController {
         if (order == null || !order.getMerchant().equals(RequestThread.get().getMerchant())) {
             return new ResultMessage(ResponseEnum.M4000.getCode(), "非法操作");
         }
-        if (money.intValue() <= 0||money.intValue() > 5000) {
+        if (money.intValue() <= 0 || money.intValue() > Constant.MERCHANT_MAX_PRODUCT_MONEY) {
             return new ResultMessage(ResponseEnum.M4000.getCode(), "请输入正确额度范围");
         }
 
@@ -306,10 +303,10 @@ public class OrderController {
         record.setBorrowMoney(money);
         //综合费用
         BigDecimal num = new BigDecimal("100");
-        BigDecimal totalFee= money.multiply(order.getTotalRate().divide(num ,2, RoundingMode.HALF_UP));
+        BigDecimal totalFee = money.multiply(order.getTotalRate().divide(num, 2, RoundingMode.HALF_UP));
         record.setTotalFee(totalFee);
         //放款金额
-        BigDecimal actualMoneny= money.subtract(totalFee);
+        BigDecimal actualMoneny = money.subtract(totalFee);
         record.setActualMoney(actualMoneny);
         //应还金额
         record.setShouldRepay(money);

@@ -1,12 +1,12 @@
 package com.mod.loan.config;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 public class Constant {
@@ -134,16 +134,21 @@ public class Constant {
 
     public static String server_api_url;
 
-	public static String mx_risk_url;
+    public static String mx_risk_url;
 
-	public static String mx_risk_token;
+    public static String mx_risk_token;
 
     public static String MULTI_LOAN_DEL_URL;
 
-	@Value("${oss.moxie.bucket.name:}")
-	public void setMoxie_bucket_name(String moxie_bucket_name) {
-		Constant.moxie_bucket_name = moxie_bucket_name;
-	}
+    /**
+     * 商户最大额度强制限制
+     */
+    public static Integer MERCHANT_MAX_PRODUCT_MONEY;
+
+    @Value("${oss.moxie.bucket.name:}")
+    public void setMoxie_bucket_name(String moxie_bucket_name) {
+        Constant.moxie_bucket_name = moxie_bucket_name;
+    }
 
     @Value("${oss.moxie.bucket.name.mobile_jxl:}")
     public void setMoxie_mobile_jxl(String moxie_mobile_jxl) {
@@ -241,33 +246,44 @@ public class Constant {
     }
 
     @Value("${server.api.url:}")
-    public void setServer_api_url(String server_api_url){
+    public void setServer_api_url(String server_api_url) {
         Constant.server_api_url = server_api_url;
     }
 
-	@Value("${mx.risk.url:}")
-	public void setMx_risk_url(String mx_risk_url) {
-	    Constant.mx_risk_url = mx_risk_url; }
+    @Value("${mx.risk.url:}")
+    public void setMx_risk_url(String mx_risk_url) {
+        Constant.mx_risk_url = mx_risk_url;
+    }
 
-	@Value("${mx.risk.token:}")
-	public void setMx_risk_token(String mx_risk_token) {
-		Constant.mx_risk_token = mx_risk_token;}
-	/**
-	 * 为thymeleaf添加全局静态变量
-	 *
-	 * @param viewResolver
-	 */
-	@Bean
-	public ThymeleafViewResolver configureThymeleafStaticVars(ThymeleafViewResolver viewResolver) {
-		if (viewResolver != null) {
-			Map<String, Object> vars = new HashMap<>();
-			vars.put("ALI_OSS_FILE_URL", img_prefix);
-			vars.put("server_h5_url", server_h5_url);
-			vars.put("server_itf_url", server_itf_url);
-			viewResolver.setStaticVariables(vars);
-		}
-		return viewResolver;
-	}
+    @Value("${mx.risk.token:}")
+    public void setMx_risk_token(String mx_risk_token) {
+        Constant.mx_risk_token = mx_risk_token;
+    }
+
+    @Value("${merchant.max.product.money:5000}")
+    public void setMerchantMaxProductMoney(Integer merchantMaxProductMoney) {
+        if (merchantMaxProductMoney > 10000) {
+            merchantMaxProductMoney = 10000;
+        }
+        MERCHANT_MAX_PRODUCT_MONEY = merchantMaxProductMoney;
+    }
+
+    /**
+     * 为thymeleaf添加全局静态变量
+     *
+     * @param viewResolver
+     */
+    @Bean
+    public ThymeleafViewResolver configureThymeleafStaticVars(ThymeleafViewResolver viewResolver) {
+        if (viewResolver != null) {
+            Map<String, Object> vars = new HashMap<>();
+            vars.put("ALI_OSS_FILE_URL", img_prefix);
+            vars.put("server_h5_url", server_h5_url);
+            vars.put("server_itf_url", server_itf_url);
+            viewResolver.setStaticVariables(vars);
+        }
+        return viewResolver;
+    }
 
     @Value("${multi.loan.del.url:}")
     public void setMultiLoanDelUrl(String multiLoanDelUrl) {
