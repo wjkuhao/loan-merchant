@@ -7,9 +7,11 @@ import com.mod.loan.common.model.RequestThread;
 import com.mod.loan.common.model.ResultMessage;
 import com.mod.loan.config.Constant;
 import com.mod.loan.model.OrderRiskInfo;
+import com.mod.loan.model.User;
 import com.mod.loan.service.OrderRiskInfoService;
-import com.mod.loan.service.OrderService;
+import com.mod.loan.service.UserService;
 import com.mod.loan.util.OkHttpReader;
+import com.mod.loan.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -28,14 +30,14 @@ public class UserRiskController {
     private final RabbitTemplate rabbitTemplate;
     private final OkHttpReader okHttpReader;
     private final OrderRiskInfoService orderRiskInfoService;
-    private final OrderService orderService;
+    private final UserService userService;
 
     @Autowired
-    public UserRiskController(RabbitTemplate rabbitTemplate, OkHttpReader okHttpReader, OrderRiskInfoService orderRiskInfoService, OrderService orderService) {
+    public UserRiskController(RabbitTemplate rabbitTemplate, OkHttpReader okHttpReader, OrderRiskInfoService orderRiskInfoService, UserService userService) {
         this.rabbitTemplate = rabbitTemplate;
         this.okHttpReader = okHttpReader;
         this.orderRiskInfoService = orderRiskInfoService;
-        this.orderService = orderService;
+        this.userService = userService;
     }
 
     @RequestMapping(value = "risk_again")
@@ -94,19 +96,14 @@ public class UserRiskController {
     }
 
     @RequestMapping(value = "user_risk_score_ajax")
-    public ResultMessage user_risk_score_ajax(Long id) { //uid
-        Long orderId = orderService.selectLastOneByUid(id).getId();
-        logger.info("user_risk_score_ajax uid={},orderId={}",id, orderId);
-        OrderRiskInfo orderRiskInfo = orderRiskInfoService.getLastOneByOrderId(orderId);
-        if (orderRiskInfo==null){
+    public ResultMessage user_risk_score_ajax(Long id) {
+        User user = userService.selectByPrimaryKey(id);
+        OrderRiskInfo orderRiskInfo = orderRiskInfoService.getLastOneByPhone(user.getUserPhone());
+        if (orderRiskInfo==null || StringUtil.isEmpty(orderRiskInfo.getRiskModelScore())){
             return new ResultMessage(ResponseEnum.M4000,"风控信息不存在");
         }
 
-        String allScoreData = pullRiskData(orderRiskInfo.getRiskId(),"all_score");
-        if(allScoreData!=null){
-            return new ResultMessage(ResponseEnum.M2000, allScoreData);
-        }
-        return new ResultMessage(ResponseEnum.M4000, "风控分数不存在");
+        return new ResultMessage(ResponseEnum.M2000, orderRiskInfo.getRiskModelScore());
     }
 
     private String pullRiskData(String riskId, String dataType){

@@ -7,4 +7,6 @@ public interface OrderRiskInfoService extends BaseService<OrderRiskInfo, Long> {
 
     OrderRiskInfo getLastOneByOrderId(Long orderId);
 
+    OrderRiskInfo getLastOneByPhone(String userPhone);
+
 }
