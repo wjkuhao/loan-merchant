@@ -396,6 +396,9 @@
                     if(payType.huichao && payType.huichao.pay && payType.huichao.pay == 1) {
                         $("#payType").append("<option value='kuaiqian'>汇潮</option>");
                     }
+                    if(payType.jinyuntong && payType.jinyuntong.pay && payType.jinyuntong.pay == 1) {
+                        $("#payType").append("<option value='kuaiqian'>金运通</option>");
+                    }
 				},
 				complete : function(){
 					unMaskScreen();
