@@ -21,6 +21,7 @@
         <result column="reduce_money" jdbcType="DECIMAL" property="reduceMoney"/>
         <result column="status" jdbcType="INTEGER" property="status"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
         <result column="audit_time" jdbcType="TIMESTAMP" property="auditTime"/>
         <result column="arrive_time" jdbcType="TIMESTAMP" property="arriveTime"/>
         <result column="repay_time" jdbcType="TIMESTAMP" property="repayTime"/>
@@ -141,7 +142,7 @@
     <update id="updateOrderFollowUser">
         update tb_order a
         set a.follow_user_id = #{followUserId},
-            a.recycle_date = date_format(NOW(), '%Y-%m-%d')
+            a.recycle_date = date_format(NOW(), '%Y-%m-%d'),a.update_time = now()
         where a.merchant = #{merchant}
         and a.status in(31,33,34,35,36,37,38)
         and a.id in

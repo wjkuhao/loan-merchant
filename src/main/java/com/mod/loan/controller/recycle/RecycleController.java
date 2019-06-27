@@ -224,6 +224,7 @@ public class RecycleController {
         orderRecycle.setUid(order.getUid());
         recycleService.insertSelective(orderRecycle);
         order.setRecycleType(type);
+        order.setUpdateTime(new Date());
         orderService.updateByPrimaryKeySelective(order);
         return new ResultMessage(ResponseEnum.M2000);
     }

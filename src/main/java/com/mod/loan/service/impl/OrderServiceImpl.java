@@ -177,6 +177,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
             if (order.getStatus() == Constant.ORDER_FOR_LENDING || order.getStatus() == Constant.ORDER_LEND_FAIL) {
                 // 修改订单状态
                 order.setStatus(Constant.ORDER_IN_LENDING);
+                order.setUpdateTime(new Date());
                 orderMapper.updateByPrimaryKey(order);
                 // 发送消息
                 JSONObject jsonObject = new JSONObject();

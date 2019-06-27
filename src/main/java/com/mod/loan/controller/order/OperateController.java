@@ -1,6 +1,7 @@
 package com.mod.loan.controller.order;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,7 @@ public class OperateController {
 		Order record = new Order();
 		record.setId(orderId);
 		record.setStatus(34);
+		record.setUpdateTime(new Date());
 		orderMapper.updateByPrimaryKeySelective(record);
 		return new ResultMessage(ResponseEnum.M2000);
 	}
@@ -56,6 +58,7 @@ public class OperateController {
 		}
 		Order record = new Order();
 		record.setId(orderId);
+		record.setUpdateTime(new Date());
 		record.setReduceMoney(money);
 		record.setShouldRepay(order.getInterestFee().add(order.getBorrowMoney()).add(order.getOverdueFee()).subtract(money));
 		orderMapper.updateByPrimaryKeySelective(record);

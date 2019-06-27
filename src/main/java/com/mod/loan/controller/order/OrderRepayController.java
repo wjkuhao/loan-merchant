@@ -134,6 +134,7 @@ public class OrderRepayController {
 		record.setId(order.getId());
 		record.setHadRepay(repayMoney);
 		record.setRealRepayTime(new Date());
+		record.setUpdateTime(new Date());
 		OrderRepay orderRepay = new OrderRepay();
 		// 插入还款记录
 		String serials_no = StringUtil.getPayNumber("r");

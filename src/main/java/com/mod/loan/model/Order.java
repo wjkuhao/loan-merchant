@@ -111,6 +111,12 @@ public class Order {
     private Date createTime;
 
     /**
+     * 更新时间
+     */
+    @Column(name = "update_time")
+    private Date updateTime;
+
+    /**
      * 审核时间
      */
     @Column(name = "audit_time")
@@ -643,5 +649,13 @@ public class Order {
      */
     public void setRecycleType(Integer recycleType) {
         this.recycleType = recycleType;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

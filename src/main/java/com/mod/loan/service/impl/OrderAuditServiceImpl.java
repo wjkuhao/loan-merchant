@@ -58,12 +58,14 @@ public class OrderAuditServiceImpl extends BaseServiceImpl<OrderAudit, Long> imp
         // 复审通过
         if (orderAudit.getStatus() == 0) {
             order.setAuditTime(new Date());
+            order.setUpdateTime(new Date());
             order.setStatus(Constant.ORDER_FOR_LENDING);
             orderMapper.updateByPrimaryKey(order);
             orderAudit.setCreteTime(new Date());
             orderAuditMapper.updateByPrimaryKeySelective(orderAudit);
         } else if (orderAudit.getStatus() == 1) {// 复审拒绝
             order.setAuditTime(new Date());
+            order.setUpdateTime(new Date());
             order.setStatus(Constant.ORDER_AUDIT_FAIL);
             orderMapper.updateByPrimaryKey(order);
             // 更新审核记录

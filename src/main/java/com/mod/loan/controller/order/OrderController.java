@@ -231,6 +231,7 @@ public class OrderController {
         }
         Order record = new Order();
         record.setId(orderId);
+        record.setUpdateTime(new Date());
         record.setStatus(Constant.ORDER_CANCLE);
         orderService.updateByPrimaryKeySelective(record);
         return new ResultMessage(ResponseEnum.M2000);
@@ -310,6 +311,7 @@ public class OrderController {
         record.setActualMoney(actualMoneny);
         //应还金额
         record.setShouldRepay(money);
+        record.setUpdateTime(new Date());
         orderService.updateByPrimaryKeySelective(record);
         return new ResultMessage(ResponseEnum.M2000);
     }
