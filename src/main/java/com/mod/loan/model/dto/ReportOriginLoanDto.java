@@ -15,6 +15,11 @@ public class ReportOriginLoanDto {
     private String date;
 
     /**
+     *  渠道编号
+     */
+    private String originNo;
+
+    /**
      * uv人数
      */
     private String uvCount;
