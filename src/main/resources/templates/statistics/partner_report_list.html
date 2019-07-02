@@ -9,8 +9,8 @@
 				<div class="row-fluid">
 					<!-- 检索  -->
 					<div>
-						<span>渠道编号:</span>
-						<input id="userOrigin" name="userOrigin" type="text" />
+<!--						<span>渠道编号:</span>-->
+<!--						<input id="userOrigin" name="userOrigin" type="text" />-->
 						<span>注册时间:</span>
 						<input id="startTime" name="startTime" type="text" readonly="readonly" placeholder="开始时间" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})"/>
 						~
@@ -27,13 +27,26 @@
 						<thead>
 							<tr>
 								<th class="center">注册日期</th>
-								<th class="center">注册渠道</th>
-								<th class="center">注册人数(人)</th>
-								<th class="center">注册的登录数量(人)</th>
-								<th class="center">实名人数(人)</th>
-								<th class="center">提单人数(人)</th>
-								<th class="center">首借人数(人)</th>
-								<th class="center">首借金额(元)</th>
+<!--								<th class="center">UV人数</th>-->
+<!--								<th class="center">注册渠道</th>-->
+								<th class="center">注册人数</th>
+<!--								<th class="center">注册的登录数量</th>-->
+								<th class="center">实名认证数</th>
+								<th class="center">个人信息认证数</th>
+								<th class="center">运营商认证数</th>
+								<th class="center">银行卡绑定数</th>
+								<th class="center">申请订单数</th>
+								<th class="center">风控通过数</th>
+								<th class="center">下款数</th>
+								<th class="center">实名认证率</th>
+								<th class="center">个人信息认证率</th>
+								<th class="center">运营商认证率</th>
+								<th class="center">银行卡绑定率</th>
+								<th class="center">申请转化率</th>
+								<th class="center">下款率</th>
+								<th class="center">审核通过率</th>
+<!--								<th class="center">注册通过率</th>-->
+								<th class="center">详情</th>
 							</tr>
 						</thead>
 						<tbody id="myTable"></tbody>
@@ -55,52 +68,120 @@
 			id : "id",
 			queryUrl : contextPath+"statistics/partner_report_list_ajax",
 			headerColumns : [{
-		            id : "day_key",
+		            id : "dayKey",
 		            renderer : function(idValue,value,record){
 		            	return value != null ? moment(value).format("YYYY-MM-DD") : "---";
 				    }
-    			},{
-		            id : "origin_name",
-		            renderer : function(idValue,value,record){
-		            	return value != null ? value + "(" + record.user_origin + ")" : record.user_origin;
-				    }
-	        	},{
-		            id : "reg_cnt",
+    			},
+				// {
+		        //     id : "origin_name",
+		        //     renderer : function(idValue,value,record){
+		        //     	return value != null ? value + "(" + record.user_origin + ")" : record.user_origin;
+				//     }
+	        	// },
+				// {
+		        //     id : "uvCount",
+		        //     renderer : function(idValue,value,record){
+				// 		return value != null ? value : "---" ;
+			    //     }
+	        	// },
+				{
+					id : "regCnt",
+					renderer : function(idValue,value,record){
+						return value != null ? value : "---" ;
+					}
+				},
+				// {
+		        //     id : "loginCount",
+		        //     renderer : function(idValue,value,record){
+				// 		return value != null ? value : "---" ;
+			    //     }
+	        	// },
+				{
+		            id : "realNameCnt",
 		            renderer : function(idValue,value,record){
 						return value != null ? value : "---" ;
 			        }
 	        	},{
-					id : "login_cnt",
+					id : "personalInfoCertiCnt",
 					renderer : function(idValue,value,record){
 						return value != null ? value : "---" ;
 					}
 				},{
-		            id : "real_name_cnt",
+		            id : "yysCnt",
 		            renderer : function(idValue,value,record){
 						return value != null ? value : "---" ;
 			        }
 	        	},{
-		            id : "submit_order_cnt",
+		            id : "bankCnt",
 		            renderer : function(idValue,value,record){
 						return value != null ? value : "---" ;
 			        }
 	        	},{
-		            id : "first_submit_cnt",
-		            renderer : function(idValue,value,record){
+                    id : "orderCnt",
+                    renderer : function(idValue,value,record){
+                        return value != null ? value : "---" ;
+                    }
+                },{
+                    id : "passRiskCnt",
+                    renderer : function(idValue,value,record){
+                        return value != null ? value : "---" ;
+                    }
+                },{
+                    id : "loanSuccessCnt",
+                    renderer : function(idValue,value,record){
+                        return value != null ? value : "---" ;
+                    }
+                },{
+					id : "realNameCertiRate",
+					renderer : function(idValue,value,record){
 						return value != null ? value : "---" ;
-			        }
-	        	},{
-		            id : "first_submit_amount",
-		            renderer : function(idValue,value,record){
+					}
+				},{
+					id : "personalInfoCertiRate",
+					renderer : function(idValue,value,record){
 						return value != null ? value : "---" ;
-			        }
-	        	}]
+					}
+				},{
+					id : "yysCertiRate",
+					renderer : function(idValue,value,record){
+						return value != null ? value : "---" ;
+					}
+				},{
+					id : "bankBoundRate",
+					renderer : function(idValue,value,record){
+						return value != null ? value : "---" ;
+					}
+				},{
+					id : "regApplyTransRate",
+					renderer : function(idValue,value,record){
+						return value != null ? value : "---" ;
+					}
+				},{
+                    id : "loanRate",
+                    renderer : function(idValue,value,record){
+                        return value != null ? value : "---" ;
+                    }
+                },{
+                    id : "auditPassRate",
+                    renderer : function(idValue,value,record){
+                        return value != null ? value : "---" ;
+                    }
+                },{
+                    id : "dayKey",
+                    renderer : function(idValue,value,record){
+                        var html = "<div class='btn-group'>";
+                        html += "<a class='btn btn-mini btn-info' title='查看' onclick=\"detail(" + value + ");\">查看</a>";
+                        html += "</div>";
+                        return html;
+                    }
+                }]
 		});
 		
 		function query() {
 			myTable.page.totalRowNum = 0;
 			myTable.onLoad({
-				userOrigin:$("#userOrigin").val(),
+				// userOrigin:$("#userOrigin").val(),
 				startTime:$("#startTime").val(),
 				endTime:$("#endTime").val()
 			});
@@ -132,6 +213,20 @@
 			Dialog.confirm("确认按条件导出渠道统计报表吗？",function () {
 				location.href = contextPath+"statistics/export_report?reportName=partner_effect&userOrigin=" + $("#userOrigin").val() + "&startTime=" + $("#startTime").val() + "&endTime=" + $("#endTime").val();
 			});
+		}
+
+		function detail(date){
+			var diag = new top.Dialog();
+			diag.Drag = true;
+			diag.Title = "详情";
+			diag.URL = contextPath + "statistics/partner_report_list_detail?date=" + date;
+			diag.Width = 1400;
+			diag.Height = 800;
+			diag.CancelEvent = function(){ //关闭事件
+				query();
+				diag.close();
+			};
+			diag.show();
 		}
 	</script>
 </body>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="common/top :: head">
+</head>
+<head>
+<body>
+<div id="page-content">
+    <div class="index-model-h">
+        <div class="page-header">
+            <div>
+<!--                <span>查询时间:</span>-->
+<!--                <input id="searchTime" name="searchTime" type="text" readonly="readonly" placeholder="查询时间" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})"/>-->
+<!--                <button id="query" class="btn btn-small btn-success" onclick="search()"><i class="icon-search"></i> 查询-->
+<!--                </button>-->
+            </div>
+        </div>
+        <div class="row">
+            <div class="index-model">
+                <div class="pricing-span-index">
+                    <div class="widget-box pricing-box-small">
+                        <div class="widget-header header-color-red3">
+                            <h5 class="bigger lighter">总打款总额（元）</h5>
+                        </div>
+                        <div class="widget-body index-number">
+                            <span id="sumLoanMoney"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="pricing-span-index">
+                    <div class="widget-box pricing-box-small">
+                        <div class="widget-header header-color-red3">
+                            <h5 class="bigger lighter">总还款金额（元）</h5>
+                        </div>
+                        <div class="widget-body index-number">
+                            <span id="sumRepayMoney"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="pricing-span-index">
+                    <div class="widget-box pricing-box-small">
+                        <div class="widget-header header-color-red3">
+                            <h5 class="bigger lighter">总待收金额（元）</h5>
+                        </div>
+                        <div class="widget-body index-number">
+                            <span id="sumToCollectMoney"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="pricing-span-index">
+                    <div class="widget-box pricing-box-small">
+                        <div class="widget-header header-color-red3">
+                            <h5 class="bigger lighter">未逾期待收金额（元）</h5>
+                        </div>
+                        <div class="widget-body index-number">
+                            <span id="sumNotOverDueToCollectMoney"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="index-model">
+                <div class="pricing-span-index">
+                    <div class="widget-box pricing-box-small">
+                        <div class="widget-header header-color-red3">
+                            <h5 class="bigger lighter">当日待收金额（元）</h5>
+                        </div>
+                        <div class="widget-body index-number">
+                            <span id="todayToCollectMoney"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="pricing-span-index">
+                    <div class="widget-box pricing-box-small">
+                        <div class="widget-header header-color-red3">
+                            <h5 class="bigger lighter">3日内逾期待收金额（元）</h5>
+                        </div>
+                        <div class="widget-body index-number">
+                            <span id="overDueToCollectMoney3Days"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="pricing-span-index">
+                    <div class="widget-box pricing-box-small">
+                        <div class="widget-header header-color-red3">
+                            <h5 class="bigger lighter">7日内逾期待收金额（元）</h5>
+                        </div>
+                        <div class="widget-body index-number">
+                            <span id="overDueToCollectMoney7Days"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="pricing-span-index">
+                    <div class="widget-box pricing-box-small">
+                        <div class="widget-header header-color-red3">
+                            <h5 class="bigger lighter">15日内逾期待收金额（元）</h5>
+                        </div>
+                        <div class="widget-body index-number">
+                            <span id="overDueToCollectMoney15Days"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="index-model">
+                <div class="pricing-span-index">
+                    <div class="widget-box pricing-box-small">
+                        <div class="widget-header header-color-red3">
+                            <h5 class="bigger lighter">15日以上逾期待收金额（元）</h5>
+                        </div>
+                        <div class="widget-body index-number">
+                            <span id="overDueToCollectMoneyOver15Days"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+	$(top.hangge());
+    var contextPath = "[[@{/}]]";
+    var submitTime = laydate.now(0, 'YYYY-MM-DD');
+    $("#searchTime").attr('value', submitTime);
+    
+    function getAllMessage() {
+        var searchTime = $("#searchTime").val();
+        $.ajax({
+			url : contextPath + "statistics/data_view_ajax",
+			type : "POST",
+			dataType : "json",
+			// data : {"searchTime": searchTime},
+			beforeSend : function(){
+				maskScreen();
+			},
+			success : function(data) {
+				var info = data.data;
+	            if(data.status == 2000){
+		            $("#sumLoanMoney").html(info.sumLoanMoney);
+		            $("#sumRepayMoney").html(info.sumRepayMoney);
+		            $("#sumToCollectMoney").html(info.sumToCollectMoney);
+		            $("#sumNotOverDueToCollectMoney").html(info.sumNotOverDueToCollectMoney);
+		            $("#todayToCollectMoney").html(info.todayToCollectMoney);
+		            $("#overDueToCollectMoney3Days").html(info.overDueToCollectMoney3Days);
+		
+		            $("#overDueToCollectMoney7Days").html(info.overDueToCollectMoney7Days);
+		            $("#overDueToCollectMoney15Days").html(info.overDueToCollectMoney15Days);
+		            $("#overDueToCollectMoneyOver15Days").html(info.overDueToCollectMoneyOver15Days);
+	            }else{
+	            	Dialog.alert(data.message);
+	            }
+			},
+			complete : function(){
+				unMaskScreen();
+			}
+		});
+    }
+    getAllMessage();
+
+</script>
+</body>
+</html>

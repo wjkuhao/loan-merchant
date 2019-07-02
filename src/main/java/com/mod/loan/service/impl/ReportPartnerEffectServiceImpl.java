@@ -3,6 +3,7 @@ package com.mod.loan.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import com.mod.loan.model.dto.ReportOriginLoanDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,17 @@ public class ReportPartnerEffectServiceImpl extends BaseServiceImpl<ReportPartne
 
 	@Override
 	public List<Map<String, Object>> exportReport(Map<String, Object> param) {
+		// TODO...changcf
 		return reportPartnerEffectMapper.exportReport(param);
 	}
+
+	@Override
+	public List<Map<String, Object>> findReportPartnerEffectDetailList(Map<String, Object> param, Page page) {
+		param.put("startIndex", page.getStartIndex());
+		param.put("pageSize", page.getPageSize());
+		page.setTotalCount(reportPartnerEffectMapper.reportPartnerEffectDetailCount(param));
+		return reportPartnerEffectMapper.findReportPartnerEffectDetailList(param);
+	}
+
+
 }

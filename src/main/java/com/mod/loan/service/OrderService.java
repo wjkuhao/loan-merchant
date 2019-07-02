@@ -60,4 +60,6 @@ public interface OrderService extends BaseService<Order, Long> {
 
 
     Order selectLastOneByUid(Long uid);
+
+    Map<String, Object> dataView(String merchant);
 }

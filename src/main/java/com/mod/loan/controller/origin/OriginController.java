@@ -1,5 +1,6 @@
 package com.mod.loan.controller.origin;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -8,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.mod.loan.model.Order;
-import com.mod.loan.util.ExcelUtil;
+import com.mod.loan.util.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,6 @@ import com.mod.loan.common.model.RequestThread;
 import com.mod.loan.common.model.ResultMessage;
 import com.mod.loan.model.MerchantOrigin;
 import com.mod.loan.service.OriginService;
-import com.mod.loan.util.ArrayUtil;
-import com.mod.loan.util.StringReplaceUtil;
-import com.mod.loan.util.TimeUtils;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -144,6 +142,8 @@ public class OriginController {
     public ResultMessage origin_statistics_list_ajax() {
         Map<String, Object> param = new HashMap<>();
         param.put("merchant", RequestThread.get().getMerchant());
+        param.put("startTime", TimeUtil.datePlusDays(new Date(),-1));
+        param.put("endTime", TimeUtil.datePlusDays(new Date(),0));
         return new ResultMessage(ResponseEnum.M2000, originService.findOriginStatistics(param));
     }
 

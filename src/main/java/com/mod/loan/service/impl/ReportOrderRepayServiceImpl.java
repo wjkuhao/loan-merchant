@@ -24,12 +24,14 @@ public class ReportOrderRepayServiceImpl extends BaseServiceImpl<ReportOrderRepa
     public List<Map<String, Object>> findReportOrderRepayList(Map<String, Object> param, Page page) {
         param.put("startIndex", page.getStartIndex());
         param.put("pageSize", page.getPageSize());
+        // TODO... changcf
         page.setTotalCount(reportOrderRepayMapper.reportOrderRepayCount(param));
         return reportOrderRepayMapper.findReportOrderRepayList(param);
     }
 
     @Override
     public List<Map<String, Object>> exportReport(Map<String, Object> param) {
+        // TODO... changcf
         List<Map<String, Object>> list = reportOrderRepayMapper.exportReport(param);
         for (Map<String, Object> map : list) {
             BigDecimal overdue_cnt = new BigDecimal(map.get("overdue_cnt").toString());
@@ -101,6 +103,15 @@ public class ReportOrderRepayServiceImpl extends BaseServiceImpl<ReportOrderRepa
             return new ArrayList<>();
         }
        return list;
+    }
+
+    @Override
+    public List<Map<String, Object>> findReportOrderRepayListDetail(Map<String, Object> param, Page page) {
+        param.put("startIndex", page.getStartIndex());
+        param.put("pageSize", page.getPageSize());
+        // TODO... changcf
+        page.setTotalCount(reportOrderRepayMapper.reportOrderRepayDetailCount(param));
+        return reportOrderRepayMapper.findReportOrderRepayListDetail(param);
     }
 
     /**

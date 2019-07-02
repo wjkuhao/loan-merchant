@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.mod.loan.common.model.RequestThread;
+import com.mod.loan.mapper.ReportPartnerEffectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,9 @@ public class OriginServiceImpl extends BaseServiceImpl<MerchantOrigin, Long> imp
     private RedisMapper redisMapper;
     @Autowired
     private MerchantOriginMapper merchantOriginMapper;
+    @Autowired
+    private ReportPartnerEffectMapper reportPartnerEffectMapper;
+
 
     @Override
     public List<MerchantOrigin> findOriginListByManagerId(Long managerId) {
@@ -80,13 +84,14 @@ public class OriginServiceImpl extends BaseServiceImpl<MerchantOrigin, Long> imp
 
     @Override
     public List<Map<String, Object>> findOriginStatistics(Map<String, Object> param) {
-        List<Map<String, Object>> data = redisMapper.get(RedisConst.CURRENT_ORIGIN_TWO_DAYS + param.get("merchant"), new TypeReference<List<Map<String, Object>>>() {
+/*        List<Map<String, Object>> data = redisMapper.get(RedisConst.CURRENT_ORIGIN_TWO_DAYS + param.get("merchant"), new TypeReference<List<Map<String, Object>>>() {
         });
         if (data == null) {
             data = merchantOriginMapper.findOriginStatistics(param);
             redisMapper.set(RedisConst.CURRENT_ORIGIN_TWO_DAYS + param.get("merchant"), data, 60);
         }
-        return data;
+        return data;*/
+        return reportPartnerEffectMapper.findReportPartnerEffectList(param);
     }
 
     @Override

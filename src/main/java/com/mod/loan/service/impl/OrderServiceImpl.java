@@ -233,4 +233,10 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
         return orderMapper.selectLastOneByUid(uid);
     }
 
+    @Override
+    public Map<String, Object> dataView(String merchant) {
+        // TODO... changcf
+        return null;
+    }
+
 }
