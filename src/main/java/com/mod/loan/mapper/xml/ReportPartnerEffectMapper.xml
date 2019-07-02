@@ -133,26 +133,27 @@
 
     <select id="findReportPartnerEffectDetailList" resultType="map">
         SELECT
-   day_key as dayKey,
-  -- t1.origin_name as 渠道名称,
-	 user_origin,
-   count(reg_cnt) as regCnt,
---    count(t1.login_flag) as app登陆数 ,
-   count(real_name_cnt) as realNameCnt,
-   count(personal_info_certi_cnt) as personalInfoCertiCnt,
-   count(yys_cnt) as yysCnt,
-	 count(bank_cnt) as bankCnt,
-   count(order_cnt) as orderCnt,
-	 count(pass_risk_cnt) as passRiskCnt,
-   count(loan_success_cnt) as loanSuccessCnt ,
-	 concat(ROUND(count(real_name_cnt)/count(reg_cnt)*100,2),'%') AS realNameCertiRate,
-	 concat(ROUND(count(personal_info_certi_cnt)/count(reg_cnt)*100,2),'%') AS personalInfoCertiRate,
-	 concat(ROUND(count(yys_cnt)/count(reg_cnt)*100,2),'%') AS yysCertiRate,
-	 concat(ROUND(count(bank_cnt)/count(reg_cnt)*100,2),'%') AS bankBoundRate,
-	 concat(ROUND(count(order_cnt)/count(reg_cnt)*100,2),'%') AS regApplyTransRate,
-	 concat(ROUND(count(loan_success_cnt)/count(reg_cnt)*100,2),'%') AS loanRate,
-	 concat(ROUND(count(loan_success_cnt)/count(order_cnt)*100,2),'%') AS auditPassRate
-from report_partner_effect pe
+        day_key as dayKey,
+        -- t1.origin_name as 渠道名称,
+        user_origin,
+        reg_cnt as regCnt,
+        --    count(t1.login_flag) as app登陆数 ,
+        real_name_cnt as realNameCnt,
+        personal_info_certi_cnt as personalInfoCertiCnt,
+        yys_cnt as yysCnt,
+        bank_cnt as bankCnt,
+        order_cnt as orderCnt,
+        pass_risk_cnt as passRiskCnt,
+        loan_success_cnt as loanSuccessCnt ,
+        concat(ROUND(real_name_cnt/reg_cnt*100,2),'%') AS realNameCertiRate,
+        concat(ROUND(personal_info_certi_cnt/reg_cnt*100,2),'%') AS personalInfoCertiRate,
+        concat(ROUND(yys_cnt/reg_cnt*100,2),'%') AS yysCertiRate,
+        concat(ROUND(bank_cnt/reg_cnt*100,2),'%') AS bankBoundRate,
+        concat(ROUND(order_cnt/reg_cnt*100,2),'%') AS regApplyTransRate,
+        concat(ROUND(loan_success_cnt/reg_cnt*100,2),'%') AS loanRate,
+        concat(ROUND(loan_success_cnt/order_cnt*100,2),'%') AS auditPassRate
+        from report_partner_effect pe
+        left join tb_merchant_origin mo on pe.user_origin = mo.id
 -- LEFT JOIN tb_order_risk_info t6 ON t1.d=t6.order_id and t6.risk_status in (1,3)
         <where>
             <if test="merchant != null">

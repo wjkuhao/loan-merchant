@@ -59,6 +59,7 @@
 		<i class="icon-double-angle-up icon-only"></i>
 	</a>
 	<script type="text/javascript">
+		var date = "[[${date}]]";
 		var contextPath="[[@{/}]]";
 		$(top.hangge());
 		var myTable = new MaxTable();
@@ -172,8 +173,8 @@
 		function query() {
 			myTable.page.totalRowNum = 0;
 			myTable.onLoad({
-				originName:$("#originName").val()
-				//date:$("#date").val()
+				//originName:$("#originName").val()
+				date: date
 			});
 		}
 		query();
