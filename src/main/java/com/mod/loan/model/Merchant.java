@@ -43,12 +43,6 @@ public class Merchant {
     @Column(name = "merchant_channel")
     private String merchantChannel;
 
-    /**
-     *  是否需要放款，0：不需要，1：需要
-     */
-    @Column(name = "user_pay_confirm")
-    private Integer userPayConfirm;
-
     @Column(name = "create_time")
     private Date createTime;
 
@@ -219,13 +213,5 @@ public class Merchant {
 
     public void setFuyou_h5key(String fuyou_h5key) {
         this.fuyou_h5key = fuyou_h5key;
-    }
-
-    public Integer getUserPayConfirm() {
-        return userPayConfirm;
-    }
-
-    public void setUserPayConfirm(Integer userPayConfirm) {
-        this.userPayConfirm = userPayConfirm;
     }
 }
