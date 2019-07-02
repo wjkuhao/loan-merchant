@@ -1,6 +1,7 @@
 package com.mod.loan.controller.order;
 
 import com.alibaba.fastjson.JSONObject;
+import com.mod.loan.common.enums.OrderEnum;
 import com.mod.loan.common.enums.ResponseEnum;
 import com.mod.loan.common.model.Page;
 import com.mod.loan.common.model.RequestThread;
@@ -94,6 +95,7 @@ public class OrderController {
 
     @RequestMapping(value = "order_list_ajax", method = {RequestMethod.POST})
     public ResultMessage order_list_ajax(Order order, String userPhone, String startTime, String endTime, String startRealRepayTime, String endRealRepayTime, String startCreateTime, String endCreateTime, Page page) {
+        Merchant merchant = merchantService.findMerchantByAlias(RequestThread.get().getMerchant());
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("id", order.getId() != null ? order.getId() : null);
         param.put("merchant", RequestThread.get().getMerchant());
@@ -110,6 +112,10 @@ public class OrderController {
             param.put("userType", order.getUserType());
         } else {
             param.put("userType", null);
+        }
+        //只有待打款的订单，需要验证是否开启用户打款验证
+        if (order != null && (order.getStatus().equals(OrderEnum.WAIT_LOAN.getCode()))) {
+            param.put("userPayConfirm", merchant.getUserPayConfirm() != null? merchant.getUserPayConfirm() : 0);
         }
         return new ResultMessage(ResponseEnum.M2000, orderService.findOrderList(param, page), page);
     }
