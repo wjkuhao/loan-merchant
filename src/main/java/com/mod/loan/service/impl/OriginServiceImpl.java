@@ -84,13 +84,6 @@ public class OriginServiceImpl extends BaseServiceImpl<MerchantOrigin, Long> imp
 
     @Override
     public List<Map<String, Object>> findOriginStatistics(Map<String, Object> param) {
-/*        List<Map<String, Object>> data = redisMapper.get(RedisConst.CURRENT_ORIGIN_TWO_DAYS + param.get("merchant"), new TypeReference<List<Map<String, Object>>>() {
-        });
-        if (data == null) {
-            data = merchantOriginMapper.findOriginStatistics(param);
-            redisMapper.set(RedisConst.CURRENT_ORIGIN_TWO_DAYS + param.get("merchant"), data, 60);
-        }
-        return data;*/
         return reportPartnerEffectMapper.findReportPartnerEffectList(param);
     }
 

@@ -212,7 +212,7 @@ public class StatisticsController {
                     title = new String[]{"注册日期",  "注册人数",  "实名认证数","个人信息认证数", "运营商认证数", "银行卡绑定数", "申请订单数","风控通过数","下款数", "实名认证率","个人信息认证率","运营商认证率","银行卡绑定率","申请转化率","下款率","审核通过率"};
                     sheetName = "渠道注册-放款统计";
                     // 设置插入值的名称
-                    columns = new String[]{"date", "regCount",  "realNameCount","personalInfoCertiCount", "yysCount", "bankCount", "orderCount","passRiskCount","loanSuccessCount","realNameCertiRate","personalInfoCertiRate","yysCertiRate","bankBoundRate","regApplyTransRate","loanRate","auditPassRate"};
+                    columns = new String[]{"dayKey", "regCnt",  "realNameCnt","personalInfoCertiCnt", "yysCnt", "bankCnt", "orderCnt","passRiskCnt","loanSuccessCnt","realNameCertiRate","personalInfoCertiRate","yysCertiRate","bankBoundRate","regApplyTransRate","loanRate","auditPassRate"};
                     // 获取信息
                     list = reportPartnerEffectService.exportReport(param);
                     break;

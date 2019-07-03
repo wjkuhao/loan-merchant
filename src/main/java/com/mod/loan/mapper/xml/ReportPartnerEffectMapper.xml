@@ -16,21 +16,6 @@
         <result column="first_submit_amount" jdbcType="DECIMAL" property="firstSubmitAmount"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="merchant" jdbcType="VARCHAR" property="merchant"/>
-
-<!--        <result column="personal_info_certi_cnt" jdbcType="INTEGER" property="personalInfoCertiCnt"/>-->
-<!--        <result column="yys_cnt" jdbcType="INTEGER" property="yysCnt"/>-->
-<!--        <result column="bank_cnt" jdbcType="INTEGER" property="bankCnt"/>-->
-<!--        <result column="order_cnt" jdbcType="INTEGER" property="orderCnt"/>-->
-<!--        <result column="pass_risk_cnt" jdbcType="INTEGER" property="passRiskCnt"/>-->
-<!--        <result column="loan_success_cnt" jdbcType="INTEGER" property="loanSuccessCnt"/>-->
-
-<!--        <result column="real_name_certi_rate" jdbcType="VARCHAR" property="realNameCertiRate"/>-->
-<!--        <result column="personal_info_certi_rate" jdbcType="VARCHAR" property="personalInfoCertiRate"/>-->
-<!--        <result column="yys_certi_rate" jdbcType="VARCHAR" property="yysCertiRate"/>-->
-<!--        <result column="bank_bound_rate" jdbcType="VARCHAR" property="bankBoundRate"/>-->
-<!--        <result column="reg_apply_trans_rate" jdbcType="VARCHAR" property="regApplyTransRate"/>-->
-<!--        <result column="loan_rate" jdbcType="VARCHAR" property="loanRate"/>-->
-<!--        <result column="audit_pass_rate" jdbcType="VARCHAR" property="auditPassRate"/>-->
     </resultMap>
 
     <select id="reportPartnerEffectCount" resultType="int">
@@ -54,9 +39,7 @@
     <select id="findReportPartnerEffectList" resultType="map">
         SELECT
         day_key as dayKey,
-        -- t1.origin_name as 渠道名称,
         sum(reg_cnt) as regCnt,
-        --    sum(t1.login_flag) as app登陆数 ,
         sum(real_name_cnt) as realNameCnt,
         sum(personal_info_certi_cnt) as personalInfoCertiCnt,
         sum(yys_cnt) as yysCnt,
@@ -95,15 +78,30 @@
     </select>
 
     <select id="exportReport" resultType="map">
-        select pe.day_key,ifnull(mo.origin_name,pe.user_origin) as 'user_origin',pe.reg_cnt,pe.real_name_cnt,
-        pe.submit_order_cnt,pe.first_submit_cnt,pe.login_cnt,pe.first_submit_amount from report_partner_effect pe left
-        join tb_merchant_origin mo on pe.user_origin = mo.id
+        SELECT
+        day_key as dayKey,
+        sum(reg_cnt) as regCnt,
+        sum(real_name_cnt) as realNameCnt,
+        sum(personal_info_certi_cnt) as personalInfoCertiCnt,
+        sum(yys_cnt) as yysCnt,
+        sum(bank_cnt) as bankCnt,
+        sum(order_cnt) as orderCnt,
+        sum(pass_risk_cnt) as passRiskCnt,
+        sum(loan_success_cnt) as loanSuccessCnt ,
+        concat(ROUND(sum(real_name_cnt)/sum(reg_cnt)*100,2),'%') AS realNameCertiRate,
+        concat(ROUND(sum(personal_info_certi_cnt)/sum(reg_cnt)*100,2),'%') AS personalInfoCertiRate,
+        concat(ROUND(sum(yys_cnt)/sum(reg_cnt)*100,2),'%') AS yysCertiRate,
+        concat(ROUND(sum(bank_cnt)/sum(reg_cnt)*100,2),'%') AS bankBoundRate,
+        concat(ROUND(sum(order_cnt)/sum(reg_cnt)*100,2),'%') AS regApplyTransRate,
+        concat(ROUND(sum(loan_success_cnt)/sum(reg_cnt)*100,2),'%') AS loanRate,
+        concat(ROUND(sum(loan_success_cnt)/sum(order_cnt)*100,2),'%') AS auditPassRate
+        from report_partner_effect pe
         <where>
             <if test="merchant != null">
                 and pe.merchant = #{merchant}
             </if>
             <if test="userOrigin != null">
-                and pe.user_origin = #{userOrigin}
+                and user_origin = #{userOrigin}
             </if>
             <if test="startTime != null">
                 and pe.day_key &gt;= #{startTime}
@@ -112,7 +110,8 @@
                 and pe.day_key &lt;= #{endTime}
             </if>
         </where>
-        order by pe.id
+        group by 1
+        order by pe.id desc
     </select>
 
     <select id="reportPartnerEffectDetailCount" resultType="int">
@@ -134,10 +133,9 @@
     <select id="findReportPartnerEffectDetailList" resultType="map">
         SELECT
         day_key as dayKey,
-        -- t1.origin_name as 渠道名称,
         user_origin,
+        mo.origin_name as originName,
         reg_cnt as regCnt,
-        --    count(t1.login_flag) as app登陆数 ,
         real_name_cnt as realNameCnt,
         personal_info_certi_cnt as personalInfoCertiCnt,
         yys_cnt as yysCnt,
@@ -154,7 +152,6 @@
         concat(ROUND(loan_success_cnt/order_cnt*100,2),'%') AS auditPassRate
         from report_partner_effect pe
         left join tb_merchant_origin mo on pe.user_origin = mo.id
--- LEFT JOIN tb_order_risk_info t6 ON t1.d=t6.order_id and t6.risk_status in (1,3)
         <where>
             <if test="merchant != null">
                 and pe.merchant = #{merchant}

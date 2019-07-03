@@ -29,7 +29,6 @@ public class ReportPartnerEffectServiceImpl extends BaseServiceImpl<ReportPartne
 
 	@Override
 	public List<Map<String, Object>> exportReport(Map<String, Object> param) {
-		// TODO...changcf
 		return reportPartnerEffectMapper.exportReport(param);
 	}
 
