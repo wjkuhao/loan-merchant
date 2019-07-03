@@ -230,6 +230,7 @@
 		            renderer : function(idValue,value,record){
 		            	var html = "<div class='btn-group'>";
 		            	html += "<a class='btn btn-mini btn-info' title='详情' onclick=\"detail(" + value + ");\">详情</a>";
+		            	html += "<a class='btn btn-mini btn-info' title='详情' onclick=\"rest(" + value + ");\">重置密码</a>";
 						html += "</div>";
 			        	return html;
 			        }
@@ -267,6 +268,27 @@
 				diag.close();
 			 };
 			 diag.show();
+		}
+		function rest(id){
+			Dialog.confirm("确定要重置密码吗?", function() {
+				$.ajax({
+					url : contextPath + "user/user_rest_password",
+					type : "POST",
+					dataType : "json",
+					async : false,
+					data : {
+						"id":id
+					},
+					success : function(result) {
+						if(result.status==2000){
+							query();
+							diag.close();
+						}else{
+							Dialog.alert(result.message);
+						}
+					}
+				});
+			});
 		}
 	</script>
 </body>
