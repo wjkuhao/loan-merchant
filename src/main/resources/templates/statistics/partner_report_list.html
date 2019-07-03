@@ -211,7 +211,7 @@
 		
 		function exportReport(){
 			Dialog.confirm("确认按条件导出渠道统计报表吗？",function () {
-				location.href = contextPath+"statistics/export_report?reportName=partner_effect&userOrigin=" + $("#userOrigin").val() + "&startTime=" + $("#startTime").val() + "&endTime=" + $("#endTime").val();
+				location.href = contextPath+"statistics/export_report?reportName=partner_effect&startTime=" + $("#startTime").val() + "&endTime=" + $("#endTime").val();
 			});
 		}
 
