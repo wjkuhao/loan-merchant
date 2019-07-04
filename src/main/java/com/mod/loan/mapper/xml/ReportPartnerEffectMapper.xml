@@ -70,7 +70,7 @@
             </if>
         </where>
         group by 1
-        order by pe.id desc
+        order by pe.day_key desc
         <if test="startIndex!=null and pageSize!=null">
             limit #{startIndex},#{pageSize}
         </if>
@@ -111,7 +111,7 @@
             </if>
         </where>
         group by 1
-        order by pe.id desc
+        order by pe.day_key desc
     </select>
 
     <select id="reportPartnerEffectDetailCount" resultType="int">
