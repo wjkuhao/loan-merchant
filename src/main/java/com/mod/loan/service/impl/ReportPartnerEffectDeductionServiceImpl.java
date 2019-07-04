@@ -22,7 +22,6 @@ public class ReportPartnerEffectDeductionServiceImpl extends BaseServiceImpl<Rep
 	public List<Map<String, Object>> findReportPartnerEffectDeductionList(Map<String, Object> param, Page page) {
 		param.put("startIndex", page.getStartIndex());
 		param.put("pageSize", page.getPageSize());
-		// TODO...changcf
 		page.setTotalCount(reportPartnerEffectDeductionMapper.reportPartnerEffectDeductionCount(param));
 		return reportPartnerEffectDeductionMapper.findReportPartnerEffectDeductionList(param);
 	}
@@ -36,8 +35,7 @@ public class ReportPartnerEffectDeductionServiceImpl extends BaseServiceImpl<Rep
 	public List<Map<String, Object>> findReportPartnerEffectDeductionDetailList(Map<String, Object> param, Page page) {
 		param.put("startIndex", page.getStartIndex());
 		param.put("pageSize", page.getPageSize());
-		// TODO...changcf
-		page.setTotalCount(100);
-		return null;
+		page.setTotalCount(reportPartnerEffectDeductionMapper.reportPartnerEffectDeductionDetailCount(param));
+		return reportPartnerEffectDeductionMapper.findReportPartnerEffectDeductionDetailList(param);
 	}
 }

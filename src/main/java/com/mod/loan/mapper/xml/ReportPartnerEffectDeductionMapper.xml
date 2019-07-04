@@ -19,50 +19,7 @@
     </resultMap>
 
     <select id="reportPartnerEffectDeductionCount" resultType="int">
-        select count(1) from report_partner_effect_deduction
-        <where>
-            and user_origin in (select CONCAT(origin_id, '') from tb_merchant_manager_origin where manager_id=#{managerId})
-
-            <if test="merchant != null">
-                and merchant = #{merchant}
-            </if>
-            <if test="userOrigin != null">
-                and user_origin = #{userOrigin}
-            </if>
-            <if test="startTime != null">
-                and day_key &gt;= #{startTime}
-            </if>
-            <if test="endTime != null">
-                and day_key &lt;= #{endTime}
-            </if>
-        </where>
-    </select>
-
-    <select id="findReportPartnerEffectDeductionList" resultType="map">
-        select * from report_partner_effect_deduction pe left join tb_merchant_origin mo on pe.user_origin = mo.id
-        <where>
-            and pe.user_origin in (select CONCAT(origin_id, '') from tb_merchant_manager_origin where manager_id=#{managerId})
-
-            <if test="merchant != null">
-                and pe.merchant = #{merchant}
-            </if>
-            <if test="userOrigin != null">
-                and user_origin = #{userOrigin}
-            </if>
-            <if test="startTime != null">
-                and pe.day_key &gt;= #{startTime}
-            </if>
-            <if test="endTime != null">
-                and pe.day_key &lt;= #{endTime}
-            </if>
-        </where>
-        order by pe.id desc limit #{startIndex},#{pageSize}
-    </select>
-
-    <select id="exportReport" resultType="map">
-        select pe.day_key,ifnull(mo.origin_name,pe.user_origin) as 'user_origin',pe.reg_cnt,pe.real_name_cnt,
-        pe.submit_order_cnt,pe.first_submit_cnt,pe.login_cnt,pe.first_submit_amount from report_partner_effect_deduction pe left
-        join tb_merchant_origin mo on pe.user_origin = mo.id
+        select count(DISTINCT day_key) from report_partner_effect_deduction pe
         <where>
             and pe.user_origin in (select CONCAT(origin_id, '') from tb_merchant_manager_origin where manager_id=#{managerId})
 
@@ -79,7 +36,143 @@
                 and pe.day_key &lt;= #{endTime}
             </if>
         </where>
-        order by pe.id
+    </select>
+
+    <select id="findReportPartnerEffectDeductionList" resultType="map">
+        SELECT
+        day_key as dayKey,
+        sum(reg_cnt) as regCnt,
+        sum(real_name_cnt) as realNameCnt,
+        sum(personal_info_certi_cnt) as personalInfoCertiCnt,
+        sum(yys_cnt) as yysCnt,
+        sum(bank_cnt) as bankCnt,
+        sum(order_cnt) as orderCnt,
+        sum(pass_risk_cnt) as passRiskCnt,
+        sum(loan_success_cnt) as loanSuccessCnt ,
+        concat(ROUND(sum(real_name_cnt)/sum(reg_cnt)*100,2),'%') AS realNameCertiRate,
+        concat(ROUND(sum(personal_info_certi_cnt)/sum(reg_cnt)*100,2),'%') AS personalInfoCertiRate,
+        concat(ROUND(sum(yys_cnt)/sum(reg_cnt)*100,2),'%') AS yysCertiRate,
+        concat(ROUND(sum(bank_cnt)/sum(reg_cnt)*100,2),'%') AS bankBoundRate,
+        concat(ROUND(sum(order_cnt)/sum(reg_cnt)*100,2),'%') AS regApplyTransRate,
+        concat(ROUND(sum(loan_success_cnt)/sum(reg_cnt)*100,2),'%') AS loanRate,
+        concat(ROUND(sum(loan_success_cnt)/sum(order_cnt)*100,2),'%') AS auditPassRate
+        from report_partner_effect_deduction pe
+        <where>
+            and pe.user_origin in (select CONCAT(origin_id, '') from tb_merchant_manager_origin where manager_id=#{managerId})
+
+            <if test="merchant != null">
+                and pe.merchant = #{merchant}
+            </if>
+            <if test="userOrigin != null">
+                and user_origin = #{userOrigin}
+            </if>
+            <if test="startTime != null">
+                and pe.day_key &gt;= #{startTime}
+            </if>
+            <if test="endTime != null">
+                and pe.day_key &lt;= #{endTime}
+            </if>
+        </where>
+        group by 1
+        order by pe.id desc
+        <if test="startIndex!=null and pageSize!=null">
+            limit #{startIndex},#{pageSize}
+        </if>
+    </select>
+
+    <select id="exportReport" resultType="map">
+        SELECT
+        day_key as dayKey,
+        sum(reg_cnt) as regCnt,
+        sum(real_name_cnt) as realNameCnt,
+        sum(personal_info_certi_cnt) as personalInfoCertiCnt,
+        sum(yys_cnt) as yysCnt,
+        sum(bank_cnt) as bankCnt,
+        sum(order_cnt) as orderCnt,
+        sum(pass_risk_cnt) as passRiskCnt,
+        sum(loan_success_cnt) as loanSuccessCnt ,
+        concat(ROUND(sum(real_name_cnt)/sum(reg_cnt)*100,2),'%') AS realNameCertiRate,
+        concat(ROUND(sum(personal_info_certi_cnt)/sum(reg_cnt)*100,2),'%') AS personalInfoCertiRate,
+        concat(ROUND(sum(yys_cnt)/sum(reg_cnt)*100,2),'%') AS yysCertiRate,
+        concat(ROUND(sum(bank_cnt)/sum(reg_cnt)*100,2),'%') AS bankBoundRate,
+        concat(ROUND(sum(order_cnt)/sum(reg_cnt)*100,2),'%') AS regApplyTransRate,
+        concat(ROUND(sum(loan_success_cnt)/sum(reg_cnt)*100,2),'%') AS loanRate,
+        concat(ROUND(sum(loan_success_cnt)/sum(order_cnt)*100,2),'%') AS auditPassRate
+        from report_partner_effect_deduction pe
+        <where>
+            and pe.user_origin in (select CONCAT(origin_id, '') from tb_merchant_manager_origin where manager_id=#{managerId})
+
+            <if test="merchant != null">
+                and pe.merchant = #{merchant}
+            </if>
+            <if test="userOrigin != null">
+                and user_origin = #{userOrigin}
+            </if>
+            <if test="startTime != null">
+                and pe.day_key &gt;= #{startTime}
+            </if>
+            <if test="endTime != null">
+                and pe.day_key &lt;= #{endTime}
+            </if>
+        </where>
+        group by 1
+        order by pe.id desc
+    </select>
+
+    <select id="reportPartnerEffectDeductionDetailCount" resultType="int">
+        select count(1) from report_partner_effect_deduction pe left
+        join tb_merchant_origin mo on pe.user_origin = mo.id
+        <where>
+            and user_origin in (select CONCAT(origin_id, '') from tb_merchant_manager_origin where manager_id=#{managerId})
+            <if test="merchant != null">
+                and pe.merchant = #{merchant}
+            </if>
+            <if test="originName != null">
+                and mo.origin_name = #{originName}
+            </if>
+            <if test="date != null">
+                and pe.day_key = #{date}
+            </if>
+        </where>
+    </select>
+
+    <select id="findReportPartnerEffectDeductionDetailList" resultType="map">
+        SELECT
+        day_key as dayKey,
+        user_origin,
+        mo.origin_name as originName,
+        reg_cnt as regCnt,
+        real_name_cnt as realNameCnt,
+        personal_info_certi_cnt as personalInfoCertiCnt,
+        yys_cnt as yysCnt,
+        bank_cnt as bankCnt,
+        order_cnt as orderCnt,
+        pass_risk_cnt as passRiskCnt,
+        loan_success_cnt as loanSuccessCnt ,
+        concat(ROUND(real_name_cnt/reg_cnt*100,2),'%') AS realNameCertiRate,
+        concat(ROUND(personal_info_certi_cnt/reg_cnt*100,2),'%') AS personalInfoCertiRate,
+        concat(ROUND(yys_cnt/reg_cnt*100,2),'%') AS yysCertiRate,
+        concat(ROUND(bank_cnt/reg_cnt*100,2),'%') AS bankBoundRate,
+        concat(ROUND(order_cnt/reg_cnt*100,2),'%') AS regApplyTransRate,
+        concat(ROUND(loan_success_cnt/reg_cnt*100,2),'%') AS loanRate,
+        concat(ROUND(loan_success_cnt/order_cnt*100,2),'%') AS auditPassRate
+        from report_partner_effect_deduction pe
+        left join tb_merchant_origin mo on pe.user_origin = mo.id
+        <where>
+            and user_origin in (select CONCAT(origin_id, '') from tb_merchant_manager_origin where manager_id=#{managerId})
+            <if test="merchant != null">
+                and pe.merchant = #{merchant}
+            </if>
+            <if test="originName != null">
+                and mo.origin_name = #{originName}
+            </if>
+            <if test="date != null">
+                and pe.day_key = #{date}
+            </if>
+        </where>
+        GROUP BY 1,2
+        ORDER BY 1 DESC
+        limit #{startIndex},#{pageSize}
     </select>
 
 </mapper>
