@@ -97,6 +97,8 @@ public class RecycleController {
         }
         if (!StringUtils.isBlank(repayTimeUp)) {
             query.setRepayTimeUp(repayTimeUp);
+        }else {
+            query.setRepayTimeUp(DateFormat.getDateInstance(DateFormat.DEFAULT).format(new Date()));
         }
         return new ResultMessage(ResponseEnum.M2000, recycleService.findOverdueList(query, page), page);
     }
