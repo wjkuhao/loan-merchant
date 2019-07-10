@@ -29,4 +29,14 @@
 		order by risk_id desc limit 1
 	</select>
 
+	<select id="selectCountNow" parameterType="map" resultType="int">
+		select count(a.id) from tb_order_risk_info a join tb_order b on a.order_id = b.id join tb_user c on b.uid=c.id
+		where c.merchant = #{merchant}
+		and
+		DATE_FORMAT(a.create_time, '%Y-%m-%d')=DATE_FORMAT(#{now}, '%Y-%m-%d')
+		<if test="riskStatus != null">
+			and a.risk_status = #{riskStatus}
+		</if>
+	</select>
+
 </mapper>

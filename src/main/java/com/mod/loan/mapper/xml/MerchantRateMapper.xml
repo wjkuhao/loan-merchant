@@ -14,7 +14,33 @@
     <result column="product_status" jdbcType="TINYINT" property="productStatus" />
     <result column="total_rate" jdbcType="DECIMAL" property="totalRate" />
     <result column="overdue_rate" jdbcType="DECIMAL" property="overdueRate" />
+    <result column="borrow_type" jdbcType="DECIMAL" property="borrowType" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+
+  <select id="merchantRateCount" resultType="int">
+    select count(1) from tb_merchant_rate
+    <where>
+      <if test="merchant != null">
+        and merchant = #{merchant}
+      </if>
+      <if test="productStatus != null">
+        and product_status = #{productStatus}
+      </if>
+    </where>
+  </select>
+
+  <select id="findMerchantRateList" resultType="map">
+    select * from tb_merchant_rate
+    <where>
+      <if test="merchant != null">
+        and merchant = #{merchant}
+      </if>
+      <if test="productStatus != null">
+        and product_status = #{productStatus}
+      </if>
+    </where>
+    order by product_level desc,id desc limit #{startIndex},#{pageSize}
+  </select>
 </mapper>

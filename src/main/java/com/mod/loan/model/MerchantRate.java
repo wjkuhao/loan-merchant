@@ -70,6 +70,33 @@ public class MerchantRate {
     private Date updateTime;
 
     /**
+     * 商户别名
+     */
+    private String merchant;
+
+    /**
+     * 借款次数
+     */
+    @Column(name = "borrow_type")
+    private Integer borrowType;
+
+    public Integer getBorrowType() {
+        return borrowType;
+    }
+
+    public void setBorrowType(Integer borrowType) {
+        this.borrowType = borrowType;
+    }
+
+    public String getMerchant() {
+        return merchant;
+    }
+
+    public void setMerchant(String merchant) {
+        this.merchant = merchant;
+    }
+
+    /**
      * @return id
      */
     public Long getId() {

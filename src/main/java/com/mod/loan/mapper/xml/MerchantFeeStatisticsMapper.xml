@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mod.loan.mapper.MerchantFeeStatisticsMapper">
+  <resultMap id="BaseResultMap" type="com.mod.loan.model.MerchantFeeStatistics">
+    <id column="day" jdbcType="VARCHAR" property="day" />
+    <id column="merchant" jdbcType="VARCHAR" property="merchant" />
+    <result column="sms1_price" jdbcType="DECIMAL" property="sms1Price" />
+    <result column="sms1_count" jdbcType="INTEGER" property="sms1Count" />
+    <result column="sms1_fee" jdbcType="DECIMAL" property="sms1Fee" />
+    <result column="sms2_price" jdbcType="DECIMAL" property="sms2Price" />
+    <result column="sms2_count" jdbcType="INTEGER" property="sms2Count" />
+    <result column="sms2_fee" jdbcType="DECIMAL" property="sms2Fee" />
+    <result column="youdun_price" jdbcType="INTEGER" property="youdunPrice" />
+    <result column="youdun_count" jdbcType="INTEGER" property="youdunCount" />
+    <result column="youdun_fee" jdbcType="DECIMAL" property="youdunFee" />
+    <result column="operator_price" jdbcType="DECIMAL" property="operatorPrice" />
+    <result column="operator_count" jdbcType="INTEGER" property="operatorCount" />
+    <result column="operator_fee" jdbcType="DECIMAL" property="operatorFee" />
+    <result column="risk_price" jdbcType="DECIMAL" property="riskPrice" />
+    <result column="risk_count" jdbcType="INTEGER" property="riskCount" />
+    <result column="risk_fee" jdbcType="DECIMAL" property="riskFee" />
+    <result column="refused_count" jdbcType="INTEGER" property="refusedCount" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    `day`, merchant, sms1_price, sms1_count, sms1_fee, sms2_price, sms2_count, sms2_fee, 
+    youdun_price, youdun_count, youdun_fee, operator_price, operator_count, operator_fee, 
+    risk_price, risk_count, risk_fee, refused_count
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.mod.loan.model.MerchantFeeStatistics" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_merchant_fee_statistics
+    where `day` = #{day,jdbcType=VARCHAR}
+      and merchant = #{merchant,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.mod.loan.model.MerchantFeeStatistics">
+    delete from tb_merchant_fee_statistics
+    where `day` = #{day,jdbcType=VARCHAR}
+      and merchant = #{merchant,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.mod.loan.model.MerchantFeeStatistics">
+    insert into tb_merchant_fee_statistics (`day`, merchant, sms1_price, 
+      sms1_count, sms1_fee, sms2_price, 
+      sms2_count, sms2_fee, youdun_price, 
+      youdun_count, youdun_fee, operator_price, 
+      operator_count, operator_fee, risk_price, 
+      risk_count, risk_fee, refused_count
+      )
+    values (#{day,jdbcType=VARCHAR}, #{merchant,jdbcType=VARCHAR}, #{sms1Price,jdbcType=DECIMAL}, 
+      #{sms1Count,jdbcType=INTEGER}, #{sms1Fee,jdbcType=DECIMAL}, #{sms2Price,jdbcType=DECIMAL}, 
+      #{sms2Count,jdbcType=INTEGER}, #{sms2Fee,jdbcType=DECIMAL}, #{youdunPrice,jdbcType=INTEGER}, 
+      #{youdunCount,jdbcType=INTEGER}, #{youdunFee,jdbcType=DECIMAL}, #{operatorPrice,jdbcType=DECIMAL}, 
+      #{operatorCount,jdbcType=INTEGER}, #{operatorFee,jdbcType=DECIMAL}, #{riskPrice,jdbcType=DECIMAL}, 
+      #{riskCount,jdbcType=INTEGER}, #{riskFee,jdbcType=DECIMAL}, #{refusedCount,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mod.loan.model.MerchantFeeStatistics">
+    insert into tb_merchant_fee_statistics
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="day != null">
+        `day`,
+      </if>
+      <if test="merchant != null">
+        merchant,
+      </if>
+      <if test="sms1Price != null">
+        sms1_price,
+      </if>
+      <if test="sms1Count != null">
+        sms1_count,
+      </if>
+      <if test="sms1Fee != null">
+        sms1_fee,
+      </if>
+      <if test="sms2Price != null">
+        sms2_price,
+      </if>
+      <if test="sms2Count != null">
+        sms2_count,
+      </if>
+      <if test="sms2Fee != null">
+        sms2_fee,
+      </if>
+      <if test="youdunPrice != null">
+        youdun_price,
+      </if>
+      <if test="youdunCount != null">
+        youdun_count,
+      </if>
+      <if test="youdunFee != null">
+        youdun_fee,
+      </if>
+      <if test="operatorPrice != null">
+        operator_price,
+      </if>
+      <if test="operatorCount != null">
+        operator_count,
+      </if>
+      <if test="operatorFee != null">
+        operator_fee,
+      </if>
+      <if test="riskPrice != null">
+        risk_price,
+      </if>
+      <if test="riskCount != null">
+        risk_count,
+      </if>
+      <if test="riskFee != null">
+        risk_fee,
+      </if>
+      <if test="refusedCount != null">
+        refused_count,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="day != null">
+        #{day,jdbcType=VARCHAR},
+      </if>
+      <if test="merchant != null">
+        #{merchant,jdbcType=VARCHAR},
+      </if>
+      <if test="sms1Price != null">
+        #{sms1Price,jdbcType=DECIMAL},
+      </if>
+      <if test="sms1Count != null">
+        #{sms1Count,jdbcType=INTEGER},
+      </if>
+      <if test="sms1Fee != null">
+        #{sms1Fee,jdbcType=DECIMAL},
+      </if>
+      <if test="sms2Price != null">
+        #{sms2Price,jdbcType=DECIMAL},
+      </if>
+      <if test="sms2Count != null">
+        #{sms2Count,jdbcType=INTEGER},
+      </if>
+      <if test="sms2Fee != null">
+        #{sms2Fee,jdbcType=DECIMAL},
+      </if>
+      <if test="youdunPrice != null">
+        #{youdunPrice,jdbcType=INTEGER},
+      </if>
+      <if test="youdunCount != null">
+        #{youdunCount,jdbcType=INTEGER},
+      </if>
+      <if test="youdunFee != null">
+        #{youdunFee,jdbcType=DECIMAL},
+      </if>
+      <if test="operatorPrice != null">
+        #{operatorPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="operatorCount != null">
+        #{operatorCount,jdbcType=INTEGER},
+      </if>
+      <if test="operatorFee != null">
+        #{operatorFee,jdbcType=DECIMAL},
+      </if>
+      <if test="riskPrice != null">
+        #{riskPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="riskCount != null">
+        #{riskCount,jdbcType=INTEGER},
+      </if>
+      <if test="riskFee != null">
+        #{riskFee,jdbcType=DECIMAL},
+      </if>
+      <if test="refusedCount != null">
+        #{refusedCount,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mod.loan.model.MerchantFeeStatistics">
+    update tb_merchant_fee_statistics
+    <set>
+      <if test="sms1Price != null">
+        sms1_price = #{sms1Price,jdbcType=DECIMAL},
+      </if>
+      <if test="sms1Count != null">
+        sms1_count = #{sms1Count,jdbcType=INTEGER},
+      </if>
+      <if test="sms1Fee != null">
+        sms1_fee = #{sms1Fee,jdbcType=DECIMAL},
+      </if>
+      <if test="sms2Price != null">
+        sms2_price = #{sms2Price,jdbcType=DECIMAL},
+      </if>
+      <if test="sms2Count != null">
+        sms2_count = #{sms2Count,jdbcType=INTEGER},
+      </if>
+      <if test="sms2Fee != null">
+        sms2_fee = #{sms2Fee,jdbcType=DECIMAL},
+      </if>
+      <if test="youdunPrice != null">
+        youdun_price = #{youdunPrice,jdbcType=INTEGER},
+      </if>
+      <if test="youdunCount != null">
+        youdun_count = #{youdunCount,jdbcType=INTEGER},
+      </if>
+      <if test="youdunFee != null">
+        youdun_fee = #{youdunFee,jdbcType=DECIMAL},
+      </if>
+      <if test="operatorPrice != null">
+        operator_price = #{operatorPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="operatorCount != null">
+        operator_count = #{operatorCount,jdbcType=INTEGER},
+      </if>
+      <if test="operatorFee != null">
+        operator_fee = #{operatorFee,jdbcType=DECIMAL},
+      </if>
+      <if test="riskPrice != null">
+        risk_price = #{riskPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="riskCount != null">
+        risk_count = #{riskCount,jdbcType=INTEGER},
+      </if>
+      <if test="riskFee != null">
+        risk_fee = #{riskFee,jdbcType=DECIMAL},
+      </if>
+      <if test="refusedCount != null">
+        refused_count = #{refusedCount,jdbcType=INTEGER},
+      </if>
+    </set>
+    where `day` = #{day,jdbcType=VARCHAR}
+      and merchant = #{merchant,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mod.loan.model.MerchantFeeStatistics">
+    update tb_merchant_fee_statistics
+    set sms1_price = #{sms1Price,jdbcType=DECIMAL},
+      sms1_count = #{sms1Count,jdbcType=INTEGER},
+      sms1_fee = #{sms1Fee,jdbcType=DECIMAL},
+      sms2_price = #{sms2Price,jdbcType=DECIMAL},
+      sms2_count = #{sms2Count,jdbcType=INTEGER},
+      sms2_fee = #{sms2Fee,jdbcType=DECIMAL},
+      youdun_price = #{youdunPrice,jdbcType=INTEGER},
+      youdun_count = #{youdunCount,jdbcType=INTEGER},
+      youdun_fee = #{youdunFee,jdbcType=DECIMAL},
+      operator_price = #{operatorPrice,jdbcType=DECIMAL},
+      operator_count = #{operatorCount,jdbcType=INTEGER},
+      operator_fee = #{operatorFee,jdbcType=DECIMAL},
+      risk_price = #{riskPrice,jdbcType=DECIMAL},
+      risk_count = #{riskCount,jdbcType=INTEGER},
+      risk_fee = #{riskFee,jdbcType=DECIMAL},
+      refused_count = #{refusedCount,jdbcType=INTEGER}
+    where `day` = #{day,jdbcType=VARCHAR}
+      and merchant = #{merchant,jdbcType=VARCHAR}
+  </update>
+
+  <select id="findFeeStatisticsCount" parameterType="map" resultType="int">
+    select count(1) from tb_merchant_fee_statistics
+    <where>
+      <if test="merchant !='' and merchant != null">
+        and merchant = #{merchant}
+      </if>
+      <if test="startTime != null">
+        and STR_TO_DATE(`day`,'%Y-%m-%d') &gt;= #{startTime}
+      </if>
+      <if test="endTime != null">
+        and STR_TO_DATE(`day`,'%Y-%m-%d') &lt;= #{endTime}
+      </if>
+    </where>
+  </select>
+
+  <select id="findFeeStatisticsDetailCount" parameterType="map" resultType="int">
+    select count(1) from tb_merchant_fee_statistics
+    where `day`= #{time} and merchant = #{merchant}
+  </select>
+
+  <select id="findFeeStatisticsList" parameterType="map" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/> from tb_merchant_fee_statistics
+    <where>
+      <if test="merchant !='' and merchant != null">
+        and merchant = #{merchant}
+      </if>
+      <if test="startTime != null">
+        and STR_TO_DATE(`day`,'%Y-%m-%d') &gt;= #{startTime}
+      </if>
+      <if test="endTime != null">
+        and STR_TO_DATE(`day`,'%Y-%m-%d') &lt;= #{endTime}
+      </if>
+    </where>
+    order by `day`
+    limit #{startIndex},#{pageSize}
+  </select>
+
+  <select id="findSumFeeStatistics" parameterType="map" resultType="map">
+    SELECT
+      '全部' as `day`,
+      sum(sms1_count) AS sms1Count,
+      sum(sms1_fee) AS sms1Fee,
+      sum(sms2_count) AS sms2Count,
+      sum(sms2_fee) AS sms2Fee,
+      sum(youdun_count) AS youdunCount,
+      sum(youdun_fee) AS youdunFee,
+      sum(operator_count) AS operatorCount,
+      sum(operator_fee) AS operatorFee,
+      sum(risk_count) AS riskCount,
+      sum(risk_fee) AS riskFee,
+      sum(refused_count) AS refusedCount
+    FROM
+      tb_merchant_fee_statistics
+    <where>
+      <if test="merchant !='' and merchant != null">
+        and merchant = #{merchant}
+      </if>
+      <if test="startTime != null">
+        and STR_TO_DATE(`day`,'%Y-%m-%d') &gt;= #{startTime}
+      </if>
+      <if test="endTime != null">
+        and STR_TO_DATE(`day`,'%Y-%m-%d') &lt;= #{endTime}
+      </if>
+    </where>
+  </select>
+
+</mapper>

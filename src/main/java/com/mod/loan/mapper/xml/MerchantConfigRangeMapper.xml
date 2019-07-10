@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mod.loan.mapper.MerchantConfigRangeMapper">
+  <resultMap id="BaseResultMap" type="com.mod.loan.model.MerchantConfigRange">
+    <id column="merchant_alias" jdbcType="VARCHAR" property="merchantAlias" />
+    <result column="product_day_min" jdbcType="INTEGER" property="productDayMin" />
+    <result column="product_day_max" jdbcType="INTEGER" property="productDayMax" />
+    <result column="product_money_min" jdbcType="INTEGER" property="productMoneyMin" />
+    <result column="product_money_max" jdbcType="INTEGER" property="productMoneyMax" />
+    <result column="total_rate_min" jdbcType="INTEGER" property="totalRateMin" />
+    <result column="total_rate_max" jdbcType="INTEGER" property="totalRateMax" />
+    <result column="overdue_rate_min" jdbcType="INTEGER" property="overdueRateMin" />
+    <result column="overdue_rate_max" jdbcType="INTEGER" property="overdueRateMax" />
+    <result column="daily_defer_fee_min" jdbcType="INTEGER" property="dailyDeferFeeMin" />
+    <result column="daily_defer_fee_max" jdbcType="INTEGER" property="dailyDeferFeeMax" />
+    <result column="daily_defer_rate_min" jdbcType="INTEGER" property="dailyDeferRateMin" />
+    <result column="daily_defer_rate_max" jdbcType="INTEGER" property="dailyDeferRateMax" />
+    <result column="daily_other_fee_min" jdbcType="INTEGER" property="dailyOtherFeeMin" />
+    <result column="daily_other_fee_max" jdbcType="INTEGER" property="dailyOtherFeeMax" />
+    <result column="defer_day_min" jdbcType="INTEGER" property="deferDayMin" />
+    <result column="defer_day_max" jdbcType="INTEGER" property="deferDayMax" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+</mapper>
