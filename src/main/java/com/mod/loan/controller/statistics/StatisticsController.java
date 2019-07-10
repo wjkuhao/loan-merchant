@@ -196,13 +196,23 @@ public class StatisticsController {
                     // 获取信息
                     list = reportOrderRepayService.exportReport(param);
                     break;
-                case "partner_effect":
-                    downloadFileName += "-渠道统计";
+                case "order_repay_detail":
+                    downloadFileName += "-还款统计(详情)";
                     // 定义excel第一行的信息
-                    title = new String[]{"注册日期", "注册渠道", "注册人数(人)", "注册的登录数量(人)", "实名人数(人)", "提单人数(人)", "首借人数(人)", "首借金额(元)"};
-                    sheetName = "渠道统计";
+                    title = new String[]{"应还日期", "应还订单数", "实还订单数", "展期订单数占比", "全额还款订单数占比", "未还订单数", "还款率", "新客还款率", "老客还款率", "复借订单数","复借占比"};
+                    sheetName = "还款统计(详情)报表";
                     // 设置插入值的名称
-                    columns = new String[]{"day_key", "user_origin", "reg_cnt", "login_cnt", "real_name_cnt", "submit_order_cnt", "first_submit_cnt", "first_submit_amount"};
+                    columns = new String[]{"date", "shouldRepayOrderCount", "realRepayOrderCount", "extendOrderRate", "fullRepayOrderRate", "notRepayCount", "repayRate", "newUserRepayRate", "oldUserRepayRate", "againBorrowOrderCount", "againBorrowRate"};
+                    // 获取信息
+                    list = reportOrderRepayService.exportReport(param);
+                    break;
+                case "partner_effect":
+                    downloadFileName += "-渠道注册-放款统计";
+                    // 定义excel第一行的信息
+                    title = new String[]{"注册日期",  "注册人数",  "实名认证数","个人信息认证数", "运营商认证数", "银行卡绑定数", "申请订单数","风控通过数","下款数", "实名认证率","个人信息认证率","运营商认证率","银行卡绑定率","申请转化率","下款率","审核通过率"};
+                    sheetName = "渠道注册-放款统计";
+                    // 设置插入值的名称
+                    columns = new String[]{"dayKey", "regCnt",  "realNameCnt","personalInfoCertiCnt", "yysCnt", "bankCnt", "orderCnt","passRiskCnt","loanSuccessCnt","realNameCertiRate","personalInfoCertiRate","yysCertiRate","bankBoundRate","regApplyTransRate","loanRate","auditPassRate"};
                     // 获取信息
                     list = reportPartnerEffectService.exportReport(param);
                     break;
@@ -277,12 +287,12 @@ public class StatisticsController {
             param.put("userOrigin", StringUtils.isNotEmpty(userOrigin) ? userOrigin : null);
             param.put("managerId", RequestThread.get().getUid());
 
-            downloadFileName += "-渠道统计";
+            downloadFileName += "-渠道注册-放款统计（商户）";
             // 定义excel第一行的信息
-            title = new String[]{"注册日期", "注册渠道", "注册人数(人)", "注册的登录数量(人)", "实名人数(人)", "提单人数(人)", "首借人数(人)", "首借金额(元)"};
-            sheetName = "渠道统计";
+            title = new String[]{"注册日期",  "注册人数",  "实名认证数","个人信息认证数", "运营商认证数", "银行卡绑定数", "申请订单数","风控通过数","下款数", "实名认证率","个人信息认证率","运营商认证率","银行卡绑定率","申请转化率","下款率","审核通过率"};
+            sheetName = "渠道注册-放款统计（商户）";
             // 设置插入值的名称
-            columns = new String[]{"day_key", "user_origin", "reg_cnt", "login_cnt", "real_name_cnt", "submit_order_cnt", "first_submit_cnt", "first_submit_amount"};
+            columns = new String[]{"dayKey", "regCnt",  "realNameCnt","personalInfoCertiCnt", "yysCnt", "bankCnt", "orderCnt","passRiskCnt","loanSuccessCnt","realNameCertiRate","personalInfoCertiRate","yysCertiRate","bankBoundRate","regApplyTransRate","loanRate","auditPassRate"};
             // 获取信息
             list = reportPartnerEffectDeductionService.exportReport(param);
 
@@ -356,6 +366,90 @@ public class StatisticsController {
         param.put("startTime", StringUtils.isNotEmpty(startTime) ? startTime : null);
         param.put("endTime", StringUtils.isNotEmpty(endTime) ? endTime : null);
         return new ResultMessage(ResponseEnum.M2000, reportConnectionRateService.findConnectionrRateReportList(param, page), page);
+    }
+
+    /**
+     * 渠道注册-放款统计(详情页面)
+     */
+    @RequestMapping(value = "partner_report_list_detail")
+    public ModelAndView partner_report_list_detail(ModelAndView view, String date) {
+        view.addObject("date", date);
+        view.setViewName("statistics/partner_report_list_detail");
+        return view;
+    }
+
+    /**
+     * 渠道注册-放款统计(查看详情)
+     * @param originName
+     * @param date
+     * @param page
+     * @return
+     */
+    @RequestMapping(value = "partner_report_list_detail_ajax", method = {RequestMethod.POST})
+    public ResultMessage partner_report_list_detail_ajax(String originName, String date, Page page) {
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("merchant", RequestThread.get().getMerchant());
+        param.put("originName", StringUtils.isNotEmpty(originName) ? originName : null);
+        param.put("date", StringUtils.isNotEmpty(date) ? date : null);
+        return new ResultMessage(ResponseEnum.M2000, reportPartnerEffectService.findReportPartnerEffectDetailList(param, page), page);
+    }
+
+    /**
+     * 渠道注册-放款统计商户(详情页面)
+     */
+    @RequestMapping(value = "partner_report_deduction_list_detail")
+    public ModelAndView partner_report_deduction_list_detail(ModelAndView view, String date) {
+        view.addObject("date", date);
+        view.setViewName("statistics/partner_report_deduction_list_detail");
+        return view;
+    }
+
+    /**
+     * 渠道注册-放款统计商户(查看详情)
+     * @param originNo
+     * @param date
+     * @param page
+     * @return
+     */
+    @RequestMapping(value = "partner_report_deduction_list_detail_ajax", method = {RequestMethod.POST})
+    public ResultMessage partner_report_deduction_list_detail_ajax(String originName, String date, Page page) {
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("merchant", RequestThread.get().getMerchant());
+        param.put("managerId", RequestThread.get().getUid());
+        param.put("originName", StringUtils.isNotEmpty(originName) ? originName : null);
+        param.put("date", StringUtils.isNotEmpty(date) ? date : null);
+        return new ResultMessage(ResponseEnum.M2000, reportPartnerEffectDeductionService.findReportPartnerEffectDeductionDetailList(param,page), page);
+    }
+
+    @RequestMapping(value = "repay_report_list_detail")
+    public ModelAndView repay_report_list_detail(ModelAndView view) {
+        view.setViewName("statistics/repay_report_list_detail");
+        return view;
+    }
+
+    @RequestMapping(value = "repay_report_list_detail_ajax", method = {RequestMethod.POST})
+    public ResultMessage repay_report_list_detail_ajax(String startTime, String endTime, Page page) {
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("merchant", RequestThread.get().getMerchant());
+        param.put("startTime", StringUtils.isNotEmpty(startTime) ? startTime : null);
+        param.put("endTime", StringUtils.isNotEmpty(endTime) ? endTime : null);
+        return new ResultMessage(ResponseEnum.M2000, reportOrderRepayService.findReportOrderRepayListDetail(param, page), page);
+    }
+
+    /**
+     * 数据看板 系统总数据统计
+     * @param view
+     * @return
+     */
+    @RequestMapping(value = "data_view")
+    public ModelAndView data_view(ModelAndView view) {
+        view.setViewName("statistics/data_view");
+        return view;
+    }
+
+    @RequestMapping(value = "data_view_ajax", method = { RequestMethod.POST })
+    public ResultMessage data_view_ajax() {
+        return new ResultMessage(ResponseEnum.M2000, orderService.dataView(RequestThread.get().getMerchant()));
     }
 
 }

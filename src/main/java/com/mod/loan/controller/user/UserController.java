@@ -258,6 +258,24 @@ public class UserController {
         return new ResultMessage(ResponseEnum.M2000, userService.updateByPrimaryKeySelective(user));
     }
 
+    /**
+     * 重置用户的密码
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "user_rest_password",method = {RequestMethod.POST})
+    public ResultMessage user_rest_password(Long id){
+        User user = new User();
+        user.setId(id);
+        user.setUserPwd("e10adc3949ba59abbe56e057f20f883e");
+        int i = userService.updateByPrimaryKeySelective(user);
+        if(i==0){
+            return new ResultMessage(ResponseEnum.M4000.getCode(),ResponseEnum.M4000.getMessage());
+        }
+        return new ResultMessage(ResponseEnum.M2000.getCode(),ResponseEnum.M2000.getMessage());
+    }
+
+
     //@RequestMapping(value = "export_report_user_list")
     public void export_report(HttpServletResponse response, String userOrigin, String startTime, String endTime) {
         if (StringUtils.isBlank(userOrigin) || StringUtils.isBlank(startTime) || StringUtils.isBlank(endTime)) {

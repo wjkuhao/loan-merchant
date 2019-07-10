@@ -21,7 +21,7 @@ public class ReportLoanDto {
     /**
      * 放款金额
      */
-    private String loadMoney;
+    private String loanMoney;
 
     /**
      * 展期订单数

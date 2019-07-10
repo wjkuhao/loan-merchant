@@ -14,4 +14,7 @@ public interface ReportPartnerEffectDeductionMapper extends MyBaseMapper<ReportP
 
 	List<Map<String, Object>> exportReport(Map<String, Object> param);
 
+	int reportPartnerEffectDeductionDetailCount(Map<String, Object> param);
+
+	List<Map<String, Object>> findReportPartnerEffectDeductionDetailList(Map<String, Object> param);
 }

@@ -1,10 +1,13 @@
 package com.mod.loan.model;
 
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "report_partner_effect")
+@Data
 public class ReportPartnerEffect {
     /**
      * 主键
@@ -73,193 +76,82 @@ public class ReportPartnerEffect {
     private Integer loginCnt;
 
     /**
-     * 获取注册的登录数量
-     *
-     * @return loginCnt
+     * 个人信息认证数
      */
-    public Integer getLoginCnt() {
-        return loginCnt;
-    }
+    @Column(name = "personal_info_certi_cnt")
+    private Integer personalInfoCertiCnt;
 
     /**
-     * 设置注册的登录数量
-     *
-     * @param loginCnt
+     * 运营商认证数
      */
-    public void setLoginCnt(Integer loginCnt) {
-        this.loginCnt = loginCnt;
-    }
+    @Column(name = "yys_cnt")
+    private Integer yysCnt;
 
     /**
-     * 获取主键
-     *
-     * @return id - 主键
+     * 银行卡绑定数
      */
-    public Long getId() {
-        return id;
-    }
+    @Column(name = "bank_cnt")
+    private Integer bankCnt;
 
     /**
-     * 设置主键
-     *
-     * @param id 主键
+     * 申请订单数
      */
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Column(name = "order_cnt")
+    private Integer orderCnt;
 
     /**
-     * 获取注册日期
-     *
-     * @return day_key - 注册日期
+     * 风控通过数
      */
-    public Date getDayKey() {
-        return dayKey;
-    }
+    @Column(name = "pass_risk_cnt")
+    private Integer passRiskCnt;
 
     /**
-     * 设置注册日期
-     *
-     * @param dayKey 注册日期
+     * 下款数
      */
-    public void setDayKey(Date dayKey) {
-        this.dayKey = dayKey;
-    }
+    @Column(name = "loan_success_cnt")
+    private Integer loanSuccessCnt;
 
     /**
-     * 获取注册渠道，来源
-     *
-     * @return user_origin - 注册渠道，来源
+     * 实名认证率
      */
-    public String getUserOrigin() {
-        return userOrigin;
-    }
+    @Column(name = "real_name_certi_rate")
+    private String realNameCertiRate;
 
     /**
-     * 设置注册渠道，来源
-     *
-     * @param userOrigin 注册渠道，来源
+     * 个人信息认证率
      */
-    public void setUserOrigin(String userOrigin) {
-        this.userOrigin = userOrigin == null ? null : userOrigin.trim();
-    }
+    @Column(name = "personal_info_certi_rate")
+    private String personalInfoCertiRate;
 
     /**
-     * 获取注册人数
-     *
-     * @return reg_cnt - 注册人数
+     * 运营商认证率
      */
-    public Integer getRegCnt() {
-        return regCnt;
-    }
+    @Column(name = "yys_certi_rate")
+    private String yysCertiRate;
 
     /**
-     * 设置注册人数
-     *
-     * @param regCnt 注册人数
+     * 银行卡绑定率
      */
-    public void setRegCnt(Integer regCnt) {
-        this.regCnt = regCnt;
-    }
+    @Column(name = "bank_bound_rate")
+    private String bankBoundRate;
 
     /**
-     * 获取实名人数
-     *
-     * @return real_name_cnt - 实名人数
+     * 申请转化率
      */
-    public Integer getRealNameCnt() {
-        return realNameCnt;
-    }
+    @Column(name = "reg_apply_trans_rate")
+    private String regApplyTransRate;
 
     /**
-     * 设置实名人数
-     *
-     * @param realNameCnt 实名人数
+     * 下款率
      */
-    public void setRealNameCnt(Integer realNameCnt) {
-        this.realNameCnt = realNameCnt;
-    }
+    @Column(name = "loan_rate")
+    private String loanRate;
 
     /**
-     * 获取提单人数
-     *
-     * @return submit_order_cnt - 提单人数
+     * 审核通过率
      */
-    public Integer getSubmitOrderCnt() {
-        return submitOrderCnt;
-    }
-
-    /**
-     * 设置提单人数
-     *
-     * @param submitOrderCnt 提单人数
-     */
-    public void setSubmitOrderCnt(Integer submitOrderCnt) {
-        this.submitOrderCnt = submitOrderCnt;
-    }
-
-    /**
-     * 获取首借人数
-     *
-     * @return first_submit_cnt - 首借人数
-     */
-    public Integer getFirstSubmitCnt() {
-        return firstSubmitCnt;
-    }
-
-    /**
-     * 设置首借人数
-     *
-     * @param firstSubmitCnt 首借人数
-     */
-    public void setFirstSubmitCnt(Integer firstSubmitCnt) {
-        this.firstSubmitCnt = firstSubmitCnt;
-    }
-
-    /**
-     * 获取首借金额
-     *
-     * @return first_submit_amount - 首借金额
-     */
-    public BigDecimal getFirstSubmitAmount() {
-        return firstSubmitAmount;
-    }
-
-    /**
-     * 设置首借金额
-     *
-     * @param firstSubmitAmount 首借金额
-     */
-    public void setFirstSubmitAmount(BigDecimal firstSubmitAmount) {
-        this.firstSubmitAmount = firstSubmitAmount;
-    }
-
-    /**
-     * 获取插入时间
-     *
-     * @return create_time - 插入时间
-     */
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    /**
-     * 设置插入时间
-     *
-     * @param createTime 插入时间
-     */
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    /**
-     * 获取商户
-     *
-     * @return merchant - 商户
-     */
-    public String getMerchant() {
-        return merchant;
-    }
+    @Column(name = "audit_pass_rate")
+    private String auditPassRate;
 
     /**
      * 设置商户

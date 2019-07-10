@@ -88,6 +88,7 @@ public class Manager {
 	@Column(name = "user_security")
 	private Integer userSecurity;
 
+
 	/**
 	 * 获取主键
 	 *
@@ -348,4 +349,5 @@ public class Manager {
 	public void setUserSecurity(Integer userSecurity) {
 		this.userSecurity = userSecurity;
 	}
+
 }

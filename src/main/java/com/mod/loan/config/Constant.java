@@ -145,6 +145,8 @@ public class Constant {
      */
     public static Integer MERCHANT_MAX_PRODUCT_MONEY;
 
+    public static String GOOGLE_AUTH_SECURITY_KEY;
+
     @Value("${oss.moxie.bucket.name:}")
     public void setMoxie_bucket_name(String moxie_bucket_name) {
         Constant.moxie_bucket_name = moxie_bucket_name;
@@ -266,6 +268,11 @@ public class Constant {
             merchantMaxProductMoney = 10000;
         }
         MERCHANT_MAX_PRODUCT_MONEY = merchantMaxProductMoney;
+    }
+
+    @Value("${google.auth.security.key}")
+    public void setGoogleAuthSecurityKey(String googleAuthSecurityKey) {
+        GOOGLE_AUTH_SECURITY_KEY = googleAuthSecurityKey;
     }
 
     /**

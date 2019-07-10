@@ -21,4 +21,5 @@ public interface ReportOrderRepayService extends BaseService<ReportOrderRepay, L
 
 	List<Map<String, Object>> exportUserRepayRate(Map<String, Object> param,String type);
 
+	List<Map<String, Object>> findReportOrderRepayListDetail(Map<String, Object> param, Page page);
 }
