@@ -4,8 +4,6 @@ import com.mod.loan.common.enums.ResponseEnum;
 import com.mod.loan.common.model.Page;
 import com.mod.loan.common.model.RequestThread;
 import com.mod.loan.common.model.ResultMessage;
-import com.mod.loan.model.MerchantOrigin;
-import com.mod.loan.model.Order;
 import com.mod.loan.service.*;
 import com.mod.loan.util.ExcelUtil;
 import com.mod.loan.util.TimeUtils;
@@ -179,20 +177,20 @@ public class StatisticsController {
                 case "order_loan":
                     downloadFileName += "-借款报表";
                     // 定义excel第一行的信息
-                    title = new String[]{"放款日期", "放款笔数(笔)", "放款金额(元)", "首借人数(人)", "首借金额(元)", "次新人数(人)", "次新金额(元)", "续借人数(人)", "续借金额(元)", "综合费用(元)"};
+                    title = new String[]{"放款日期", "放款订单数", "放款金额", "展期订单数", "新客放款订单数", "新客借款金额", "新客订单占比", "老客放款订单数", "老客借款金额", "老客订单占比","综合费用"};
                     sheetName = "借款报表";
                     // 设置插入值的名称
-                    columns = new String[]{"day_key", "arrive_cnt", "arrive_amount", "first_cnt", "first_amount", "second_cnt", "second_amount", "old_cnt", "old_amount", "total_fee"};
+                    columns = new String[]{"dayKey", "loanOrderCount", "loanMoney", "extendOrderCount", "newUserLoanOrderCount", "newUserBorrowMoney", "newUserOrderRate", "oldUserLoanOrderCount", "oldUserBorrowMoney", "oldUserOrderRate","omnibusFee"};
                     // 获取信息
                     list = reportOrderLoanService.exportReport(param);
                     break;
                 case "order_repay":
                     downloadFileName += "-还款报表";
                     // 定义excel第一行的信息
-                    title = new String[]{"应还日期", "应还订单", "提前还款", "正常还款", "逾期已还", "逾期中", "坏账", "应还金额", "实还金额", "放款金额/成本", "逾期费(元)", "减免金额(元)", "待还金额", "首逾率", "逾期率", "回收率1天", "回收率3天", "回收率7天", "回收率15天"};
+                    title = new String[]{"应还日期", "应还金额", "应还订单数", "实还金额", "实还订单数", "未还金额", "未还订单数", "还款率"};
                     sheetName = "还款报表";
                     // 设置插入值的名称
-                    columns = new String[]{"day_key", "should_repay_cnt", "early_repay_cnt", "normal_repay_cnt", "overdue_repay_cnt", "overdue_cnt", "bad_cnt", "repay_amount", "real_repay_amount", "pay_amount", "overdue_fee", "reduce_money", "overdue_repay_amount", "first_overdue_rate", "overdue_rate", "overdue1_repay_cnt1", "overdue3_repay_cnt1", "overdue7_repay_cnt1", "overdue15_repay_cnt1"};
+                    columns = new String[]{"dayKey", "shouldRepayMoney", "shouldRepayOrderCount", "realRepayMoney", "realRepayOrderCount", "notRepayMoney", "notRepayOrderCount", "repayRate"};
                     // 获取信息
                     list = reportOrderRepayService.exportReport(param);
                     break;
@@ -406,7 +404,7 @@ public class StatisticsController {
 
     /**
      * 渠道注册-放款统计商户(查看详情)
-     * @param originNo
+     * @param originName
      * @param date
      * @param page
      * @return

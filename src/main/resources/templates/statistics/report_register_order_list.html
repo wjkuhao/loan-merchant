@@ -24,7 +24,7 @@
 						<th class="center">统计日期</th>
 						<th class="center">注册人数(人)</th>
 						<th class="center">实名认证人数(人)</th>
-						<th class="center">支付宝认证人数(人)</th>
+<!--						<th class="center">支付宝认证人数(人)</th>-->
 						<th class="center">运营商认证人数(人)</th>
 						<th class="center">总提单人数(人)</th>
 						<th class="center">新客人数(人)</th>
@@ -58,42 +58,44 @@
 		},{
 			id : "register_cnt",
 			renderer : function(idValue,value,record){
-				return value ? value : "---";
+				return value ? value : "0";
 			}
 		},{
 			id : "realname_cnt",
 			renderer : function(idValue,value,record){
-				return value ? value : "---" ;
+				return value ? value : "0" ;
 			}
-		},{
-			id : "zfb_cnt",
-			renderer : function(idValue,value,record){
-				return value ? value : "---" ;
-			}
-		},{
+		},
+		// 	{
+		// 	id : "zfb_cnt",
+		// 	renderer : function(idValue,value,record){
+		// 		return value ? value : "---" ;
+		// 	}
+		// },
+			{
 			id : "mobile_cnt",
 			renderer : function(idValue,value,record){
-				return value ? value : "---" ;
+				return value ? value : "0" ;
 			}
 		},{
 			id : "order_cnt",
 			renderer : function(idValue,value,record){
-				return value ? value : "---" ;
+				return value ? value : "0" ;
 			}
 		},{
 			id : "first_cnt",
 			renderer : function(idValue,value,record){
-				return value ? value : "---" ;
+				return value ? value : "0" ;
 			}
 		},{
 			id : "second_cnt",
 			renderer : function(idValue,value,record){
-				return value ? value : "---" ;
+				return value ? value : "0" ;
 			}
 		},{
 			id : "old_cnt",
 			renderer : function(idValue,value,record){
-				return value ? value : "---" ;
+				return value ? value : "0" ;
 			}
 		}]
 	});

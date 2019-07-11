@@ -10,8 +10,8 @@
             <div>
 <!--                <span>查询时间:</span>-->
 <!--                <input id="searchTime" name="searchTime" type="text" readonly="readonly" placeholder="查询时间" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})"/>-->
-<!--                <button id="query" class="btn btn-small btn-success" onclick="search()"><i class="icon-search"></i> 查询-->
-<!--                </button>-->
+                <button id="query" class="btn btn-small btn-success" onclick="search()"><i class="icon-search"></i> 查询
+                </button>
             </div>
         </div>
         <div class="row">
@@ -157,6 +157,9 @@
 		});
     }
     getAllMessage();
+    function search() {
+        getAllMessage();
+    }
 
 </script>
 </body>

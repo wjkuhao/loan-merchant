@@ -235,8 +235,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 
     @Override
     public Map<String, Object> dataView(String merchant) {
-        // TODO... changcf
-        return null;
+        return orderMapper.dataView(merchant);
     }
 
 }

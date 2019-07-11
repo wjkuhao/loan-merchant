@@ -59,4 +59,10 @@ public interface OrderMapper extends MyBaseMapper<Order> {
 
 	Order selectLastOneByUid(@Param("uid") Long uid);
 
+	/**
+	 * 数据看板 商户订单总数据
+	 * @param merchant
+	 * @return
+	 */
+    Map<String, Object> dataView(@Param("merchant") String merchant);
 }
