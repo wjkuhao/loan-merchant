@@ -187,10 +187,10 @@ public class StatisticsController {
                 case "order_repay":
                     downloadFileName += "-还款报表";
                     // 定义excel第一行的信息
-                    title = new String[]{"应还日期", "应还金额", "应还订单数", "实还金额", "实还订单数", "未还金额", "未还订单数", "还款率"};
+                    title = new String[]{"应还日期", "应还订单", "提前还款", "正常还款", "逾期已还", "逾期中", "坏账", "应还金额", "实还金额", "放款金额/成本", "逾期费(元)", "减免金额(元)", "待还金额", "首逾率", "逾期率", "回收率1天", "回收率3天", "回收率7天", "回收率15天"};
                     sheetName = "还款报表";
                     // 设置插入值的名称
-                    columns = new String[]{"dayKey", "shouldRepayMoney", "shouldRepayOrderCount", "realRepayMoney", "realRepayOrderCount", "notRepayMoney", "notRepayOrderCount", "repayRate"};
+                    columns = new String[]{"day_key", "should_repay_cnt", "early_repay_cnt", "normal_repay_cnt", "overdue_repay_cnt", "overdue_cnt", "bad_cnt", "repay_amount", "real_repay_amount", "pay_amount", "overdue_fee", "reduce_money", "overdue_repay_amount", "first_overdue_rate", "overdue_rate", "overdue1_repay_cnt1", "overdue3_repay_cnt1", "overdue7_repay_cnt1", "overdue15_repay_cnt1"};
                     // 获取信息
                     list = reportOrderRepayService.exportReport(param);
                     break;
