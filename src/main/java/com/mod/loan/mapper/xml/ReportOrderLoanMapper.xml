@@ -20,50 +20,153 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
 	<select id="reportOrderLoanCount" resultType="int">
-	select count(1) from report_order_loan
-	<where>
-	     <if test="merchant != null">
-			and merchant = #{merchant}
-		</if>
-		<if test="startTime != null">
-			and day_key &gt;= #{startTime}
-		</if>
-		<if test="endTime != null">
-			and day_key &lt;= #{endTime}
-		</if>
-	</where>
+		select count(DISTINCT(DATE(arrive_time))) from tb_order
+			<where>
+				<if test="merchant != null">
+					and merchant = #{merchant}
+				</if>
+				<if test="startTime != null">
+					and DATE(arrive_time) &gt;= #{startTime}
+				</if>
+				<if test="endTime != null">
+					and DATE(arrive_time) &lt;= #{endTime}
+				</if>
+			</where>
 	</select>
 	
 	<select id="findReportOrderLoanList" resultType="map">
-	select * from report_order_loan
-	<where>
-	 <if test="merchant != null">
-			and merchant = #{merchant}
-		</if>
-		<if test="startTime != null">
-			and day_key &gt;= #{startTime}
-		</if>
-		<if test="endTime != null">
-			and day_key &lt;= #{endTime}
-		</if>
-	</where>
-	order by day_key desc limit #{startIndex},#{pageSize}
+		SELECT
+		a.create_time AS 'dayKey',
+		a.loanOrderCount,
+		a.loanMoney,
+		b.extendOrderCount,
+		a.newUserLoanOrderCount,
+		a.newUserBorrowMoney,
+		a.newUserOrderRate,
+		a.oldUserLoanOrderCount,
+		a.oldUserBorrowMoney,
+		a.oldUserOrderRate,
+		a.omnibusFee
+		FROM
+		(
+		SELECT
+		DATE(o.arrive_time) AS 'create_time',
+		o.merchant,
+		count(o.id) AS 'loanOrderCount',
+		sum(o.actual_money) AS 'loanMoney',
+		count(CASE WHEN o.user_type = 1 THEN o.id ELSE NULL END) AS 'newUserLoanOrderCount',
+		sum(CASE WHEN o.user_type = 1 THEN o.borrow_money ELSE 0 END) AS 'newUserBorrowMoney',
+		concat(ROUND(count(CASE WHEN o.user_type = 1 THEN o.id ELSE NULL END) / count(o.id) * 100,2),'%') AS 'newUserOrderRate',
+		count(CASE WHEN o.user_type = 3 THEN o.id ELSE NULL END) AS 'oldUserLoanOrderCount',
+		sum(CASE WHEN o.user_type = 3 THEN o.borrow_money ELSE 0 END) AS 'oldUserBorrowMoney',
+		concat(ROUND(count(CASE WHEN o.user_type = 3 THEN o.id ELSE NULL END) / count(o.id) * 100,2),'%') AS 'oldUserOrderRate',
+		sum(o.total_fee) AS 'omnibusFee'
+		FROM
+		tb_order o
+		<where>
+			and o.arrive_time is not null
+			<if test="startTime != null">
+				and DATE(o.arrive_time) &gt;= #{startTime}
+			</if>
+			<if test="endTime != null">
+				and DATE(o.arrive_time) &lt;= #{endTime}
+			</if>
+		</where>
+		GROUP BY
+		1,2) a
+		LEFT JOIN (
+		SELECT
+		DATE(od.create_time) AS 'create_time',
+		od.merchant,
+		count(od.id) AS 'extendOrderCount'
+		FROM
+		tb_order_defer od
+		<where>
+			<if test="startTime != null">
+				and DATE(od.create_time) &gt;= #{startTime}
+			</if>
+			<if test="endTime != null">
+				and DATE(od.create_time) &lt;= #{endTime}
+			</if>
+		</where>
+		GROUP BY
+		1,2) b
+		ON (a.merchant = b.merchant AND a.create_time = b.create_time)
+		<where>
+			<if test="merchant != null">
+				and a.merchant = #{merchant}
+			</if>
+		</where>
+		ORDER BY
+		a.create_time DESC
+		limit #{startIndex},#{pageSize}
 	</select>
 	
 	<select id="exportReport" resultType="map">
-	select * from report_order_loan
-	<where>
-	 <if test="merchant != null">
-			and merchant = #{merchant}
-		</if>
-		<if test="startTime != null">
-			and day_key &gt;= #{startTime}
-		</if>
-		<if test="endTime != null">
-			and day_key &lt;= #{endTime}
-		</if>
-	</where>
-	order by day_key
+		SELECT
+		a.create_time AS 'dayKey',
+		a.loanOrderCount,
+		a.loanMoney,
+		b.extendOrderCount,
+		a.newUserLoanOrderCount,
+		a.newUserBorrowMoney,
+		a.newUserOrderRate,
+		a.oldUserLoanOrderCount,
+		a.oldUserBorrowMoney,
+		a.oldUserOrderRate,
+		a.omnibusFee
+		FROM
+		(
+		SELECT
+		DATE(o.arrive_time) AS 'create_time',
+		o.merchant,
+		count(o.id) AS 'loanOrderCount',
+		sum(o.actual_money) AS 'loanMoney',
+		count(CASE WHEN o.user_type = 1 THEN o.id ELSE NULL END) AS 'newUserLoanOrderCount',
+		sum(CASE WHEN o.user_type = 1 THEN o.borrow_money ELSE 0 END) AS 'newUserBorrowMoney',
+		concat(ROUND(count(CASE WHEN o.user_type = 1 THEN o.id ELSE NULL END) / count(o.id) * 100,2),'%') AS 'newUserOrderRate',
+		count(CASE WHEN o.user_type = 3 THEN o.id ELSE NULL END) AS 'oldUserLoanOrderCount',
+		sum(CASE WHEN o.user_type = 3 THEN o.borrow_money ELSE 0 END) AS 'oldUserBorrowMoney',
+		concat(ROUND(count(CASE WHEN o.user_type = 3 THEN o.id ELSE NULL END) / count(o.id) * 100,2),'%') AS 'oldUserOrderRate',
+		sum(o.total_fee) AS 'omnibusFee'
+		FROM
+		tb_order o
+		<where>
+			and o.arrive_time is not null
+			<if test="startTime != null">
+				and DATE(o.arrive_time) &gt;= #{startTime}
+			</if>
+			<if test="endTime != null">
+				and DATE(o.arrive_time) &lt;= #{endTime}
+			</if>
+		</where>
+		GROUP BY
+		1,2) a
+		LEFT JOIN (
+		SELECT
+		DATE(od.create_time) AS 'create_time',
+		od.merchant,
+		count(od.id) AS 'extendOrderCount'
+		FROM
+		tb_order_defer od
+		<where>
+			<if test="startTime != null">
+				and DATE(od.create_time) &gt;= #{startTime}
+			</if>
+			<if test="endTime != null">
+				and DATE(od.create_time) &lt;= #{endTime}
+			</if>
+		</where>
+		GROUP BY
+		1,2) b
+		ON (a.merchant = b.merchant AND a.create_time = b.create_time)
+		<where>
+			<if test="merchant != null">
+				and a.merchant = #{merchant}
+			</if>
+		</where>
+		ORDER BY
+		a.create_time DESC
 	</select>
 	
 </mapper>

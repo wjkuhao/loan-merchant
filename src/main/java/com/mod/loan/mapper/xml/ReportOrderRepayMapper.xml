@@ -28,50 +28,141 @@
   </resultMap>
 	
 	<select id="reportOrderRepayCount" resultType="int">
-	select count(1) from report_order_repay
-	<where>
-	 <if test="merchant != null">
-			and merchant = #{merchant}
-		</if>
-		<if test="startTime != null">
-			and day_key >= #{startTime}
-		</if>
-		<if test="endTime != null">
-			and day_key &lt;= #{endTime}
-		</if>
-	</where>
+		select count(DISTINCT(DATE(repay_time))) from tb_order
+		<where>
+			<if test="merchant != null">
+				and merchant = #{merchant}
+			</if>
+			<if test="startTime != null">
+				and DATE(repay_time) &gt;= #{startTime}
+			</if>
+			<if test="endTime != null">
+				and DATE(repay_time) &lt;= #{endTime}
+			</if>
+		</where>
 	</select>
 	
 	<select id="findReportOrderRepayList" resultType="map">
-	select * from report_order_repay
-	<where>
-	 <if test="merchant != null">
-			and merchant = #{merchant}
-		</if>
-		<if test="startTime != null">
-			and day_key >= #{startTime}
-		</if>
-		<if test="endTime != null">
-			and day_key &lt;= #{endTime}
-		</if>
-	</where>
-	order by day_key desc limit #{startIndex},#{pageSize}
+		SELECT
+		a.create_time AS 'dayKey',
+		a.shouldRepayMoney,
+		a.shouldRepayOrderCount,
+		ifnull(b.realRepayMoney,0) AS 'realRepayMoney',
+		ifnull(b.realRepayOrderCount,0) AS 'realRepayOrderCount',
+		(a.shouldRepayMoney - ifnull(b.realRepayMoney,0)) AS 'notRepayMoney',
+		(a.shouldRepayOrderCount - ifnull(b.realRepayOrderCount,0)) AS 'notRepayOrderCount',
+        ifnull(concat(ROUND(b.realRepayOrderCount / a.shouldRepayOrderCount * 100,2),'%'),'0.00%') AS 'repayRate'
+		FROM
+		(
+		SELECT
+		DATE(o.repay_time) AS 'create_time',
+		sum(o.borrow_money) AS 'shouldRepayMoney',
+		count(o.id) AS 'shouldRepayOrderCount'
+		FROM
+		tb_order o
+		<where>
+			and o.repay_time is not null
+			<if test="merchant != null">
+				and o.merchant = #{merchant}
+			</if>
+			<if test="startTime != null">
+				and DATE(o.repay_time) &gt;= #{startTime}
+			</if>
+			<if test="endTime != null">
+				and DATE(o.repay_time) &lt;= #{endTime}
+			</if>
+		</where>
+		GROUP BY
+		1) a
+		LEFT JOIN (
+		SELECT
+		DATE(od.update_time) AS 'create_time',
+		sum(od.repay_money) AS 'realRepayMoney',
+		count(DISTINCT od.order_id) AS 'realRepayOrderCount'
+		FROM
+		tb_order_repay od left join tb_order o2 on
+		(od.order_id = o2.id and DATE(od.update_time) = DATE(o2.real_repay_time))
+		<where>
+			and DATE(o2.real_repay_time) = DATE(o2.repay_time)
+			and od.repay_status = 3
+			<if test="merchant != null">
+				and o2.merchant = #{merchant}
+			</if>
+			<if test="startTime != null">
+				and DATE(od.create_time) &gt;= #{startTime}
+			</if>
+			<if test="endTime != null">
+				and DATE(od.create_time) &lt;= #{endTime}
+			</if>
+		</where>
+
+		GROUP BY
+		1) b
+		ON (a.create_time = b.create_time)
+		ORDER BY
+		a.create_time DESC
+		limit #{startIndex},#{pageSize}
 	</select>
 	
 	<select id="exportReport" resultType="map">
-	select * from report_order_repay
-	<where>
-	 <if test="merchant != null">
-			and merchant = #{merchant}
-		</if>
-		<if test="startTime != null">
-			and day_key >= #{startTime}
-		</if>
-		<if test="endTime != null">
-			and day_key &lt;= #{endTime}
-		</if>
-	</where>
-	order by day_key
+		SELECT
+		a.create_time AS 'dayKey',
+		a.shouldRepayMoney,
+		a.shouldRepayOrderCount,
+		ifnull(b.realRepayMoney,0) AS 'realRepayMoney',
+		ifnull(b.realRepayOrderCount,0) AS 'realRepayOrderCount',
+		(a.shouldRepayMoney - ifnull(b.realRepayMoney,0)) AS 'notRepayMoney',
+		(a.shouldRepayOrderCount - ifnull(b.realRepayOrderCount,0)) AS 'notRepayOrderCount',
+        ifnull(concat(ROUND(b.realRepayOrderCount / a.shouldRepayOrderCount * 100,2),'%'),'0.00%') AS 'repayRate'
+		FROM
+		(
+		SELECT
+		DATE(o.repay_time) AS 'create_time',
+		sum(o.borrow_money) AS 'shouldRepayMoney',
+		count(o.id) AS 'shouldRepayOrderCount'
+		FROM
+		tb_order o
+		<where>
+			and o.repay_time is not null
+			<if test="merchant != null">
+				and o.merchant = #{merchant}
+			</if>
+			<if test="startTime != null">
+				and DATE(o.repay_time) &gt;= #{startTime}
+			</if>
+			<if test="endTime != null">
+				and DATE(o.repay_time) &lt;= #{endTime}
+			</if>
+		</where>
+		GROUP BY
+		1) a
+		LEFT JOIN (
+		SELECT
+		DATE(od.update_time) AS 'create_time',
+		sum(od.repay_money) AS 'realRepayMoney',
+		count(DISTINCT od.order_id) AS 'realRepayOrderCount'
+		FROM
+		tb_order_repay od left join tb_order o2 on
+		(od.order_id = o2.id and DATE(od.update_time) = DATE(o2.real_repay_time))
+		<where>
+			and DATE(o2.real_repay_time) = DATE(o2.repay_time)
+			and od.repay_status = 3
+			<if test="merchant != null">
+				and o2.merchant = #{merchant}
+			</if>
+			<if test="startTime != null">
+				and DATE(od.create_time) &gt;= #{startTime}
+			</if>
+			<if test="endTime != null">
+				and DATE(od.create_time) &lt;= #{endTime}
+			</if>
+		</where>
+
+		GROUP BY
+		1) b
+		ON (a.create_time = b.create_time)
+		ORDER BY
+		a.create_time DESC
 	</select>
 
 	<select id="oldUserRepayRate" resultType="map" statementType="CALLABLE">

@@ -298,4 +298,24 @@
         </where>
         order by id desc limit 1
     </select>
+
+    <select id="dataView" resultType="map">
+        SELECT
+        <![CDATA[
+        sum(case when a.status BETWEEN 30 and 43 then a.actual_money else 0 end) as 'sumLoanMoney',
+        sum(case when a.status in (41,42,43) then a.had_repay else 0 end ) AS 'sumRepayMoney',
+        sum(case when a.status BETWEEN 30 and 40 then a.should_repay else 0 end) AS 'sumToCollectMoney',
+        sum(case when a.status in (31,32,35,36) and datediff(now(),a.repay_time) <=0  then a.should_repay else 0 end) AS 'sumNotOverDueToCollectMoney',
+        sum(case when a.status in (31,32,35,36) and datediff(now(),a.repay_time) = 0 then a.should_repay else 0 end) AS 'todayToCollectMoney',
+        sum(case when a.status in (33,34,37,38) and datediff(now(),a.repay_time) <=3 then a.should_repay else 0 end) AS 'overDueToCollectMoney3Days',
+        sum(case when a.status in (33,34,37,38) and datediff(now(),a.repay_time) <=7 then a.should_repay else 0 end) AS 'overDueToCollectMoney7Days',
+        sum(case when a.status in (33,34,37,38) and  datediff(now(),a.repay_time) <=15 then a.should_repay else 0 end) AS 'overDueToCollectMoney15Days',
+        sum(case when a.status in (33,34,37,38) and  datediff(now(),a.repay_time) > 15 then a.should_repay else 0 end) AS 'overDueToCollectMoneyOver15Days'
+        ]]>
+        FROM tb_order a
+        <where>
+            and a.merchant = #{merchant}
+        </where>
+
+    </select>
 </mapper>

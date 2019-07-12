@@ -14,7 +14,7 @@
 						~
 						<input id="endTime" name="endTime" type="text" readonly="readonly" placeholder="结束时间" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})"/>
 						<button id="query" class="btn btn-small btn-success" onclick="search()"><i class="icon-search"></i> 查询</button>
-						<button id="flash" class="btn btn-small btn-success" onclick="reportFlash()"><i class="icon-search"></i> 刷新报表</button>
+<!--						<button id="flash" class="btn btn-small btn-success" onclick="reportFlash()"><i class="icon-search"></i> 刷新报表</button>-->
 
 						<button class="btn btn-small btn-success" onclick="exportReport()">EXCEL导出</button>
 					</div>
@@ -23,24 +23,13 @@
 						<thead>
 							<tr>
 								<th class="center">应还日期</th>
-								<th class="center">应还订单</th>
-								<th class="center">提前还款</th>
-								<th class="center">正常还款</th>
-								<th class="center">逾期已还</th>
-								<th class="center">逾期中</th>
-								<th class="center">坏账</th>
 								<th class="center">应还金额</th>
+								<th class="center">应还订单数</th>
 								<th class="center">实还金额</th>
-								<th class="center">放款金额/成本</th>
-								<th class="center">逾期费</th>
-								<th class="center">减免金额</th>
-								<th class="center">待还金额</th>
-								<th class="center">首逾率</th>
-								<th class="center">逾期率</th>
-								<th class="center">回收率1天</th>
-								<th class="center">回收率3天</th>
-								<th class="center">回收率7天</th>
-								<th class="center">回收率15天</th> 
+								<th class="center">实还订单数</th>
+								<th class="center">未还金额</th>
+								<th class="center">未还订单数</th>
+								<th class="center">还款率</th>
 							</tr>
 						</thead>
 						<tbody id="myTable"></tbody>
@@ -62,125 +51,44 @@
 			id : "id",
 			queryUrl : contextPath+"statistics/repay_report_list_ajax",
 			headerColumns : [{
-		            id : "day_key",
+		            id : "dayKey",
 		            renderer : function(idValue,value,record){
 		            	return value ? moment(value).format("YYYY-MM-DD") : "---";
 				    }
     			},{
-		            id : "should_repay_cnt",
+		            id : "shouldRepayMoney",
 		            renderer : function(idValue,value,record){
-		            	return value;
+						return value != null ? value : "0" ;
 				    }
 	        	},{
-		            id : "early_repay_cnt",
+		            id : "shouldRepayOrderCount",
 		            renderer : function(idValue,value,record){
-			            return value;
+						return value != null ? value : "0" ;
 			        }
 	        	},{
-		            id : "normal_repay_cnt",
+		            id : "realRepayMoney",
 		            renderer : function(idValue,value,record){
-		            	return value;
+						return value != null ? value : "0" ;
 			        }
 	        	},{
-		            id : "overdue_repay_cnt",
+		            id : "realRepayOrderCount",
 		            renderer : function(idValue,value,record){
-			            return value;
+						return value != null ? value : "0" ;
 			        }
 	        	},{
-		            id : "overdue_cnt",
+		            id : "notRepayMoney",
 		            renderer : function(idValue,value,record){
-			            return value;
+						return value != null ? value : "0" ;
 			        }
 	        	},{
-		            id : "bad_cnt",
+		            id : "notRepayOrderCount",
 		            renderer : function(idValue,value,record){
-			            return value;
+						return value != null ? value : "0" ;
 			        }
 	        	},{
-		            id : "repay_amount",
+		            id : "repayRate",
 		            renderer : function(idValue,value,record){
-			            return value;
-			        }
-	        	},{
-		            id : "real_repay_amount",
-		            renderer : function(idValue,value,record){
-			            return value;
-			        }
-	        	},{
-		            id : "pay_amount",
-		            renderer : function(idValue,value,record){
-			            return value;
-			        }
-	        	},{
-		            id : "overdue_fee",
-		            renderer : function(idValue,value,record){
-			            return value;
-			        }
-	        	},{
-		            id : "reduce_money",
-		            renderer : function(idValue,value,record){
-			            return value;
-			        }
-	        	},{
-		            id : "overdue_repay_amount",
-		            renderer : function(idValue,value,record){
-			            return value;
-			        }
-	        	},{
-		            id : "first_overdue_rate",
-		            renderer : function(idValue,value,record){
-		            	var a=(record.overdue_cnt+record.bad_cnt+record.overdue_repay_cnt)/record.should_repay_cnt*100
-			            return a.toFixed(2)+"%";
-			        }
-	        	},{
-		            id : "overdue_rate",
-		            renderer : function(idValue,value,record){
-		            	var a=(record.overdue_cnt+record.bad_cnt)/record.should_repay_cnt*100
-			            return a.toFixed(2)+"%";
-			        }
-	        	},{
-		            id : "overdue1_repay_cnt",
-		            renderer : function(idValue,value,record){
-		            	var overdue=record.overdue_cnt+record.bad_cnt+record.overdue_repay_cnt;
-		            	if(overdue){
-		            		 var a=record.overdue1_repay_cnt/overdue*100;
-		            		 return a.toFixed(2)+"%";
-		            	}else{
-		            		 return "--";
-		            	}
-			        }
-	        	},{
-		            id : "overdue3_repay_cnt",
-		            renderer : function(idValue,value,record){
-		            	var overdue=record.overdue_cnt+record.bad_cnt+record.overdue_repay_cnt;
-		            	if(overdue){
-		            		 var a=record.overdue3_repay_cnt/overdue*100;
-		            		 return a.toFixed(2)+"%";
-		            	}else{
-		            		 return "--";
-		            	}
-			        }
-	        	},{
-		            id : "overdue7_repay_cnt",
-		            renderer : function(idValue,value,record){
-		            	var overdue=record.overdue_cnt+record.bad_cnt+record.overdue_repay_cnt;
-		            	if(overdue){
-		            		 var a=record.overdue7_repay_cnt/overdue*100;
-		            		 return a.toFixed(2)+"%";
-		            	}else{
-		            		 return "--";
-		            	}
-			        }
-	        	},{
-		            id : "overdue15_repay_cnt",
-		            renderer : function(idValue,value,record){
-		            	var overdue=record.overdue_cnt+record.bad_cnt+record.overdue_repay_cnt;
-		            	if(overdue){
-		            		 var a=record.overdue15_repay_cnt/overdue*100;
-		            		 return a.toFixed(2)+"%";
-		            	}else{
-		            		 return "--";
-		            	}
+						return value != null ? value : "0.00%" ;
 			        }
 	        	}]
 		});
