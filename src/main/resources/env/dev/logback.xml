@@ -22,7 +22,7 @@
 			<charset>UTF-8</charset> 
 		</encoder>
 	</appender>
-	<logger name="com.mod.loan.mapper" level="DEBUG"/>
+	<!--<logger name="com.mod.loan.mapper" level="DEBUG"/>-->
 	<root level="${LOG_LEVEL}">
 		<appender-ref ref="CONSOLE"></appender-ref>
 		<appender-ref ref="FILE"></appender-ref>
