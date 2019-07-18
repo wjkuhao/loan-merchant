@@ -33,6 +33,7 @@
 						<thead>
 							<tr>
 								<th class="center"><label><input type="checkbox" onclick="selectAll(this.checked)" /><span class="lbl">全选</span></label></th>
+								<th class="center">渠道名称</th>
 								<th class="center">用户姓名</th>
 								<th class="center">借款期限(天)</th>
 								<th class="center">状态</th>
@@ -72,6 +73,11 @@
 					id : "id",
 					renderer : IdCheckBoxRenderer
 				},{
+					id : "origin_name",
+					renderer : function(idValue,value,record){
+                        return value ? value : "---" ;
+					}
+            	},{
 		            id : "user_name",
 		            renderer : function(idValue,value,record){
 		            	return value ? value + "(" + record.user_phone + ")" : "---" ;

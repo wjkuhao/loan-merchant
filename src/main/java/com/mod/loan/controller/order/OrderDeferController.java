@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequestMapping("/order")
 public class OrderDeferController {
@@ -93,19 +95,22 @@ public class OrderDeferController {
         Double deferTotalFee = deferFee + overdueFee;
         // 如果是null 或者 为支付成功 则可以继续生成下一笔展期订单
         OrderDefer orderDeferOld = orderDeferService.findLastValidByOrderId(orderId);
+        BigDecimal dff = new BigDecimal(dailyDeferFee);
+        BigDecimal df = new BigDecimal(deferFee);
+        BigDecimal of = new BigDecimal(overdueFee);
+        BigDecimal dtf = new BigDecimal(deferTotalFee);
         if (orderDeferOld == null || orderDeferOld.getPayStatus().equals(OrderRepayStatusEnum.REPAY_SUCCESS.getCode())) {
             OrderDefer orderDefer = new OrderDefer();
             orderDefer.setOrderId(orderId);
             orderDefer.setDeferTimes(deferTimes);
             orderDefer.setDeferDay(deferDay);
-            orderDefer.setDailyDeferFee(dailyDeferFee);
-            orderDefer.setDeferFee(deferFee);
+            orderDefer.setDailyDeferFee(dff.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+            orderDefer.setDeferFee(df.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
             orderDefer.setRepayDate(TimeUtil.dateFormat(order.getRepayTime()));
             orderDefer.setDeferRepayDate(deferRepayDate);
             orderDefer.setOverdueDay(overdueDay);
-            orderDefer.setOverdueFee(overdueFee);
-            orderDefer.setDeferTotalFee(deferTotalFee);
-
+            orderDefer.setOverdueFee(of.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+            orderDefer.setDeferTotalFee(dtf.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
             User user = userService.selectByPrimaryKey(order.getUid());
             orderDefer.setUserName(user.getUserName());
             orderDefer.setUserPhone(user.getUserPhone());
@@ -118,13 +123,13 @@ public class OrderDeferController {
         } else {
             // 更新续期单子: 可能是用户生成了续期单 一直未支付;后面要重新按照新的费率进行计算
             orderDeferOld.setDeferDay(deferDay);
-            orderDeferOld.setDailyDeferFee(dailyDeferFee);
-            orderDeferOld.setDeferFee(deferFee);
+            orderDeferOld.setDailyDeferFee(dff.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+            orderDeferOld.setDeferFee(df.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
             orderDeferOld.setRepayDate(TimeUtil.dateFormat(order.getRepayTime()));
             orderDeferOld.setDeferRepayDate(deferRepayDate);
             orderDeferOld.setOverdueDay(overdueDay);
-            orderDeferOld.setOverdueFee(overdueFee);
-            orderDeferOld.setDeferTotalFee(deferTotalFee);
+            orderDeferOld.setOverdueFee(of.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+            orderDeferOld.setDeferTotalFee(dtf.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
             orderDeferService.updateByPrimaryKeySelective(orderDeferOld);
         }
 
