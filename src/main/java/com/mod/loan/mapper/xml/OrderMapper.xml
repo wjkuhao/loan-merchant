@@ -79,7 +79,7 @@
     </select>
 
     <select id="findOrderList" resultType="map">
-        select o.*,user.user_name,user.user_phone,c.weskit_alias from tb_order o left join tb_user user on o.uid = user.id
+        select o.*,user.user_name,user.user_phone,c.weskit_alias,c.origin_name from tb_order o left join tb_user user on o.uid = user.id
         left join tb_merchant_origin c on user.user_origin=c.id
         <where>
             <if test="id != null">
