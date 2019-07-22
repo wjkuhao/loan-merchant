@@ -357,6 +357,48 @@ public class StatisticsController {
         return new ResultMessage(ResponseEnum.M4000.getCode(), "请选择正确的回款率报表类型");
     }
 
+    /**
+     *新客回款率详情
+     * */
+    @RequestMapping(value = "new_user_repay_rate_list_detail")
+    public ModelAndView new_user_repay_rate_list_detail(ModelAndView view, String date) {
+        //新客回款率详情
+        view.addObject("date", date);
+        view.setViewName("statistics/new_user_repay_rate_list_detail");
+        return view;
+    }
+
+    /**
+     *老客回款率详情
+     * */
+    @RequestMapping(value = "old_user_repay_rate_list_detail")
+    public ModelAndView old_user_repay_rate_list_detail(ModelAndView view, String date) {
+        //老客回款率详情
+        view.addObject("date", date);
+        view.setViewName("statistics/old_user_repay_rate_list_detail");
+        return view;
+    }
+
+    /**
+     * 用户回款率(包括展期)查询
+     * */
+    @RequestMapping(value = "user_repay_rate_detail_ajax", method = {RequestMethod.POST})
+    public ResultMessage user_repay_rate_detail_ajax(String type, String userSource, String userOrigin, String date, Page page) {
+        Map<String, Object> param = new HashMap();
+        param.put("merchant", RequestThread.get().getMerchant());
+        param.put("userSource", userSource);
+        param.put("userOrigin", userOrigin);
+        param.put("dateStr", date);
+        if("oldUserRepayRateDetail".equals(type)){
+            //老客回款率详情
+            return new ResultMessage(ResponseEnum.M2000, reportOrderRepayService.oldUserRepayRateDetail(param, page), page);
+        }else if("newUserRepayRateDetail".equals(type)){
+            //新客回款率详情
+            return new ResultMessage(ResponseEnum.M2000, reportOrderRepayService.newUserRepayRateDetail(param, page), page);
+        }
+        return new ResultMessage(ResponseEnum.M4000.getCode(), "请选择正确的回款率报表类型");
+    }
+
     @RequestMapping(value = "connection_rate_report_list_ajax", method = {RequestMethod.POST})
     public ResultMessage connection_rate_report_list_ajax( String startTime, String endTime, Page page) {
         Map<String, Object> param = new HashMap<String, Object>();

@@ -50,6 +50,7 @@
 								<th class="center">老客逾期展期</th>
 								<th class="center">老客展期逾期中</th>
 								<th class="center">老客展期次数</th>
+								<th class="center">详情</th>
 							</tr>
 						</thead>
 						<tbody id="myTable"></tbody>
@@ -156,7 +157,15 @@
 		            renderer : function(idValue,value,record){
 		            	return value ? value : "--";
 			        }
-	        	}]
+	        	},{
+                id : "give_time",
+                renderer : function(idValue,value,record){
+                    var html = "<div class='btn-group'>";
+                    html += "<a class='btn btn-mini btn-info' title='查看' onclick=\"detail('" + value + "');\">查看</a>";
+                    html += "</div>";
+                    return html;
+                }
+            }]
 		});
 		
 		function query() {
@@ -193,6 +202,20 @@
 				location.href = contextPath+"statistics/export_report?reportName=old_user_repay_rate";
 			});
       	}
+
+        function detail(date){
+            var diag = new top.Dialog();
+            diag.Drag = true;
+            diag.Title = "详情";
+            diag.URL = contextPath + "statistics/old_user_repay_rate_list_detail?date=" + date;
+            diag.Width = 1400;
+            diag.Height = 800;
+            diag.CancelEvent = function(){ //关闭事件
+                query();
+                diag.close();
+            };
+            diag.show();
+        }
 	</script>
 </body>
 </html>

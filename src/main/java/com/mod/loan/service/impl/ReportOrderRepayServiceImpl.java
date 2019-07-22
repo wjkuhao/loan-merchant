@@ -79,6 +79,24 @@ public class ReportOrderRepayServiceImpl extends BaseServiceImpl<ReportOrderRepa
     }
 
     @Override
+    public List<Map<String, Object>> oldUserRepayRateDetail(Map<String, Object> param, Page page){
+        param.put("startIndex", page.getStartIndex());
+        param.put("pageSize", page.getPageSize());
+        List<Map<String, Object>> list = reportOrderRepayMapper.oldUserRepayRateDetail(param);
+        page.setTotalCount(list.size());
+        return getSubList(list, page.getStartIndex(), page.getPageSize());
+    }
+
+    @Override
+    public List<Map<String, Object>> newUserRepayRateDetail(Map<String, Object> param, Page page){
+        param.put("startIndex", page.getStartIndex());
+        param.put("pageSize", page.getPageSize());
+        List<Map<String, Object>> list = reportOrderRepayMapper.newUserRepayRateDetail(param);
+        page.setTotalCount(list.size());
+        return getSubList(list, page.getStartIndex(), page.getPageSize());
+    }
+
+    @Override
     public List<Map<String, Object>> totalUserRepayRate(Map<String, Object> param, Page page){
         param.put("startIndex", page.getStartIndex());
         param.put("pageSize", page.getPageSize());

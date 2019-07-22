@@ -85,4 +85,12 @@
 	<select id="totalUserRepayRate" resultType="map" statementType="CALLABLE">
 		CALL TotalUserRepayRate(#{merchant},#{userSource},#{userOrigin},#{startTime},#{endTime})
 	</select>
+
+	<select id="oldUserRepayRateDetail" resultType="map" statementType="CALLABLE">
+		CALL OldUserRepayRateDetail(#{merchant},#{userSource},#{userOrigin},#{dateStr})
+	</select>
+
+	<select id="newUserRepayRateDetail" resultType="map" statementType="CALLABLE">
+		CALL NewUserRepayRateDetail(#{merchant},#{userSource},#{userOrigin},#{dateStr})
+	</select>
 </mapper>
