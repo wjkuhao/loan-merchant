@@ -175,9 +175,9 @@ public class OrderRepayController {
 			switch (reportName) {
 			case "order_repay_list":
 				downloadFileName += "_还款记录报表";
-				title = new String[] { "还款流水号", "用户姓名", "用户手机", "还款类型", "还款状态", "支付金额（元）", "还款银行", "还款卡号", "备注", "还款时间" };
+				title = new String[] { "还款流水号","订单编号", "用户姓名", "用户手机", "还款类型", "还款状态", "支付金额（元）", "还款银行", "还款卡号", "备注", "还款时间" };
 				sheetName = "还款款记录报表";
-				columns = new String[] { "repay_no", "user_name", "user_phone", "repay_type", "repay_status", "repay_money", "bank", "bank_no", "remark", "create_time" };
+				columns = new String[] { "repay_no","order_no", "user_name", "user_phone", "repay_type", "repay_status", "repay_money", "bank", "bank_no", "remark", "create_time" };
 				list = orderRepayService.exportReport(param);
 				break;
 			default:

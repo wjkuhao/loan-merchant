@@ -43,7 +43,9 @@
 						<thead>
 							<tr>
 								<th class="center">还款流水号</th>
+								<th class="center">订单编号</th>
 								<th class="center">用户姓名</th>
+								<th class="center">手机号</th>
 								<th class="center">还款类型</th>
 								<th class="center">还款状态</th>
 								<th class="center">支付金额(元)</th>
@@ -81,11 +83,21 @@
 		            	return value ? value : "---" ;
 				    }
         		},{
+					id : "order_no",
+					renderer : function(idValue,value,record){
+						return value ? value : "---" ;
+					}
+				},{
 		            id : "user_name",
 		            renderer : function(idValue,value,record){
-		            	return value ? value + "(" + record.user_phone + ")" : "---" ;
+		            	return value ? value : "---" ;
 				    }
 	        	},{
+					id : "user_phone",
+					renderer : function(idValue,value,record){
+						return value ? value : "---" ;
+					}
+				},{
 		            id : "repay_type",
 		            renderer : function(idValue,value,record){
 			            if (value == 1){

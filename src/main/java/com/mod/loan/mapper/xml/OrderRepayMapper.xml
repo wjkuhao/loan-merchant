@@ -42,7 +42,8 @@
 	</select>
 
 	<select id="findOrderRepayList" resultType="map">
-	select op.*,u.user_name,u.user_phone from tb_order_repay op left join tb_user u on op.uid = u.id
+	select op.*,u.user_name,u.user_phone,o.order_no from tb_order_repay op left join tb_user u on op.uid = u.id
+		left join tb_order o on op.order_id = o.id
 	<where>
 		<if test="merchant != null">
 			and u.merchant = #{merchant}
@@ -67,7 +68,8 @@
 	</select>
 	
 	<select id="exportReport" resultType="map">
-		select op.*,u.user_name,u.user_phone from tb_order_repay op left join tb_user u on op.uid = u.id
+		select op.*,u.user_name,u.user_phone,o.order_no from tb_order_repay op left join tb_user u on op.uid = u.id
+		left join tb_order o on op.order_id = o.id
 		<where>
 			<if test="merchant != null">
 				and u.merchant = #{merchant}
